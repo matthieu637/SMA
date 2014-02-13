@@ -1,0 +1,19 @@
+# linux 
+.directory
+*~
+*.swp
+*.kate-swp
+*.kilepr
+
+# useless latex files
+*.toc
+*.log
+*.bbl
+*.blg
+*.out
+*~
+*.aux
+*.gz
+*.backup
+
+
