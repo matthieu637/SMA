@@ -16,4 +16,5 @@
 *.gz
 *.backup
 
-
+# don't upload .pdf to avoid overloading git
+*.pdf

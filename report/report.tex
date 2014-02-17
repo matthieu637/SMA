@@ -3,11 +3,18 @@
 % --------------------------------------------------------------------------------------------------------------------------------------------- %
 
     % Type of document
-	\documentclass{article}
+	\documentclass[a4paper]{article}
 
+	\usepackage[utf8]{inputenc} %fac
 	\usepackage[T1]{fontenc} 
     \usepackage[francais]{babel}
-	\usepackage{float}
+    \usepackage[pdftex]{graphicx} % images
+    \graphicspath{{images/}}
+    
+    \usepackage{amssymb}
+    \usepackage{amsmath}
+    \usepackage{float}
+
 
     % Make a clickable table of content 
     \usepackage{hyperref} 
@@ -21,16 +28,21 @@
 	
     % Start
 	\begin{document}
+	
 
 % --------------------------------------------------------------------------------------------------------------------------------------------- %
 % ------------------------------------------------------------------ HEADERS ------------------------------------------------------------------ %
 % --------------------------------------------------------------------------------------------------------------------------------------------- %
 
 	% Information
-	\title{Rapport de projet\\UE SystËmes Multi-Agents}
-	%\author{SÈbastien Forestier \& }
-	\date{Mars 2014}
-	\maketitle
+	\title{Rapport de projet\\UE Syst√®mes Multi-Agents}
+
+	  \begin{titlepage}
+	    \def\titletype{Syst√®mes Multi-Agent}
+	    \def\majortitle{Rapport Projet ... : ... Coordination de dr√¥ne ... ?}
+	    \def\docversion{1.0}
+	    \input{dependencies/title_page.tex}
+	  \end{titlepage}
 
     % Table of contents
     \newpage
