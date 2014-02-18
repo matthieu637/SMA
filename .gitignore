@@ -18,3 +18,10 @@
 
 # don't upload .pdf to avoid overloading git
 *.pdf
+
+#useless eclipse files
+.settings/
+project/bin/
+
+#java
+*.class

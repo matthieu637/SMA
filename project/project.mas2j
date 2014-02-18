@@ -1,0 +1,14 @@
+MAS project {
+
+	infrastructure: Centralised
+
+	environment: Env
+
+	agents:
+		d drone#6;
+		v vehicule#6;
+		t tour_controle#1;
+
+	aslSourcePath:
+		"src/asl";
+}
