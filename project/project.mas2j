@@ -2,7 +2,7 @@ MAS project {
 
 	infrastructure: Centralised
 
-	environment: Env
+	environment: Env("project.mas2j")
 
 	agents:
 		d drone#6;

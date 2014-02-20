@@ -1,3 +1,4 @@
+package modele;
 import jason.asSyntax.Literal;
 import jason.environment.Environment;
 
