@@ -12,13 +12,16 @@ public class TerrainModel extends GridWorldModelP {
 
 	private int hauteur[][];
 	private Random generateur = new Random();
+	private Couple<Integer, Integer> but;
 
 	protected TerrainModel(int nbAgent) {
 		super(Constantes.TAILLE_CARTE_X, Constantes.TAILLE_CARTE_Y, nbAgent);
 
 		construire_fractale();
-		
+
 		smooth_carte();
+
+		but = definir_position_but();
 	}
 
 	private int par_pixel(float valeur, int n_per_level, float random) {
@@ -30,7 +33,7 @@ public class TerrainModel extends GridWorldModelP {
 		else
 			return 255;
 	}
-	
+
 	private void construire_fractale() {
 		hauteur = new int[Constantes.TAILLE_CARTE_X][Constantes.TAILLE_CARTE_Y];
 
@@ -39,7 +42,7 @@ public class TerrainModel extends GridWorldModelP {
 				hauteur[i][j] = par_pixel(hauteur[i][j], Constantes.FRACTALE_N_LEVEL, generateur.nextFloat());
 	}
 
-	private void smooth_carte(){
+	private void smooth_carte() {
 		List<Couple<Integer, Integer>> index = new ArrayList<Couple<Integer, Integer>>(Constantes.TAILLE_CARTE_X
 				* Constantes.TAILLE_CARTE_Y);
 		for (int i = 0; i < Constantes.TAILLE_CARTE_X; i++)
@@ -67,8 +70,19 @@ public class TerrainModel extends GridWorldModelP {
 		}
 	}
 
+	private Couple<Integer, Integer> definir_position_but() {
+		int x = (int) (Constantes.TAILLE_CARTE_X * (1. / 2.)) + random.nextInt((int) (Constantes.TAILLE_CARTE_X / 3.));
+		int y = (int) (Constantes.TAILLE_CARTE_Y * (1. / 2.)) + random.nextInt((int) (Constantes.TAILLE_CARTE_Y / 3.));
+
+		return new Couple<Integer, Integer>(x, y);
+	}
+
 	public int getHauteur(int x, int y) {
 		return hauteur[x][y];
+	}
+
+	public boolean estBut(int x, int y) {
+		return but.first == x && but.second == y;
 	}
 
 }
