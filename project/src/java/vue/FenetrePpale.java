@@ -13,23 +13,21 @@ public class FenetrePpale extends JFrame {
 	private HauteAltitudeView haute_altitude;
 
 	public FenetrePpale(CarteModel modele) {
-		setSize(1200, 800);
+		setSize(1870, 750);
 		setVisible(true);
 
 		getContentPane().setLayout(null);
 		terrain = new TerrainView(modele.getTerrain(), 600);
-		terrain.setLocation(0, 0);
+		terrain.setLocation(0, 3);
 		getContentPane().add(terrain);
 
 		basse_altitude = new BasseAltitudeView(modele.getBasseAltitude(), 600);
-		basse_altitude.setLocation(600, 0);
+		basse_altitude.setLocation(625, 3);
 		getContentPane().add(basse_altitude);
 
 		haute_altitude = new HauteAltitudeView(modele.getHauteAltitude(), 600);
-		haute_altitude.setLocation(0, 600);
+		haute_altitude.setLocation(1250, 3);
 		getContentPane().add(haute_altitude);
-
-		repaint();
 	}
 
 	public TerrainView getTerrain() {

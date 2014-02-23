@@ -103,21 +103,29 @@ public class GridWorldViewPanel extends JPanel {
 	private static int limit = (int) Math.pow(2, 14);
 
 	private void draw(Graphics g, int x, int y) {
+		boolean drawSomething = false;
+
 		if ((model.data[x][y] & GridWorldModel.OBSTACLE) != 0) {
 			drawObstacle(g, x, y);
+			drawSomething = true;
 		}
 
 		int vl = GridWorldModel.OBSTACLE * 2;
 		while (vl < limit) {
 			if ((model.data[x][y] & vl) != 0) {
 				draw(g, x, y, vl);
+				drawSomething = true;
 			}
 			vl *= 2;
 		}
 
 		if ((model.data[x][y] & GridWorldModel.AGENT) != 0) {
 			drawAgent(drawArea.getGraphics(), x, y, Color.blue, model.getAgAtPos(x, y));
+			drawSomething = true;
 		}
+
+		if (!drawSomething)
+			drawEmpty(g, x, y);
 	}
 
 	public Canvas getCanvas() {

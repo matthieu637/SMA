@@ -10,5 +10,4 @@ public class BasseAltitudeView extends GridWorldViewPanel {
 	public BasseAltitudeView(GridWorldModelP model, int windowSize) {
 		super(model, windowSize);
 	}
-
 }
