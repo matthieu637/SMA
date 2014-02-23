@@ -24,7 +24,7 @@ public class TerrainView extends GridWorldViewPanel {
 		Color c = g.getColor();
 		if (getModele().estBut(x, y)) {
 			g.setColor(Color.RED);
-		} else if(!cache) {
+		} else if (!cache) {
 			int h = 255 - getModele().getHauteur(x, y);
 			g.setColor(new Color(h, h, h));
 		} else {
@@ -33,6 +33,14 @@ public class TerrainView extends GridWorldViewPanel {
 
 		g.fillRect(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 1, cellSizeH - 1);
 		g.setColor(c);
+	}
+
+	@Override
+	public void drawAgent(Graphics g, int x, int y, Color c, int id) {
+		super.drawEmpty(g, x, y);
+
+		g.setColor(Color.BLUE);
+		g.fillOval(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
 	}
 
 	public TerrainModel getModele() {

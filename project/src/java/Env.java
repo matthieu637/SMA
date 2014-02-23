@@ -52,10 +52,28 @@ public class Env extends Environment {
 
 	@Override
 	public boolean executeAction(String agName, Structure action) {
-		logger.info("executing: " + action + ", but not implemented!");
+		boolean valide = true;
+
+		switch (action.getFunctor()) {
+		case "deplacer":
+			modele.deplacer(agName, Integer.parseInt(action.getTerm(0).toString()));
+			break;
+		default:
+			valide = true;
+			break;
+		}
+
+		if (!valide)
+			logger.info("executing: " + action + ", but not implemented!");
+
+//		modele.update();
 		
-		modele.update();
-		
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		return true;
 	}
 

@@ -8,4 +8,6 @@
 
 /* Plans */
 
-+!start : true <- .print("hello world.").
++!start : .random(R) & X = math.floor(4*R) <- 
+	deplacer(X);
+	!start.

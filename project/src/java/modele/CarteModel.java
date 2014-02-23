@@ -1,22 +1,25 @@
 package modele;
 
+import jason.asSyntax.Term;
 import vue.FenetrePpale;
 import ext.GridWorldModelP;
-
 
 public class CarteModel {
 
 	private TerrainModel terrain;
 	private BasseAltitudeModel basse_altitude;
-	private HauteAltitudeModel haute_altitude; 
-	
+	private HauteAltitudeModel haute_altitude;
+
 	public CarteModel(Interpreteur interpreteur, int nombreVehicule, int nombreDrone) {
-		
-		//TODO:générer haut/basse drone
-		
+
+		// TODO:générer haut/basse drone
+
+		int nombre_drone_basse_altitude = (int) (nombreDrone * Constantes.PROPORTION_DRONE_BASSE_HAUTE_ALTITUDE);
+		int nombre_drone_haute_altitude = nombreDrone - nombre_drone_basse_altitude;
+
 		terrain = new TerrainModel(nombreVehicule);
-		basse_altitude = new BasseAltitudeModel(nombreDrone/2);
-		haute_altitude = new HauteAltitudeModel(nombreDrone/2);
+		basse_altitude = new BasseAltitudeModel(nombre_drone_basse_altitude);
+		haute_altitude = new HauteAltitudeModel(nombre_drone_haute_altitude);
 	}
 
 	public GridWorldModelP getTerrain() {
@@ -43,4 +46,21 @@ public class CarteModel {
 		haute_altitude.setView(vue.getHaute_altitude());
 	}
 
+	public void deplacer(String agName, int position) {
+		terrain.deplacer(toAgent(agName), position);
+	}
+
+	private int toAgent(String agName) {
+		switch (agName.charAt(0)) {
+		case 'd':
+			int index = Integer.parseInt(agName.substring(1));
+			return index >= basse_altitude.getNbOfAgs() ? index - basse_altitude.getNbOfAgs() : index;
+		case 't':
+			return Integer.parseInt(agName.substring(1));
+		case 'v':
+			return Integer.parseInt(agName.substring(1));
+		default:
+			return -1;
+		}
+	}
 }

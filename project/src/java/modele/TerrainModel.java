@@ -1,5 +1,7 @@
 package modele;
 
+import jason.environment.grid.Location;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +24,9 @@ public class TerrainModel extends GridWorldModelP {
 		smooth_carte();
 
 		but = definir_position_but();
+
+		for (int a = 0; a < nbAgent; a++)
+			setAgPos(a, 0, 0);
 	}
 
 	private int par_pixel(float valeur, int n_per_level, float random) {
@@ -83,6 +88,37 @@ public class TerrainModel extends GridWorldModelP {
 
 	public boolean estBut(int x, int y) {
 		return but.first == x && but.second == y;
+	}
+
+	public void deplacer(int agent, int position) {
+		Location l = getAgPos(agent);
+		if (l == null)
+			return;
+
+		switch (position) {
+		case 0:
+			if (l.x - 1 >= 0)
+				l.x--;
+			break;
+		case 1:
+			if (l.y - 1 >= 0)
+				l.y--;
+			break;
+		case 2:
+			if (l.x + 1 < Constantes.TAILLE_CARTE_X)
+				l.x++;
+			break;
+		case 3:
+			if (l.y + 1 < Constantes.TAILLE_CARTE_Y)
+				l.y++;
+			break;
+
+		default:
+			System.out.println("Error");
+			break;
+		}
+
+		setAgPos(agent, l);
 	}
 
 }
