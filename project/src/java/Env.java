@@ -93,7 +93,7 @@ public class Env extends Environment implements Runnable {
 				e.printStackTrace();
 			}
 			
-			modele.getTerrain().deplaceAdversaire();
+			modele.deplaceAdversaire();
 		}
 	}
 }

@@ -24,7 +24,7 @@ public class FenetrePpale extends JFrame {
 		setSize(1870, 750);
 
 		getContentPane().setLayout(null);
-		terrain = new TerrainView(modele.getTerrain(), 600);
+		terrain = new TerrainView(modele.getTerrain(), 600, modele);
 		terrain.setLocation(0, 30);
 		getContentPane().add(terrain);
 

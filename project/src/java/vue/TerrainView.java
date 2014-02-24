@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
+import modele.CarteModel;
 import modele.TerrainModel;
 import ext.GridWorldModelP;
 import ext.GridWorldViewPanel;
@@ -16,7 +16,7 @@ public class TerrainView extends GridWorldViewPanel {
 
 	private boolean cache = false;
 
-	public TerrainView(GridWorldModelP model, int windowSize) {
+	public TerrainView(GridWorldModelP model, int windowSize, final CarteModel carte) {
 		super(model, windowSize);
 
 		drawArea.addMouseListener(new MouseAdapter() {
@@ -24,7 +24,7 @@ public class TerrainView extends GridWorldViewPanel {
 			public void mouseReleased(MouseEvent e) {
 				int x = e.getX() / cellSizeW;
 				int y = e.getY() / cellSizeH;
-				getModele().ajouterAgentAdverse(x, y);
+				carte.ajouterAgentAdverse(x, y);
 			}
 		});
 
@@ -58,8 +58,6 @@ public class TerrainView extends GridWorldViewPanel {
 
 	@Override
 	public void drawAgent(Graphics g, int x, int y, Color c, int id) {
-		super.drawEmpty(g, x, y);
-
 		g.setColor(Color.BLUE);
 		g.fillOval(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
 	}
