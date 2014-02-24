@@ -4,6 +4,7 @@ import jason.environment.grid.Location;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -12,9 +13,12 @@ import ext.GridWorldModelP;
 
 public class TerrainModel extends GridWorldModelP {
 
+	private static final int ADVERSAIRE_CODE = 8;
+
 	private int hauteur[][];
 	private Random generateur = new Random();
 	private Couple<Integer, Integer> but;
+	private List<Adversaire> adversaire;
 
 	protected TerrainModel(int nbAgent) {
 		super(Constantes.TAILLE_CARTE_X, Constantes.TAILLE_CARTE_Y, nbAgent);
@@ -27,6 +31,8 @@ public class TerrainModel extends GridWorldModelP {
 
 		for (int a = 0; a < nbAgent; a++)
 			setAgPos(a, 0, 0);
+		
+		adversaire = new LinkedList<>();
 	}
 
 	private int par_pixel(float valeur, int n_per_level, float random) {
@@ -94,7 +100,28 @@ public class TerrainModel extends GridWorldModelP {
 		Location l = getAgPos(agent);
 		if (l == null)
 			return;
+		
+		l = deplacer(l, position);
+		
+		setAgPos(agent, l);
+	}
 
+	public void ajouterAgentAdverse(int x, int y) {
+		add(ADVERSAIRE_CODE, x, y);
+		adversaire.add(new Adversaire(x, y));
+	}
+
+	public void deplaceAdversaire() {
+		for (Adversaire a : adversaire) {
+			remove(ADVERSAIRE_CODE, a.getLocation());
+			Location l = a.getLocation();
+			deplacer(l, generateur.nextInt(4));
+			a.setLocation(l);
+			add(ADVERSAIRE_CODE, a.getLocation());
+		}
+	}
+
+	private Location deplacer(Location l, int position) {
 		switch (position) {
 		case 0:
 			if (l.x - 1 >= 0)
@@ -117,8 +144,7 @@ public class TerrainModel extends GridWorldModelP {
 			System.out.println("Error");
 			break;
 		}
-
-		setAgPos(agent, l);
+		return l;
 	}
 
 }

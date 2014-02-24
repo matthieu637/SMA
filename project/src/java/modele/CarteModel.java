@@ -1,8 +1,6 @@
 package modele;
 
-import jason.asSyntax.Term;
 import vue.FenetrePpale;
-import ext.GridWorldModelP;
 
 public class CarteModel {
 
@@ -22,15 +20,15 @@ public class CarteModel {
 		haute_altitude = new HauteAltitudeModel(nombre_drone_haute_altitude);
 	}
 
-	public GridWorldModelP getTerrain() {
+	public TerrainModel getTerrain() {
 		return terrain;
 	}
 
-	public GridWorldModelP getHauteAltitude() {
+	public HauteAltitudeModel getHauteAltitude() {
 		return haute_altitude;
 	}
 
-	public GridWorldModelP getBasseAltitude() {
+	public BasseAltitudeModel getBasseAltitude() {
 		return basse_altitude;
 	}
 

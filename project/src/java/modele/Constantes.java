@@ -10,4 +10,8 @@ public interface Constantes {
 	public static int SMOOTH_CARTE = 2;
 	
 	public static float PROPORTION_DRONE_BASSE_HAUTE_ALTITUDE = 0.6f;
+	
+	
+	public static long VITESSE_ACTION = 500;
+	public static long VITESSE_ACTION_ADVERSAIRE = 500;
 }

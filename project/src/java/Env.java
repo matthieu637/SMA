@@ -10,10 +10,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import modele.CarteModel;
+import modele.Constantes;
 import modele.Interpreteur;
 import vue.FenetrePpale;
 
-public class Env extends Environment {
+public class Env extends Environment implements Runnable {
 
 	private Logger logger = Logger.getLogger("project." + Env.class.getName());
 
@@ -48,6 +49,8 @@ public class Env extends Environment {
 		modele = new CarteModel(new Interpreteur(this), nombreVehicule, nombreDrone);
 		FenetrePpale vue = new FenetrePpale(modele);
 		modele.setView(vue);
+		
+		new Thread(this).start();
 	}
 
 	@Override
@@ -65,11 +68,9 @@ public class Env extends Environment {
 
 		if (!valide)
 			logger.info("executing: " + action + ", but not implemented!");
-
-//		modele.update();
 		
 		try {
-			Thread.sleep(500);
+			Thread.sleep(Constantes.VITESSE_ACTION);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -81,5 +82,18 @@ public class Env extends Environment {
 	@Override
 	public void stop() {
 		super.stop();
+	}
+
+	@Override
+	public void run() {
+		while(this.isRunning()){
+			try {
+				Thread.sleep(Constantes.VITESSE_ACTION_ADVERSAIRE);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			modele.getTerrain().deplaceAdversaire();
+		}
 	}
 }

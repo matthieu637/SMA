@@ -136,7 +136,7 @@ public class GridWorldViewPanel extends JPanel {
 		return model;
 	}
 
-	class GridCanvas extends Canvas {
+	public class GridCanvas extends Canvas {
 
 		private static final long serialVersionUID = 1L;
 

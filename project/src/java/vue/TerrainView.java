@@ -2,6 +2,9 @@ package vue;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import modele.TerrainModel;
 import ext.GridWorldModelP;
@@ -15,6 +18,16 @@ public class TerrainView extends GridWorldViewPanel {
 
 	public TerrainView(GridWorldModelP model, int windowSize) {
 		super(model, windowSize);
+
+		drawArea.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				int x = e.getX() / cellSizeW;
+				int y = e.getY() / cellSizeH;
+				getModele().ajouterAgentAdverse(x, y);
+			}
+		});
+
 	}
 
 	@Override
@@ -23,7 +36,7 @@ public class TerrainView extends GridWorldViewPanel {
 
 		Color c = g.getColor();
 		if (getModele().estBut(x, y)) {
-			g.setColor(Color.RED);
+			g.setColor(Color.YELLOW);
 		} else if (!cache) {
 			int h = 255 - getModele().getHauteur(x, y);
 			g.setColor(new Color(h, h, h));
@@ -32,6 +45,14 @@ public class TerrainView extends GridWorldViewPanel {
 		}
 
 		g.fillRect(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 1, cellSizeH - 1);
+		g.setColor(c);
+	}
+
+	@Override
+	public void draw(Graphics g, int x, int y, int object) {
+		Color c = g.getColor();
+		g.setColor(Color.red);
+		g.fillOval(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
 		g.setColor(c);
 	}
 
