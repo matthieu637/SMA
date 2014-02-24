@@ -6,6 +6,12 @@ import java.awt.Graphics;
 import ext.GridWorldModelP;
 import ext.GridWorldViewPanel;
 
+/**
+ * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
+ *
+ *	Vue des drônes en haute altitude
+ *
+ */
 public class HauteAltitudeView extends GridWorldViewPanel {
 
 	private static final long serialVersionUID = 1L;

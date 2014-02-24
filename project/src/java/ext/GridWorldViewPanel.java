@@ -12,6 +12,12 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+/**
+ * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
+ * 
+ *         Adaptation de jason.environment.grid.GridWorldView en remplacant
+ *         JFrame par JPanel pour en gérer plusieurs à la fois
+ */
 public class GridWorldViewPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -94,7 +100,10 @@ public class GridWorldViewPanel extends JPanel {
 		g.drawRect(x * cellSizeW, y * cellSizeH, cellSizeW, cellSizeH);
 	}
 
-	/** method to draw unknown object, probably overridden by the user viewer class */
+	/**
+	 * method to draw unknown object, probably overridden by the user viewer
+	 * class
+	 */
 	public void draw(Graphics g, int x, int y, int object) {
 		// g.setColor(Color.black);
 		// drawString(g,x,y,defaultFont,String.valueOf(object));

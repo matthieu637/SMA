@@ -4,6 +4,12 @@ import jason.environment.grid.Location;
 
 import java.util.Random;
 
+/**
+ * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
+ * 
+ *         Adaptation de jason.environment.grid.GridWorldModel en remplacant
+ *         JFrame par JPanel pour en gérer plusieurs à la fois
+ */
 public class GridWorldModelP {
 
 	// each different object is represented by having a single bit
@@ -186,8 +192,8 @@ public class GridWorldModelP {
 	}
 
 	/**
-	 * returns a random free location using isFree to test the availability of some possible location (it means free of
-	 * agents and obstacles)
+	 * returns a random free location using isFree to test the availability of
+	 * some possible location (it means free of agents and obstacles)
 	 */
 	protected Location getFreePos() {
 		for (int i = 0; i < (getWidth() * getHeight() * 5); i++) {
@@ -201,7 +207,10 @@ public class GridWorldModelP {
 		return null; // not found
 	}
 
-	/** returns a random free location using isFree(object) to test the availability of some possible location */
+	/**
+	 * returns a random free location using isFree(object) to test the
+	 * availability of some possible location
+	 */
 	protected Location getFreePos(int obj) {
 		for (int i = 0; i < (getWidth() * getHeight() * 5); i++) {
 			int x = random.nextInt(getWidth());
@@ -213,8 +222,5 @@ public class GridWorldModelP {
 		}
 		return null; // not found
 	}
-	
-	public void update() {
-		view.update();
-	}
+
 }

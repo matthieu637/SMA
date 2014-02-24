@@ -1,10 +1,15 @@
 package modele;
 
-
-public class BasseAltitudeModel extends Grille{
+/**
+ * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
+ * 
+ *         Contient les informations du modèle pour l'environnement des drônes
+ *         en basse altitude
+ */
+public class BasseAltitudeModel extends Grille {
 
 	protected BasseAltitudeModel(int nbAgent) {
-		super(Constantes.TAILLE_CARTE_X, Constantes.TAILLE_CARTE_Y, nbAgent);
+		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent);
 	}
 
 }

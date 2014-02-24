@@ -10,17 +10,31 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import modele.CarteModel;
-import modele.Constantes;
+import modele.Variables;
 import modele.Interpreteur;
 import vue.FenetrePpale;
 
+/**
+ * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
+ * 
+ *         Environnement avec un Thread dédié pour le déplacement des
+ *         adversaires
+ */
 public class Env extends Environment implements Runnable {
 
 	private Logger logger = Logger.getLogger("project." + Env.class.getName());
 
+	/**
+	 * Le modèle haut niveau
+	 */
 	private CarteModel modele;
 
-	/** Called before the MAS execution with the args informed in .mas2j */
+	/**
+	 * Called before the MAS execution with the args informed in .mas2j
+	 * 
+	 * Parse le fichier .mas2j pour récupérer le nom/nombre des agents puis
+	 * création du modèle et de la vue à partir de ces informations
+	 * */
 	@Override
 	public void init(String[] args) {
 		super.init(args);
@@ -49,7 +63,7 @@ public class Env extends Environment implements Runnable {
 		modele = new CarteModel(new Interpreteur(this), nombreVehicule, nombreDrone);
 		FenetrePpale vue = new FenetrePpale(modele);
 		modele.setView(vue);
-		
+
 		new Thread(this).start();
 	}
 
@@ -68,9 +82,9 @@ public class Env extends Environment implements Runnable {
 
 		if (!valide)
 			logger.info("executing: " + action + ", but not implemented!");
-		
+
 		try {
-			Thread.sleep(Constantes.VITESSE_ACTION);
+			Thread.sleep(Variables.VITESSE_ACTION);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -86,13 +100,13 @@ public class Env extends Environment implements Runnable {
 
 	@Override
 	public void run() {
-		while(this.isRunning()){
+		while (this.isRunning()) {
 			try {
-				Thread.sleep(Constantes.VITESSE_ACTION_ADVERSAIRE);
+				Thread.sleep(Variables.VITESSE_ACTION_ADVERSAIRE);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
+
 			modele.deplaceAdversaire();
 		}
 	}

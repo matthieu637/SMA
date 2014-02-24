@@ -10,6 +10,12 @@ import modele.TerrainModel;
 import ext.GridWorldModelP;
 import ext.GridWorldViewPanel;
 
+/**
+ * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
+ * 
+ *         Vue au sol du convoi et du but. On peut ajouter des adversaires en
+ *         cliquant sur cette vue.
+ */
 public class TerrainView extends GridWorldViewPanel {
 
 	private static final long serialVersionUID = 1L;

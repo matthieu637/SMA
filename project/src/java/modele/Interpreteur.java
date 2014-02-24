@@ -1,7 +1,14 @@
 package modele;
+
 import jason.asSyntax.Literal;
 import jason.environment.Environment;
 
+/**
+ * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
+ * 
+ *         Permet aux modèles de communiquer des percepts à l'environnement plus
+ *         facilement
+ */
 public class Interpreteur {
 
 	private Environment env;
