@@ -1,14 +1,16 @@
-SPÉCIFICATIONS DU SYSTÈME
+
+	
+	SPÉCIFICATIONS DU SYSTÈME
 
 
-* ENVIRONNEMENT
+*** ENVIRONNEMENT
 
 grille 2d * 3 couches (sol, basse altitude, haute altitude)
-point de départ, but à atteindre
+convoi: point de départ, but à atteindre
 
 Relief:
 - comment le gérer ? 
-idées : plus on est haut plus on est visible ? mais cela permet de couper pour aller plus vite au but ?
+idées : plus on est haut plus on est visible ? et cela permet de couper pour aller plus vite au but ?
 est-ce qu'on gère la visibilité de façon précise (2 objets se voient que s'il n'y a pas de cases plus hautes que le segment qui les relie -> complexe) ou alors on a juste une proba d'être vu qui est plus grande quand on est plus haut ?
 - comment le générer ? aléatoire ? ou on prévoit une map avec différents chemins possibles pour aller au but ?
 
@@ -30,18 +32,20 @@ comportement : mobile : il va d'un point A à un point B en suivant le bas relie
 
 
 
-* SYSTÈME MULTI-AGENTS
+*** SYSTÈME MULTI-AGENTS
 
-Véhicules:
-
-
-
-Drones:
+- Véhicules:
+propriétés: position, leader ou follower, fuel
 
 
+- Drones:
+propriétés: position, altitude, fuel, champ de vision (qui dépend de l'altitude : plus grand quand on est plus haut)
+est-ce qu'un drône ne peut voler qu'à une altitude possible, ou est-ce qu'il peut en changer ?
 
-Centre de contrôle:
+- Centre de contrôle:
 
 
 
-Communications:
+-> Communications: 
+possibles: D/D s'il sont pas trop éloignés ?, V/D idem ?, C/D si D à haute altitude
+
