@@ -1,0 +1,47 @@
+SPÉCIFICATIONS DU SYSTÈME
+
+
+* ENVIRONNEMENT
+
+grille 2d * 3 couches (sol, basse altitude, haute altitude)
+point de départ, but à atteindre
+
+Relief:
+- comment le gérer ? 
+idées : plus on est haut plus on est visible ? mais cela permet de couper pour aller plus vite au but ?
+est-ce qu'on gère la visibilité de façon précise (2 objets se voient que s'il n'y a pas de cases plus hautes que le segment qui les relie -> complexe) ou alors on a juste une proba d'être vu qui est plus grande quand on est plus haut ?
+- comment le générer ? aléatoire ? ou on prévoit une map avec différents chemins possibles pour aller au but ?
+
+
+Véhicules:
+comportement des véhicules visible depuis la haute altitude (position du véhicule)
+nature des véhicules visible depuis la basse altitude
+nature: -véhicule humanitaire: civil
+	-véhicule de combat: méchants (ou allié : demander au centre de contrôle)
+
+- Adversaires:
+on peut les ajouter en cliquant
+propriétés : portée visuelle, portée de tir (son tir n'est pas très précis : bruit gaussien proportionel à la distance de tir), temps de recharge
+comportement : mobile : marche aléatoire, et quand il voit un véhicule, il s'approche jusqu'à ce qu'il puisse tirer dessus
+
+- Civils:
+on peut les ajouter en cliquant
+comportement : mobile : il va d'un point A à un point B en suivant le bas relief
+
+
+
+* SYSTÈME MULTI-AGENTS
+
+Véhicules:
+
+
+
+Drones:
+
+
+
+Centre de contrôle:
+
+
+
+Communications:

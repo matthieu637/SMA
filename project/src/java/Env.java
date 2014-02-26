@@ -71,14 +71,8 @@ public class Env extends Environment implements Runnable {
 	public boolean executeAction(String agName, Structure action) {
 		boolean valide = true;
 
-		switch (action.getFunctor()) {
-		case "deplacer":
+		if(action.getFunctor().equals("deplacer"))
 			modele.deplacer(agName, Integer.parseInt(action.getTerm(0).toString()));
-			break;
-		default:
-			valide = true;
-			break;
-		}
 
 		if (!valide)
 			logger.info("executing: " + action + ", but not implemented!");

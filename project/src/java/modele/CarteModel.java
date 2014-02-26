@@ -65,8 +65,8 @@ public class CarteModel {
 		basse_altitude = new BasseAltitudeModel(nombre_drone_basse_altitude);
 		haute_altitude = new HauteAltitudeModel(nombre_drone_haute_altitude);
 
-		adversaire = new LinkedList<>();
-		lesGrilles = new ArrayList<>(3);
+		adversaire = new LinkedList();
+		lesGrilles = new ArrayList(3);
 		lesGrilles.add(terrain);
 		lesGrilles.add(basse_altitude);
 		lesGrilles.add(haute_altitude);
@@ -120,7 +120,7 @@ public class CarteModel {
 	 */
 	private Couple<Integer, Grille> dispatch(String agName) {
 		int index = Integer.parseInt(agName.substring(1));
-		Couple<Integer, Grille> r = new Couple<>(index, null);
+		Couple<Integer, Grille> r = new Couple(index, null);
 
 		switch (agName.charAt(0)) {
 		case 'd':
