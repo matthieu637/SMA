@@ -1,0 +1,69 @@
+	
+ 	SPÉCIFICATIONS DU SYSTÈME
+ 
+@@ -13,6 +12,7 @@ Relief:
+ idées : plus on est haut plus on est visible ? et cela permet de couper pour aller plus vite au but ?
+ est-ce qu'on gère la visibilité de façon précise (2 objets se voient que s'il n'y a pas de cases plus hautes que le segment qui les relie -> complexe) ou alors on a juste une proba d'être vu qui est plus grande quand on est plus haut ?
+ - comment le générer ? aléatoire ? ou on prévoit une map avec différents chemins possibles pour aller au but ?
++avec des fractales, il vaut mieux en changer à chaque fois pour évaluer nos agents sur différents environnements
+ 
+ 
+ Véhicules:
+@@ -23,7 +23,7 @@ nature: -véhicule humanitaire: civil
+
+ - Une case est occupée par un seul véhicule, car dans le cas où elle est occupée par un civil et un adversaire et qu’on a pris la décision de tirer on peut tuer le civil. 
+ 
+ - Adversaires:
+ on peut les ajouter en cliquant
+
+-propriétés : portée visuelle, portée de tir (son tir n'est pas très précis : bruit gaussien proportionnel à la distance de tir), temps de recharge
+
++propriétés : portée visuelle, portée de tir (son tir n'est pas très précis : bruit gaussien proportionnel à la distance de tir), temps de recharge (le temps de recharge est géré par le temps à accomplir l'action tirer)
+- Comportement : mobile : marche aléatoire, et quand il voit un véhicule, il s'approche jusqu'à ce qu'il puisse tirer dessus
+
+- Avoir une visibilité sur le convoi pour venir l’attaquer. 
+ 
+ - Civils:
+@@ -36,16 +36,29 @@ comportement : mobile : il va d'un point A à un point B en suivant le bas relif
+ 
+ - Véhicules:
+ propriétés: position, leader ou follower, fuel
+
+- Le leader choisit la direction selon ces propres perceptions locales, se focaliser plutôt sur le calcul des chemins vers le but.
+
++action leader : choix déplacement, scinder
++action follower : suivre celui devant
++perceptions : 
++ * les cases adjacentes (hauteurs)
++ * ce que contient ces cases (identification directe de la nature)
++ * s'il se fait tirer dessus
++Idée : 
++Le déplacement du leader peut se modéliser de cette façon : argmin{case adjacente} epsilon * h + (1-epsilon) * d
++h la hauteur de la case, d la distance au but de cette case, epsilon à déterminer
+ 
+ - Drones:
+ propriétés: position, altitude, fuel, champ de vision (qui dépend de l'altitude : plus grand quand on est plus haut)
+-est-ce qu'un drône ne peut voler qu'à une altitude possible, ou est-ce qu'il peut en changer ?
+- Les drones se mettent d’accord pour celui qui tir selon 2 critères :
+  -> il possède le plus de ressources et/ou
+  -> la distance par rapport à la menace est minimale (bonne visibilité)
+- Le but est de garder le maximum de ressources pour pouvoir tuer tous les adversaires.
+
++action : tirer, déplacer, changer altitude
++L'allocation des tâches : à voir mais il faudra probablement découper la carte en zone et répartir ces zones entre les drônes
++(une zone contient un ensemble de case ex: 9, pour éviter qu'on négocie chaque case de la carte ).
+ 
+ - Centre de contrôle:
++ * Il donne les autorisations de tirer
++ * Il détermine le leader du convoi au départ?
+ 
++-> Communications possibles:
++ * D/D s'il sont pas trop éloignés (d'où des protocoles décentralisés) 
++ * V_leader/D idem
++ * C/D si D à haute altitude
+ 
+ 
+--> Communications: 
+-possibles: D/D s'il sont pas trop éloignés ?, V/D idem ?, C/D si D à haute altitude
+
+
