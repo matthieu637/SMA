@@ -95,13 +95,13 @@ public class Env extends Environment implements Runnable {
 	@Override
 	public void run() {
 		while (this.isRunning()) {
-			try {
+			try {   
 				Thread.sleep(Variables.VITESSE_ACTION_ADVERSAIRE);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 
-			modele.deplaceAdversaire();
+			modele.runAdversaire();
 		}
 	}
 }
