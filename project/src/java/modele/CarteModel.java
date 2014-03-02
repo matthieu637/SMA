@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import modele.percepts.AllPercepts;
 import utils.Couple;
 import vue.FenetrePpale;
 
@@ -57,16 +58,16 @@ public class CarteModel {
 	 * @param nombreDrone
 	 *            nombre de drone
 	 */
-	public CarteModel(Interpreteur interpreteur, int nombreVehicule, int nombreDrone) {
+	public CarteModel(AllPercepts interpreteur, int nombreVehicule, int nombreDrone) {
 		int nombre_drone_basse_altitude = (int) (nombreDrone * Variables.PROPORTION_DRONE_BASSE_HAUTE_ALTITUDE);
 		int nombre_drone_haute_altitude = nombreDrone - nombre_drone_basse_altitude;
 
-		terrain = new TerrainModel(nombreVehicule);
-		basse_altitude = new BasseAltitudeModel(nombre_drone_basse_altitude);
-		haute_altitude = new HauteAltitudeModel(nombre_drone_haute_altitude);
+		terrain = new TerrainModel(nombreVehicule, interpreteur);
+		basse_altitude = new BasseAltitudeModel(nombre_drone_basse_altitude, interpreteur);
+		haute_altitude = new HauteAltitudeModel(nombre_drone_haute_altitude, interpreteur);
 
-		adversaire = new LinkedList();
-		lesGrilles = new ArrayList(3);
+		adversaire = new LinkedList<Adversaire>();
+		lesGrilles = new ArrayList<Grille>(3);
 		lesGrilles.add(terrain);
 		lesGrilles.add(basse_altitude);
 		lesGrilles.add(haute_altitude);
@@ -120,7 +121,7 @@ public class CarteModel {
 	 */
 	private Couple<Integer, Grille> dispatch(String agName) {
 		int index = Integer.parseInt(agName.substring(1));
-		Couple<Integer, Grille> r = new Couple(index, null);
+		Couple<Integer, Grille> r = new Couple<Integer, Grille>(index, null);
 
 		switch (agName.charAt(0)) {
 		case 'd':

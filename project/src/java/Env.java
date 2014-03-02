@@ -1,4 +1,4 @@
-// Environment code for project project
+
 
 import jason.asSyntax.Structure;
 import jason.environment.Environment;
@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 import modele.CarteModel;
 import modele.Variables;
-import modele.Interpreteur;
+import modele.percepts.AllPercepts;
 import vue.FenetrePpale;
 
 /**
@@ -60,7 +60,7 @@ public class Env extends Environment implements Runnable {
 			e.printStackTrace();
 		}
 
-		modele = new CarteModel(new Interpreteur(this), nombreVehicule, nombreDrone);
+		modele = new CarteModel(new AllPercepts(this), nombreVehicule, nombreDrone);
 		FenetrePpale vue = new FenetrePpale(modele);
 		modele.setView(vue);
 
@@ -73,6 +73,7 @@ public class Env extends Environment implements Runnable {
 
 		if(action.getFunctor().equals("deplacer"))
 			modele.deplacer(agName, Integer.parseInt(action.getTerm(0).toString()));
+		else valide = false;
 
 		if (!valide)
 			logger.info("executing: " + action + ", but not implemented!");

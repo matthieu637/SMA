@@ -1,5 +1,7 @@
 package modele;
 
+import modele.percepts.AllPercepts;
+
 /**
  * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
  * 
@@ -7,8 +9,8 @@ package modele;
  */
 public class HauteAltitudeModel extends Grille {
 
-	protected HauteAltitudeModel(int nbAgent) {
-		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent);
+	protected HauteAltitudeModel(int nbAgent, AllPercepts interpreteur) {
+		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent, interpreteur);
 	}
 
 }

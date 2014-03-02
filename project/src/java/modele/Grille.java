@@ -1,6 +1,7 @@
 package modele;
 
 import jason.environment.grid.Location;
+import modele.percepts.AllPercepts;
 import ext.GridWorldModelP;
 
 /**
@@ -12,12 +13,16 @@ import ext.GridWorldModelP;
 public abstract class Grille extends GridWorldModelP {
 
 	public static final int ADVERSAIRE_CODE = 8;
+	
+	protected AllPercepts interpreteur;
 
-	protected Grille(int w, int h, int nbAgs) {
+	protected Grille(int w, int h, int nbAgs, AllPercepts interpreteur) {
 		super(w, h, nbAgs);
 
 		for (int a = 0; a < nbAgs; a++)
 			setAgPos(a, 0, 0);
+		
+		this.interpreteur = interpreteur;
 	}
 
 	/**

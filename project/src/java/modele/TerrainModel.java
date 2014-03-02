@@ -4,9 +4,11 @@ import jason.environment.grid.Location;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import modele.percepts.AllPercepts;
 import utils.Couple;
 
 /**
@@ -28,8 +30,10 @@ public class TerrainModel extends Grille {
 
 	private Random generateur = new Random();
 
-	protected TerrainModel(int nbAgent) {
-		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent);
+	private List<Vehicule> leaders;
+
+	protected TerrainModel(int nbAgent, AllPercepts interpreteur) {
+		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent, interpreteur);
 
 		construire_fractale();
 
@@ -37,6 +41,15 @@ public class TerrainModel extends Grille {
 
 		but = definir_position_but();
 
+		// place les agents par leur numero, le dernier est leader
+		for (int a = 0; a < nbAgent; a++)
+			setAgPos(a, a, 0);
+
+		Vehicule leader = new Vehicule(nbAgent, getAgPos(nbAgent - 1));
+		leader.initLeader(interpreteur, but, hauteur);
+
+		leaders = new LinkedList<Vehicule>();
+		leaders.add(leader);
 	}
 
 	/**
@@ -117,5 +130,16 @@ public class TerrainModel extends Grille {
 
 	public boolean estBut(int x, int y) {
 		return but.x == x && but.y == y;
+	}
+
+	@Override
+	public void deplacer(int agent, int direction) {
+		super.deplacer(agent - 1, direction);
+
+		for (Vehicule leader : leaders)
+			if (leader.equals(agent)) {
+				leader.deplacer(interpreteur, getAgPos(leader.getNumero() - 1), hauteur);
+				break;
+			}
 	}
 }

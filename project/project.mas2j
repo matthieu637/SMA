@@ -5,7 +5,7 @@ MAS project {
 	environment: Env("project.mas2j")
 
 	agents:
-		d drone#6;
+		d drone#3;
 		v vehicule#6;
 		t tour_controle#1;
 
