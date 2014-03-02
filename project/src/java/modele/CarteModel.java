@@ -184,6 +184,21 @@ public class CarteModel {
 		interpreteur.killVehicule(terrain.getAgAtPos(t));
 		terrain.remove(GridWorldModelP.AGENT, t);
 	}
+	
+	/**
+	* calcule la visibilité entre 2 points en fonction du relief
+	* de façon approximative
+	* résultat entre 0 et 1
+	*/
+	public double visibilite(Location l1, Location l2) {
+		
+		int h1 = this.terrain.getHauteur(l1.x, l1.y);
+		int h2 = this.terrain.getHauteur(l2.x, l2.y);
+		
+		double v = 0.5 + ((double) (h1*h2)) / (255*255*2);
+		
+		return v;		
+	}
 
 	/**
 	 * Appeler à chaque iteration pour que les adversaires fassent leur action
@@ -195,9 +210,10 @@ public class CarteModel {
 
 			Location t = this.find_target(l);
 
-			if (l.distanceEuclidean(t) < a.vision()) { // s'il y a une cible en
-														// vue, on s'en approche
-														// et/ou on tire
+			if ((l.distanceEuclidean(t) < a.vision()) & (this.visibilite(l,t) > generateur.nextDouble())) { 
+				// s'il y a une cible à portee de
+				// vue et plutot visible, on s'en approche
+				// et/ou on tire
 
 				if (a.virulent()) { // on s'en approche
 
