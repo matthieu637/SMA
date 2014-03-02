@@ -4,7 +4,6 @@ import jason.environment.grid.Location;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -30,7 +29,7 @@ public class TerrainModel extends Grille {
 
 	private Random generateur = new Random();
 
-	private List<Vehicule> leaders;
+	private Convoi convoi;
 
 	protected TerrainModel(int nbAgent, AllPercepts interpreteur) {
 		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent, interpreteur);
@@ -41,15 +40,8 @@ public class TerrainModel extends Grille {
 
 		but = definir_position_but();
 
-		// place les agents par leur numero, le dernier est leader
-		for (int a = 0; a < nbAgent; a++)
-			setAgPos(a, a, 0);
-
-		Vehicule leader = new Vehicule(nbAgent, getAgPos(nbAgent - 1));
-		leader.initLeader(interpreteur, but, hauteur);
-
-		leaders = new LinkedList<Vehicule>();
-		leaders.add(leader);
+		// percept initiaux
+		convoi = new Convoi(nbAgent, getAgPos(nbAgent - 1), interpreteur, but, hauteur);
 	}
 
 	/**
@@ -133,13 +125,20 @@ public class TerrainModel extends Grille {
 	}
 
 	@Override
-	public void deplacer(int agent, int direction) {
-		super.deplacer(agent - 1, direction);
+	public Location deplacer(int agent, int direction) {
+		Location l = super.deplacer(agent - 1, direction);
 
-		for (Vehicule leader : leaders)
-			if (leader.equals(agent)) {
-				leader.deplacer(interpreteur, getAgPos(leader.getNumero() - 1), hauteur);
-				break;
-			}
+		convoi.majPercepts(agent, l);
+
+		return l;
+	}
+
+	@Override
+	public Couple<Location, Boolean> deplacerCollision(int agent, int direction) {
+		Couple<Location, Boolean> c = super.deplacerCollision(agent - 1, direction);
+
+		convoi.majPercepts(agent, c.first);
+
+		return c;
 	}
 }

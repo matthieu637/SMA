@@ -36,12 +36,10 @@ public class Vehicule {
 	}
 
 	public void deplacer(AllPercepts interpreteur, Location nl, int[][] hauteur) {
-		interpreteur.retirerPositionVehicule(numero, l.x, l.y);
+		interpreteur.retirerPositionVehicule(numero);
 		interpreteur.ajouterPositionVehicule(numero, nl.x, nl.y);
 
-		interpreteur.retirerHeightmap(numero, l.x - 1 >= 0 ? hauteur[l.x - 1][l.y] : OUT, l.y - 1 >= 0 ? hauteur[l.x][l.y - 1] : OUT,
-				l.x + 1 < Variables.TAILLE_CARTE_X ? hauteur[l.x + 1][l.y] : OUT,
-				l.y + 1 < Variables.TAILLE_CARTE_Y ? hauteur[l.x][l.y + 1] : OUT);
+		interpreteur.retirerHeightmap(numero);
 		interpreteur.ajouterHeightmap(numero, nl.x - 1 >= 0 ? hauteur[nl.x - 1][nl.y] : OUT, nl.y - 1 >= 0 ? hauteur[nl.x][nl.y - 1] : OUT,
 				nl.x + 1 < Variables.TAILLE_CARTE_X ? hauteur[nl.x + 1][nl.y] : OUT,
 				nl.y + 1 < Variables.TAILLE_CARTE_Y ? hauteur[nl.x][nl.y + 1] : OUT);

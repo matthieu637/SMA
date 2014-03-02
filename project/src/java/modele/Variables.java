@@ -71,9 +71,7 @@ public class Variables {
 	}
 
 	public long getVitesse() {
-		synchronized (lock) {
 			return vitesse;
-		}
 	}
 
 	public void setVitesse(long v) {

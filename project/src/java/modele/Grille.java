@@ -2,6 +2,7 @@ package modele;
 
 import jason.environment.grid.Location;
 import modele.percepts.AllPercepts;
+import utils.Couple;
 import ext.GridWorldModelP;
 
 /**
@@ -13,15 +14,15 @@ import ext.GridWorldModelP;
 public abstract class Grille extends GridWorldModelP {
 
 	public static final int ADVERSAIRE_CODE = 8;
-	
+
 	protected AllPercepts interpreteur;
 
 	protected Grille(int w, int h, int nbAgs, AllPercepts interpreteur) {
 		super(w, h, nbAgs);
 
 		for (int a = 0; a < nbAgs; a++)
-			setAgPos(a, 0, 0);
-		
+			setAgPos(a, a, 0);
+
 		this.interpreteur = interpreteur;
 	}
 
@@ -32,15 +33,40 @@ public abstract class Grille extends GridWorldModelP {
 	 *            index de l'agent
 	 * @param direction
 	 */
-	public void deplacer(int agent, int direction) {
+	public Location deplacer(int agent, int direction) {
 		Location l = getAgPos(agent);
 
 		if (l == null)
-			return;
+			return null;
 
 		l = deplacer(l, direction);
 
 		setAgPos(agent, l);
+
+		return l;
+	}
+
+	/**
+	 * Deplace un agent dans une direction sur la grille
+	 * 
+	 * @param agent
+	 *            index de l'agent
+	 * @param direction
+	 */
+	public Couple<Location, Boolean> deplacerCollision(int agent, int direction) {
+		Location l = getAgPos(agent);
+		Location nl;
+
+		if (l == null)
+			return null;
+
+		nl = deplacer(l, direction);
+
+		if (getAgAtPos(nl) == -1) {
+			setAgPos(agent, nl);
+			return new Couple<Location, Boolean>(nl, true);
+		} else
+			return new Couple<Location, Boolean>(l, false);
 	}
 
 	/**
@@ -71,7 +97,6 @@ public abstract class Grille extends GridWorldModelP {
 			break;
 
 		default:
-			System.out.println("Error");
 			break;
 		}
 		return l;

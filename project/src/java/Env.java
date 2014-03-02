@@ -71,12 +71,9 @@ public class Env extends Environment implements Runnable {
 		boolean valide = true;
 
 		if (action.getFunctor().equals("deplacer"))
-			modele.deplacer(agName, Integer.parseInt(action.getTerm(0).toString()));
+			valide = modele.deplacerCollision(agName, Integer.parseInt(action.getTerm(0).toString()));
 		else
 			valide = false;
-
-		if (!valide)
-			logger.info("executing: " + action + ", but not implemented!");
 
 		try {
 			Thread.sleep((long) (Variables.VITESSE_ACTION * Variables.getInstance().getVitesse()));
@@ -84,7 +81,7 @@ public class Env extends Environment implements Runnable {
 			e.printStackTrace();
 		}
 
-		return true;
+		return valide;
 	}
 
 	/** Called before the end of MAS execution */

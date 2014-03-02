@@ -31,6 +31,10 @@ public abstract class InterpreteurSpl extends Interpreteur {
 		retirer("d" + numero, String.format(percept, args));
 	}
 
+	protected void retirerVehiculeUnif(int numero, String percept, Object... args) {
+		retirerUnif("v" + numero, String.format(percept, args));
+	}
+
 	/**
 	 * Tue un véhicule du système
 	 * 

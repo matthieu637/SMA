@@ -113,7 +113,23 @@ public class CarteModel {
 	 */
 	public void deplacer(String agName, int direction) {
 		Couple<Integer, Grille> c = dispatch(agName);
-		c.second.deplacer(c.first, direction);
+		c.second.deplacerCollision(c.first, direction);
+	}
+
+	/**
+	 * Déplace un agent sur une des grilles avec collision
+	 * 
+	 * @param agName
+	 *            le nom de l'agent
+	 * @param direction
+	 *            la direction du deplacement( haut,bas, droite, gauche)
+	 */
+	public boolean deplacerCollision(String agName, int direction) {
+		Couple<Integer, Grille> c = dispatch(agName);
+		Couple<Location, Boolean> c2 = c.second.deplacerCollision(c.first, direction);
+		if (c2 != null)
+			return c2.second;
+		return false;
 	}
 
 	/**
@@ -130,11 +146,12 @@ public class CarteModel {
 
 		switch (agName.charAt(0)) {
 		case 'd':
-			if (index >= basse_altitude.getNbOfAgs()) {
+			if (index > basse_altitude.getNbOfAgs()) {
 				r.first = index - basse_altitude.getNbOfAgs();
 				r.second = haute_altitude;
-			} else
+			} else{
 				r.second = basse_altitude;
+			}
 			break;
 		case 'v':
 			r.second = terrain;

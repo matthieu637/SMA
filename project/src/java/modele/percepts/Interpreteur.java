@@ -35,6 +35,16 @@ public abstract class Interpreteur {
 	protected void retirer(String nomAgent, String percept) {
 		env.removePercept(nomAgent, Literal.parseLiteral(percept));
 	}
+	
+	/**
+	 * Retire un percept par unification
+	 * 
+	 * @param nomAgent
+	 * @param percept
+	 */
+	protected void retirerUnif(String nomAgent, String percept){
+		env.removePerceptsByUnif(nomAgent, Literal.parseLiteral(percept));
+	}
 
 	/**
 	 * Ajoute un percept à un agent

@@ -1,5 +1,7 @@
 package modele;
 
+import jason.environment.grid.Location;
+import utils.Couple;
 import modele.percepts.AllPercepts;
 
 /**
@@ -14,4 +16,8 @@ public class BasseAltitudeModel extends Grille {
 		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent, interpreteur);
 	}
 
+	@Override
+	public Couple<Location, Boolean> deplacerCollision(int agent, int direction) {
+		return super.deplacerCollision(agent - 1, direction);
+	}
 }
