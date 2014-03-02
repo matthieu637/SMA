@@ -99,7 +99,7 @@ public class Env extends Environment implements Runnable {
 				e.printStackTrace();
 			}
 
-			modele.runAdversaire();
+			modele.runEnv();
 		}
 	}
 }

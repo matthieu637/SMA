@@ -37,10 +37,16 @@ public class CarteModel {
 	private List<Grille> lesGrilles;
 
 	/**
-	 * Liste des adversaires sur les 3 modèles (on peut les voir sur les 3
+	 * Liste des adversaires sur les 2 modèles (on peut les voir sur les 2
 	 * grilles mais un adversaire ne peut être qu'au sol)
 	 */
 	private List<Adversaire> adversaire;
+	
+	/**
+	 * Liste des civils sur les 2 modèles (on peut les voir sur les 2
+	 * grilles mais un civil ne peut être qu'au sol)
+	 */
+	private List<Civil> civil;
 
 	private Random generateur;
 
@@ -63,6 +69,7 @@ public class CarteModel {
 		ciel = new CielModel(nombreDrone, interpreteur);
 
 		adversaire = new LinkedList<Adversaire>();
+		civil = new LinkedList<Civil>();
 		lesGrilles = new ArrayList<Grille>(2);
 		lesGrilles.add(terrain);
 		lesGrilles.add(ciel);
@@ -80,7 +87,7 @@ public class CarteModel {
 	}
 
 	/**
-	 * Définie les 3 vues
+	 * Définie les 2 vues
 	 * 
 	 * @param vue
 	 */
@@ -95,7 +102,7 @@ public class CarteModel {
 	 * @param agName
 	 *            le nom de l'agent
 	 * @param direction
-	 *            la direction du deplacement( haut,bas, droite, gauche)
+	 *            la direction du deplacement(haut, bas, droite, gauche)
 	 */
 	public void deplacer(String agName, int direction) {
 		Couple<Integer, Grille> c = dispatch(agName);
@@ -157,6 +164,19 @@ public class CarteModel {
 	}
 
 	/**
+	 * Ajoute un civil dans chacune des grilles à la position x,y
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public void ajouterAgentCivil(int x, int y) {
+		for (Grille g : lesGrilles)
+			g.add(Grille.CIVIL_CODE, x, y);		
+		Location but = this.terrain.getFreePos();
+		civil.add(new Civil(x, y, but));		
+	}
+	
+	/**
 	 * Trouve le véhicule du convoi le plus proche de l
 	 */
 	public Location find_target(Location l) {
@@ -201,9 +221,11 @@ public class CarteModel {
 	}
 
 	/**
-	 * Appeler à chaque iteration pour que les adversaires fassent leur action
+	 * Appeler à chaque iteration pour que les adversaires et civils fassent leur action
 	 */
-	public void runAdversaire() {
+	public void runEnv() {
+		
+		// Adversaires
 		for (Adversaire a : adversaire) {
 
 			Location l = a.getLocation();
@@ -222,7 +244,7 @@ public class CarteModel {
 					int dx = t.x - l.x;
 					int dy = t.y - l.y;
 					int direction;
-
+										
 					if (Math.abs(dx) > Math.abs(dy)) {
 						if (dx > 0) {
 							direction = 2;
@@ -260,6 +282,73 @@ public class CarteModel {
 						g.add(Grille.ADVERSAIRE_CODE, a.getLocation());
 				}
 			}
+		}
+		
+		// Civils
+		for (Civil c : civil) {
+
+			Location l = c.getLocation();
+			Location but = c.getBut();	
+			
+			int dx = but.x - l.x;
+			int dy = but.y - l.y;
+			int direction;
+
+			if (but.equals(l)) { // c est arrivé à son but, on le supprime
+				
+			}
+			else {				
+				if (dx == 0) {
+					if (dy > 0)
+						direction = 3;					
+					else
+						direction = 1;									
+				}
+				else if (dy == 0) {
+					if (dx > 0)
+						direction = 2;
+					else
+						direction = 0;																
+				}
+				else {
+					
+					// on trouve dans quelle direction le civil doit avancer
+					// : la direction qui le rapproche le plus de son but
+					// tout en restant le plus bas possible
+					
+					int rx; // relief de la case d'à coté en x
+					if (dx > 0)
+						rx = this.terrain.getHauteur(l.x+1,l.y);
+					else
+						rx = this.terrain.getHauteur(l.x-1,l.y);
+					
+					int ry; // relief de la case d'à coté en y
+					if (dy > 0)
+						ry = this.terrain.getHauteur(l.x,l.y+1);
+					else
+						ry = this.terrain.getHauteur(l.x,l.y-1);
+						
+					if (rx > ry) {
+						if (dy > 0)
+							direction = 3;
+						else
+							direction = 1;						
+					}
+					else {
+						if (dx > 0)
+							direction = 2;
+						else
+							direction = 0;						
+					}						
+				}
+			
+				for (Grille g : lesGrilles)
+					g.remove(Grille.CIVIL_CODE, c.getLocation());
+				Grille.deplacer(l, direction);
+				c.setLocation(l);
+				for (Grille g : lesGrilles)
+					g.add(Grille.CIVIL_CODE, c.getLocation());
+			}				
 		}
 	}
 }

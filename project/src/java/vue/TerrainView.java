@@ -31,6 +31,7 @@ public class TerrainView extends GridWorldViewPanel {
 				int x = e.getX() / cellSizeW;
 				int y = e.getY() / cellSizeH;
 				carte.ajouterAgentAdverse(x, y);
+				//carte.ajouterAgentCivil(x, y);
 			}
 		});
 

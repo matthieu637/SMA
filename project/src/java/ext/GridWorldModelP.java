@@ -195,7 +195,7 @@ public class GridWorldModelP {
 	 * returns a random free location using isFree to test the availability of
 	 * some possible location (it means free of agents and obstacles)
 	 */
-	protected Location getFreePos() {
+	public Location getFreePos() {
 		for (int i = 0; i < (getWidth() * getHeight() * 5); i++) {
 			int x = random.nextInt(getWidth());
 			int y = random.nextInt(getHeight());
@@ -211,7 +211,7 @@ public class GridWorldModelP {
 	 * returns a random free location using isFree(object) to test the
 	 * availability of some possible location
 	 */
-	protected Location getFreePos(int obj) {
+	public Location getFreePos(int obj) {
 		for (int i = 0; i < (getWidth() * getHeight() * 5); i++) {
 			int x = random.nextInt(getWidth());
 			int y = random.nextInt(getHeight());

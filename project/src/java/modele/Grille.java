@@ -14,6 +14,7 @@ import ext.GridWorldModelP;
 public abstract class Grille extends GridWorldModelP {
 
 	public static final int ADVERSAIRE_CODE = 8;
+	public static final int CIVIL_CODE = 16;
 
 	protected AllPercepts interpreteur;
 
