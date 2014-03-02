@@ -5,7 +5,7 @@ package modele;
  * 
  *         Contient toutes les variables modifiables du système
  */
-public interface Variables {
+public class Variables {
 
 	/**
 	 * Taille des grilles en largeur
@@ -32,16 +32,53 @@ public interface Variables {
 	public static float PROPORTION_DRONE_BASSE_HAUTE_ALTITUDE = 0.6f;
 
 	/**
-	 * Vitesse d'action du MAS
+	 * Facteur de vitesse d'action du MAS
 	 */
-	public static long VITESSE_ACTION = 100;
+	public static float VITESSE_ACTION = 1.f;
 	/**
 	 * Quel pas de temps pour le deplacement des adversaires
 	 */
-	public static long VITESSE_ACTION_ADVERSAIRE = 500;
+	public static float VITESSE_ACTION_ADVERSAIRE = 1.f;
 
 	/**
 	 * Probabilité qu'un adversaire ait un comportement intégrant un déplacement
 	 */
 	public static float PROBA_ADVERSAIRE_VIRULENT = 0.4f;
+
+	/**
+	 * Singleton pour modifier dynamiquement la vitesse
+	 */
+	private static final Variables singleton = new Variables();
+
+	/**
+	 * Vitesse d'exécution globale
+	 */
+	private long vitesse;
+
+	/**
+	 * Protège le changement de vitesse
+	 */
+	private final Object lock = new Object();
+
+	private Variables() {
+		synchronized (lock) {
+			vitesse = 500;
+		}
+	}
+
+	public static Variables getInstance() {
+		return singleton;
+	}
+
+	public long getVitesse() {
+		synchronized (lock) {
+			return vitesse;
+		}
+	}
+
+	public void setVitesse(long v) {
+		synchronized (lock) {
+			vitesse = v;
+		}
+	}
 }

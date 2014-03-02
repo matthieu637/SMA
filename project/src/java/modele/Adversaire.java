@@ -4,7 +4,7 @@ import jason.environment.grid.Location;
 import java.lang.Math;
 
 /**
- * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
+ * @author Sébastien Forestier <sforesti@clipper.ens.fr>
  * 
  *         Représente un adversaire
  */

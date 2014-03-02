@@ -10,6 +10,7 @@ import java.util.Random;
 import modele.percepts.AllPercepts;
 import utils.Couple;
 import vue.FenetrePpale;
+import ext.GridWorldModelP;
 
 /**
  * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
@@ -47,6 +48,8 @@ public class CarteModel {
 
 	private Random generateur;
 
+	private AllPercepts interpreteur;
+
 	/**
 	 * Initialise les modèles, puis dispatche le nombre de drône en haute
 	 * altitude ou basse altitude
@@ -74,6 +77,7 @@ public class CarteModel {
 		lesGrilles.add(haute_altitude);
 
 		generateur = new Random();
+		this.interpreteur = interpreteur;
 	}
 
 	public TerrainModel getTerrain() {
@@ -155,14 +159,14 @@ public class CarteModel {
 	}
 
 	/**
-	 * Trouve le véhicule du convoi le plus proche de l	 
+	 * Trouve le véhicule du convoi le plus proche de l
 	 */
-	public Location find_target(Location l)  {
-		
+	public Location find_target(Location l) {
+
 		int n = this.terrain.getNbOfAgs();
 		if (n == 0)
 			return null;
-		
+
 		int mn = 0;
 		double md = 1000.;
 		for (int i = 0; i < n; i++) {
@@ -174,51 +178,51 @@ public class CarteModel {
 		}
 		return this.terrain.getAgPos(mn);
 	}
-	
+
 	/**
-	* Détruit ce qu'il y a à la position t
-	*/
+	 * Détruit ce qu'il y a à la position t
+	 */
 	public void destruction(Location t) {
-		// TO IMPLEMENT
+		interpreteur.killVehicule(terrain.getAgAtPos(t));
+		terrain.remove(GridWorldModelP.AGENT, t);
 	}
-	
-	
+
 	/**
 	 * Appeler à chaque iteration pour que les adversaires fassent leur action
 	 */
 	public void runAdversaire() {
-		for (Adversaire a : adversaire) {	
-			
-			Location l = a.getLocation();						
-			 
-			Location t = this.find_target(l);			
-			
-			if (l.distanceEuclidean(t) < a.vision()) { // s'il y a une cible en vue, on s'en approche et/ou on tire
-			
+		for (Adversaire a : adversaire) {
+
+			Location l = a.getLocation();
+
+			Location t = this.find_target(l);
+
+			if (l.distanceEuclidean(t) < a.vision()) { // s'il y a une cible en
+														// vue, on s'en approche
+														// et/ou on tire
+
 				if (a.virulent()) { // on s'en approche
-					
-					// on trouve dans quelle direction l'adversaire doit avancer : la direction qui le rapproche le plus de la cible
+
+					// on trouve dans quelle direction l'adversaire doit avancer
+					// : la direction qui le rapproche le plus de la cible
 					int dx = t.x - l.x;
 					int dy = t.y - l.y;
 					int direction;
-					
+
 					if (Math.abs(dx) > Math.abs(dy)) {
 						if (dx > 0) {
-							direction = 2; 					
-						}
-						else {
+							direction = 2;
+						} else {
 							direction = 0;
 						}
-					}
-					else {						
+					} else {
 						if (dy > 0) {
-							direction = 3; 					
-						}
-						else {
+							direction = 3;
+						} else {
 							direction = 1;
-						}						
+						}
 					}
-					
+
 					for (Grille g : lesGrilles)
 						g.remove(Grille.ADVERSAIRE_CODE, a.getLocation());
 					Grille.deplacer(l, direction);
@@ -226,14 +230,13 @@ public class CarteModel {
 					for (Grille g : lesGrilles)
 						g.add(Grille.ADVERSAIRE_CODE, a.getLocation());
 				}
-				
+
 				if (l.distanceEuclidean(t) < a.portee()) { // on tire
 					Location trou = a.tir(t, generateur.nextGaussian(), generateur.nextGaussian());
-					this.destruction(trou);				
+					this.destruction(trou);
 				}
-			}
-			else { // sinon, on bouge alétoirement si on est virulent
-				
+			} else { // sinon, on bouge alétoirement si on est virulent
+
 				if (a.virulent()) {
 					for (Grille g : lesGrilles)
 						g.remove(Grille.ADVERSAIRE_CODE, a.getLocation());

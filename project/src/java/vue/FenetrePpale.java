@@ -7,8 +7,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import modele.CarteModel;
+import modele.Variables;
 
 public class FenetrePpale extends JFrame {
 
@@ -50,7 +54,7 @@ public class FenetrePpale extends JFrame {
 		l.setFont(defaultFont);
 		l.setBounds(1500, 5, 150, 20);
 		getContentPane().add(l);
-		
+
 		JCheckBox j = new JCheckBox("Cacher zones non découverte");
 		j.setFont(defaultFont);
 		j.setBounds(20, 600 + 20 + 20, 250, 20);
@@ -60,7 +64,19 @@ public class FenetrePpale extends JFrame {
 			}
 		});
 		getContentPane().add(j);
-		
+
+		JSlider v = new JSlider(1, 1000);
+		v.setBounds(20, 600 + 20 + 20 + 20, 250, 20);
+		v.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				JSlider s = (JSlider) e.getSource();
+				Variables.getInstance().setVitesse(s.getValue());
+			}
+		});
+		getContentPane().add(v);
+
 		setVisible(true);
 	}
 

@@ -46,4 +46,12 @@ public abstract class Interpreteur {
 		env.addPercept(nomAgent, Literal.parseLiteral(percept));
 	}
 
+	/**
+	 * Tue un agent du système
+	 * @param name
+	 */
+	protected void kill(String name) {
+		env.getEnvironmentInfraTier().getRuntimeServices().killAgent(name, null);
+	}
+
 }

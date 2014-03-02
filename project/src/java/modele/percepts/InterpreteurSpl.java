@@ -30,4 +30,12 @@ public abstract class InterpreteurSpl extends Interpreteur {
 	protected void retirerDrone(int numero, String percept, Object... args) {
 		retirer("d" + numero, String.format(percept, args));
 	}
+
+	/**
+	 * Tue un véhicule du système
+	 * 
+	 */
+	public void killVehicule(int vehicule) {
+		kill("v" + (vehicule + 1));
+	}
 }

@@ -1,5 +1,4 @@
 
-
 import jason.asSyntax.Structure;
 import jason.environment.Environment;
 import jason.mas2j.AgentParameters;
@@ -71,15 +70,16 @@ public class Env extends Environment implements Runnable {
 	public boolean executeAction(String agName, Structure action) {
 		boolean valide = true;
 
-		if(action.getFunctor().equals("deplacer"))
+		if (action.getFunctor().equals("deplacer"))
 			modele.deplacer(agName, Integer.parseInt(action.getTerm(0).toString()));
-		else valide = false;
+		else
+			valide = false;
 
 		if (!valide)
 			logger.info("executing: " + action + ", but not implemented!");
 
 		try {
-			Thread.sleep(Variables.VITESSE_ACTION);
+			Thread.sleep((long) (Variables.VITESSE_ACTION * Variables.getInstance().getVitesse()));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -96,8 +96,8 @@ public class Env extends Environment implements Runnable {
 	@Override
 	public void run() {
 		while (this.isRunning()) {
-			try {   
-				Thread.sleep(Variables.VITESSE_ACTION_ADVERSAIRE);
+			try {
+				Thread.sleep((long) (Variables.VITESSE_ACTION_ADVERSAIRE * Variables.getInstance().getVitesse()));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
