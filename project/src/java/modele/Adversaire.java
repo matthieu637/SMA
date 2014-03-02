@@ -62,7 +62,9 @@ public class Adversaire {
 	public Location tir(Location t, double rdx, double rdy) {
 		
 		double distance = t.distanceEuclidean(this.l);
-		return new Location((int) (t.x + Math.round(distance * this.imprecision * rdx)), (int) (t.y + Math.round(distance * this.imprecision * rdy))); 		
+		int tirx = (int) (t.x + Math.round(distance * this.imprecision * rdx));
+		int tiry = (int) (t.y + Math.round(distance * this.imprecision * rdy));
+		return new Location(tirx, tiry); 		
 	}
 
 }

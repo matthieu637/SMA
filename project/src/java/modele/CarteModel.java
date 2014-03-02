@@ -65,15 +65,17 @@ public class CarteModel {
 	 *            nombre de drone
 	 */
 	public CarteModel(AllPercepts interpreteur, int nombreVehicule, int nombreDrone) {
-		terrain = new TerrainModel(nombreVehicule, interpreteur);
-		ciel = new CielModel(nombreDrone, interpreteur);
 
 		adversaire = new LinkedList<Adversaire>();
 		civil = new LinkedList<Civil>();
+		
+		terrain = new TerrainModel(nombreVehicule, interpreteur);
+		ciel = new CielModel(nombreDrone, interpreteur, adversaire, civil);
+
 		lesGrilles = new ArrayList<Grille>(2);
 		lesGrilles.add(terrain);
 		lesGrilles.add(ciel);
-
+		
 		generateur = new Random();
 		this.interpreteur = interpreteur;
 	}
@@ -158,8 +160,8 @@ public class CarteModel {
 	 * @param y
 	 */
 	public void ajouterAgentAdverse(int x, int y) {
-		for (Grille g : lesGrilles)
-			g.add(Grille.ADVERSAIRE_CODE, x, y);
+		for (Grille g : lesGrilles)			
+			g.add(Grille.ADVERSAIRE_CODE, x, y);	
 		adversaire.add(new Adversaire(x, y, generateur.nextFloat() < Variables.PROBA_ADVERSAIRE_VIRULENT));
 	}
 
@@ -269,7 +271,8 @@ public class CarteModel {
 
 				if (l.distanceEuclidean(t) < a.portee()) { // on tire
 					Location trou = a.tir(t, generateur.nextGaussian(), generateur.nextGaussian());
-					this.destruction(trou);
+					if (trou.isInArea(new Location(0,0), new Location(this.terrain.getWidth(), this.terrain.getHeight())))
+						this.destruction(trou);
 				}
 			} else { // sinon, on bouge alétoirement si on est virulent
 

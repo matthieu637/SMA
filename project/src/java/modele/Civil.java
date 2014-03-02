@@ -18,7 +18,7 @@ public class Civil {
 	
 	public Civil(int x, int y, Location but) {
 		this.l = new Location(x, y);
-		this.but = but;
+		this.setBut(but);
 	}
 
 	public Location getLocation() {
@@ -27,6 +27,10 @@ public class Civil {
 	
 	public Location getBut() {
 		return but;
+	}
+	
+	public void setBut(Location but) {
+		this.but = but;
 	}
 
 	public void setLocation(Location l) {
