@@ -13,6 +13,7 @@ import vue.FenetrePpale;
 
 /**
  * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
+ * @author Sébastien Forestier <sforesti@clipper.ens.fr>
  * 
  *         Modèle haut niveau, il contient les 3 différents grille et les
  *         adversaires
@@ -154,18 +155,93 @@ public class CarteModel {
 	}
 
 	/**
-	 * Appeler à chaque iteration pour faire se déplacer les adversaires
+	 * Trouve le véhicule du convoi le plus proche de l	 
 	 */
-	public void deplaceAdversaire() {
-		for (Adversaire a : adversaire) {
-			if (a.virulent()) {
-				for (Grille g : lesGrilles)
-					g.remove(Grille.ADVERSAIRE_CODE, a.getLocation());
-				Location l = a.getLocation();
-				Grille.deplacer(l, generateur.nextInt(4));
-				a.setLocation(l);
-				for (Grille g : lesGrilles)
-					g.add(Grille.ADVERSAIRE_CODE, a.getLocation());
+	public Location find_target(Location l)  {
+		
+		int n = this.terrain.getNbOfAgs();
+		if (n == 0)
+			return null;
+		
+		int mn = 0;
+		double md = 1000.;
+		for (int i = 0; i < n; i++) {
+			double distance = l.distanceEuclidean(this.terrain.getAgPos(i));
+			if (distance < md) {
+				mn = i;
+				md = distance;
+			}
+		}
+		return this.terrain.getAgPos(mn);
+	}
+	
+	/**
+	* Détruit ce qu'il y a à la position t
+	*/
+	public void destruction(Location t) {
+		// TO IMPLEMENT
+	}
+	
+	
+	/**
+	 * Appeler à chaque iteration pour que les adversaires fassent leur action
+	 */
+	public void runAdversaire() {
+		for (Adversaire a : adversaire) {	
+			
+			Location l = a.getLocation();						
+			 
+			Location t = this.find_target(l);			
+			
+			if (l.distanceEuclidean(t) < a.vision()) { // s'il y a une cible en vue, on s'en approche et/ou on tire
+			
+				if (a.virulent()) { // on s'en approche
+					
+					// on trouve dans quelle direction l'adversaire doit avancer : la direction qui le rapproche le plus de la cible
+					int dx = t.x - l.x;
+					int dy = t.y - l.y;
+					int direction;
+					
+					if (Math.abs(dx) > Math.abs(dy)) {
+						if (dx > 0) {
+							direction = 2; 					
+						}
+						else {
+							direction = 0;
+						}
+					}
+					else {						
+						if (dy > 0) {
+							direction = 3; 					
+						}
+						else {
+							direction = 1;
+						}						
+					}
+					
+					for (Grille g : lesGrilles)
+						g.remove(Grille.ADVERSAIRE_CODE, a.getLocation());
+					Grille.deplacer(l, direction);
+					a.setLocation(l);
+					for (Grille g : lesGrilles)
+						g.add(Grille.ADVERSAIRE_CODE, a.getLocation());
+				}
+				
+				if (l.distanceEuclidean(t) < a.portee()) { // on tire
+					Location trou = a.tir(t, generateur.nextGaussian(), generateur.nextGaussian());
+					this.destruction(trou);				
+				}
+			}
+			else { // sinon, on bouge alétoirement si on est virulent
+				
+				if (a.virulent()) {
+					for (Grille g : lesGrilles)
+						g.remove(Grille.ADVERSAIRE_CODE, a.getLocation());
+					Grille.deplacer(l, generateur.nextInt(4));
+					a.setLocation(l);
+					for (Grille g : lesGrilles)
+						g.add(Grille.ADVERSAIRE_CODE, a.getLocation());
+				}
 			}
 		}
 	}

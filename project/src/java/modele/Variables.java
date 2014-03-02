@@ -34,7 +34,7 @@ public interface Variables {
 	/**
 	 * Vitesse d'action du MAS
 	 */
-	public static long VITESSE_ACTION = 500;
+	public static long VITESSE_ACTION = 100;
 	/**
 	 * Quel pas de temps pour le deplacement des adversaires
 	 */
