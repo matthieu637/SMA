@@ -27,13 +27,9 @@ public class CarteModel {
 	 */
 	private TerrainModel terrain;
 	/**
-	 * Drone en basse altitude
+	 * Drone dans le ciel
 	 */
-	private BasseAltitudeModel basse_altitude;
-	/**
-	 * Drone haute altitude
-	 */
-	private HauteAltitudeModel haute_altitude;
+	private CielModel ciel;
 
 	/**
 	 * Contient les 3 modèles précedent pour faciliter le polymorphisme
@@ -63,18 +59,13 @@ public class CarteModel {
 	 *            nombre de drone
 	 */
 	public CarteModel(AllPercepts interpreteur, int nombreVehicule, int nombreDrone) {
-		int nombre_drone_basse_altitude = (int) (nombreDrone * Variables.PROPORTION_DRONE_BASSE_HAUTE_ALTITUDE);
-		int nombre_drone_haute_altitude = nombreDrone - nombre_drone_basse_altitude;
-
 		terrain = new TerrainModel(nombreVehicule, interpreteur);
-		basse_altitude = new BasseAltitudeModel(nombre_drone_basse_altitude, interpreteur);
-		haute_altitude = new HauteAltitudeModel(nombre_drone_haute_altitude, interpreteur);
+		ciel = new CielModel(nombreDrone, interpreteur);
 
 		adversaire = new LinkedList<Adversaire>();
-		lesGrilles = new ArrayList<Grille>(3);
+		lesGrilles = new ArrayList<Grille>(2);
 		lesGrilles.add(terrain);
-		lesGrilles.add(basse_altitude);
-		lesGrilles.add(haute_altitude);
+		lesGrilles.add(ciel);
 
 		generateur = new Random();
 		this.interpreteur = interpreteur;
@@ -84,12 +75,8 @@ public class CarteModel {
 		return terrain;
 	}
 
-	public HauteAltitudeModel getHauteAltitude() {
-		return haute_altitude;
-	}
-
-	public BasseAltitudeModel getBasseAltitude() {
-		return basse_altitude;
+	public CielModel getBasseAltitude() {
+		return ciel;
 	}
 
 	/**
@@ -99,8 +86,7 @@ public class CarteModel {
 	 */
 	public void setView(FenetrePpale vue) {
 		terrain.setView(vue.getTerrain());
-		basse_altitude.setView(vue.getBasse_altitude());
-		haute_altitude.setView(vue.getHaute_altitude());
+		ciel.setView(vue.getCiel());
 	}
 
 	/**
@@ -146,12 +132,7 @@ public class CarteModel {
 
 		switch (agName.charAt(0)) {
 		case 'd':
-			if (index > basse_altitude.getNbOfAgs()) {
-				r.first = index - basse_altitude.getNbOfAgs();
-				r.second = haute_altitude;
-			} else{
-				r.second = basse_altitude;
-			}
+			r.second = ciel;
 			break;
 		case 'v':
 			r.second = terrain;

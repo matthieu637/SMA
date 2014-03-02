@@ -3,6 +3,7 @@ package vue;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import modele.CielModel;
 import ext.GridWorldModelP;
 import ext.GridWorldViewPanel;
 
@@ -11,12 +12,14 @@ import ext.GridWorldViewPanel;
  * 
  *         Vue des drônes en basse altitude
  */
-public class BasseAltitudeView extends GridWorldViewPanel {
+public class CielView extends GridWorldViewPanel {
 
 	private static final long serialVersionUID = 1L;
-	private Color azurin = new Color(169, 234, 254);
+	private static final Color azurin = new Color(169, 234, 254);
+	private static final Color lawn_green = new Color(124, 252, 0);
+	private static final Color dark_green = new Color(0, 100, 0);
 
-	public BasseAltitudeView(GridWorldModelP model, int windowSize) {
+	public CielView(GridWorldModelP model, int windowSize) {
 		super(model, windowSize);
 	}
 
@@ -34,7 +37,10 @@ public class BasseAltitudeView extends GridWorldViewPanel {
 	public void drawAgent(Graphics g, int x, int y, Color c, int id) {
 		super.drawEmpty(g, x, y);
 
-		g.setColor(Color.GREEN);
+		if (getModele().getDrone(id).isHaute_altitude())
+			g.setColor(dark_green);
+		else
+			g.setColor(lawn_green);
 		g.fillOval(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
 	}
 
@@ -44,5 +50,9 @@ public class BasseAltitudeView extends GridWorldViewPanel {
 		g.setColor(Color.red);
 		g.fillOval(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
 		g.setColor(c);
+	}
+
+	public CielModel getModele() {
+		return (CielModel) getModel();
 	}
 }

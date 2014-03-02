@@ -1,5 +1,6 @@
 package vue;
 
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,39 +22,30 @@ public class FenetrePpale extends JFrame {
 	protected static Font defaultFont = new Font("Arial", Font.PLAIN, 16);
 
 	private TerrainView terrain;
-	private BasseAltitudeView basse_altitude;
-	private HauteAltitudeView haute_altitude;
+	private CielView ciel;
 
 	public FenetrePpale(CarteModel modele) {
-		setSize(1870, 750);
+		setSize(1250, 750);
 
-		getContentPane().setLayout(null);
+		Container c = getContentPane();
+		c.setLayout(null);
 		terrain = new TerrainView(modele.getTerrain(), 600, modele);
 		terrain.setLocation(0, 30);
-		getContentPane().add(terrain);
+		c.add(terrain);
 
-		basse_altitude = new BasseAltitudeView(modele.getBasseAltitude(), 600);
-		basse_altitude.setLocation(625, 30);
-		getContentPane().add(basse_altitude);
-
-		haute_altitude = new HauteAltitudeView(modele.getHauteAltitude(), 600);
-		haute_altitude.setLocation(1250, 30);
-		getContentPane().add(haute_altitude);
+		ciel = new CielView(modele.getBasseAltitude(), 600);
+		ciel.setLocation(625, 30);
+		c.add(ciel);
 
 		JLabel l = new JLabel("Vue Au Sol");
 		l.setFont(defaultFont);
 		l.setBounds(250, 5, 100, 20);
-		getContentPane().add(l);
+		c.add(l);
 
-		l = new JLabel("Vue Basse Altitude");
+		l = new JLabel("Vue du Ciel");
 		l.setFont(defaultFont);
 		l.setBounds(870, 5, 150, 20);
-		getContentPane().add(l);
-
-		l = new JLabel("Vue Haute Altitude");
-		l.setFont(defaultFont);
-		l.setBounds(1500, 5, 150, 20);
-		getContentPane().add(l);
+		c.add(l);
 
 		JCheckBox j = new JCheckBox("Cacher zones non découverte");
 		j.setFont(defaultFont);
@@ -63,7 +55,7 @@ public class FenetrePpale extends JFrame {
 				terrain.cacherNonDecouvert();
 			}
 		});
-		getContentPane().add(j);
+		c.add(j);
 
 		JSlider v = new JSlider(1, 1000);
 		v.setBounds(20, 600 + 20 + 20 + 20, 250, 20);
@@ -75,7 +67,7 @@ public class FenetrePpale extends JFrame {
 				Variables.getInstance().setVitesse(s.getValue());
 			}
 		});
-		getContentPane().add(v);
+		c.add(v);
 
 		setVisible(true);
 	}
@@ -84,11 +76,7 @@ public class FenetrePpale extends JFrame {
 		return terrain;
 	}
 
-	public BasseAltitudeView getBasse_altitude() {
-		return basse_altitude;
-	}
-
-	public HauteAltitudeView getHaute_altitude() {
-		return haute_altitude;
+	public CielView getCiel() {
+		return ciel;
 	}
 }
