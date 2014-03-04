@@ -19,6 +19,7 @@ public class AllPercepts extends InterpreteurSpl {
 	private final static String vehicule = "vehicule(%s, %s)";
 	private final static String adversaire = "adversaire(%s, %s)";
 	private final static String civil = "civil(%s, %s)";
+	private final static String fuel = "fuel(%s)";
 
 	public AllPercepts(Environment env) {
 		super(env);
@@ -76,10 +77,18 @@ public class AllPercepts extends InterpreteurSpl {
 		ajouterDrone(drone, civil, x, y);
 	}
 	
-	public void retirerVisionDrone(int agent) {
-		retirerDroneUnif(agent, vehicule, "_", "_");
-		retirerDroneUnif(agent, adversaire, "_", "_");
-		retirerDroneUnif(agent, civil, "_", "_");
+	public void retirerVisionDrone(int drone) {
+		retirerDroneUnif(drone, vehicule, "_", "_");
+		retirerDroneUnif(drone, adversaire, "_", "_");
+		retirerDroneUnif(drone, civil, "_", "_");
+	}
+	
+	public void ajouterDroneFuel(int drone, int f) {
+		ajouterDrone(drone, fuel, f);	
+	}
+	
+	public void retirerDroneFuel(int drone) {
+		retirerDroneUnif(drone, fuel, "_");	
 	}
                          
 }

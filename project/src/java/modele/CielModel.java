@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.percepts.AllPercepts;
+import ext.GridWorldModelP;
 import utils.Couple;
 
 /**
@@ -34,9 +35,9 @@ public class CielModel extends Grille {
 		drones = new ArrayList<Drone>(nbAgent);
 		int i = 0;
 		for (; i < nombre_drone_basse_altitude; i++)
-			drones.add(new Drone(i + 1, false, Variables.CAPACITE_FUEL_DRONE, Variables.CHAMP_VISION_DRONE_BASSE_ALTITUDE, Variables.CHAMP_VISION_DRONE_HAUTE_ALTITUDE));
+			drones.add(new Drone(i + 1, false, getAgPos(i), Variables.CAPACITE_FUEL_DRONE, Variables.CHAMP_VISION_DRONE_BASSE_ALTITUDE, Variables.CHAMP_VISION_DRONE_HAUTE_ALTITUDE));
 		for (; i < nombre_drone_haute_altitude + nombre_drone_basse_altitude; i++)
-			drones.add(new Drone(i + 1, true, Variables.CAPACITE_FUEL_DRONE, Variables.CHAMP_VISION_DRONE_BASSE_ALTITUDE, Variables.CHAMP_VISION_DRONE_HAUTE_ALTITUDE));
+			drones.add(new Drone(i + 1, true, getAgPos(i), Variables.CAPACITE_FUEL_DRONE, Variables.CHAMP_VISION_DRONE_BASSE_ALTITUDE, Variables.CHAMP_VISION_DRONE_HAUTE_ALTITUDE));
 		
 		this.interpreteur = interpreteur; 
 		this.adversaire = adversaire;
@@ -48,7 +49,16 @@ public class CielModel extends Grille {
 		
 		Couple<Location, Boolean> c = super.deplacerCollision(agent - 1, direction);  
 		
-		getDrone(agent-1).majPercepts(interpreteur, c.first, adversaire, civil);
+		boolean outOfFuel = getDrone(agent-1).deplacer(c.first);
+		if (outOfFuel) {
+			
+			interpreteur.killDrone(this.getAgAtPos(c.first));
+			this.remove(GridWorldModelP.AGENT, c.first);
+			
+		}	
+		else {		
+			getDrone(agent-1).majPercepts(interpreteur, adversaire, civil);
+		}
 		
 		return c;
 	}

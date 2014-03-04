@@ -46,4 +46,12 @@ public abstract class InterpreteurSpl extends Interpreteur {
 	public void killVehicule(int vehicule) {
 		kill("v" + (vehicule + 1));
 	}
+	
+	/**
+	 * Tue un drone du système
+	 * 
+	 */
+	public void killDrone(int drone) {
+		kill("d" + (drone + 1));
+	}
 }

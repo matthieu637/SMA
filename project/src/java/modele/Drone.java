@@ -13,12 +13,15 @@ public class Drone {
 	private int champ_vision_basse_altitude;
 	private int champ_vision_haute_altitude;
 	private int fuel;
+	private int maxFuel;
 	private Location l;
 
-	public Drone(int id, boolean haute_altitude, int fuel, int champ_vision_basse_altitude, int champ_vision_haute_altitude) {
+	public Drone(int id, boolean haute_altitude, Location l, int maxFuel, int champ_vision_basse_altitude, int champ_vision_haute_altitude) {
 		this.setId(id);
+		this.setPos(l);
 		this.setHaute_altitude(haute_altitude);
-		this.fuel = fuel;
+		this.maxFuel = maxFuel;
+		this.fillFuel();
 		this.champ_vision_basse_altitude = champ_vision_basse_altitude;
 		this.champ_vision_haute_altitude = champ_vision_haute_altitude;
 	}
@@ -29,6 +32,14 @@ public class Drone {
 
 	public void setHaute_altitude(boolean haute_altitude) {
 		this.haute_altitude = haute_altitude;
+	}
+	
+	public int getMaxFuel() {
+		return this.maxFuel;
+	}
+	
+	public void fillFuel() {
+		this.fuel = this.maxFuel;
 	}
 	
 	public int getFuel() {
@@ -62,10 +73,21 @@ public class Drone {
 	public void setPos(Location l) {
 		this.l = l;
 	}
-		
+	
 	public void useFuel(int fuel) {
 		this.fuel = this.fuel - fuel;
 	}
+		
+	public boolean emptyFuel() {
+		return this.fuel <= 0;
+	}
+	
+	public boolean deplacer(Location nl) {
+		//System.out.println((int)this.l.distanceEuclidean(nl));
+		this.useFuel((int)this.l.distanceEuclidean(nl));
+		this.setPos(nl);	
+		return this.emptyFuel();
+	}	
 
 	public int getId() {
 		return id;
@@ -75,10 +97,17 @@ public class Drone {
 		this.id = id;
 	}
 	
-	public void majPercepts(AllPercepts interpreteur, Location nl, List<Adversaire> adversaire, List<Civil> civil) {
+	public void majPercepts(AllPercepts interpreteur, List<Adversaire> adversaire, List<Civil> civil) {
+		
+		// fuel
+		interpreteur.retirerDroneFuel(id);
+		interpreteur.ajouterDroneFuel(id, this.getFuel());
+		
+		// position
 		interpreteur.retirerPositionDrone(id);
-		interpreteur.ajouterPositionDrone(id, nl.x, nl.y);
+		interpreteur.ajouterPositionDrone(id, l.x, l.y);		
 
+		// vision
 		interpreteur.retirerVisionDrone(id);
 		
 		if (this.isHaute_altitude()) {				
@@ -104,9 +133,8 @@ public class Drone {
 				if (this.l.distanceEuclidean(lc) < this.champ_vision_basse_altitude)
 					interpreteur.ajouterDroneVoitCivil(id, lc.x, lc.y);
 			}			
-		}
-				
-		l = nl;
+		}				
+		
 	}	
 	
 }
