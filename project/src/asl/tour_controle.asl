@@ -4,8 +4,10 @@
 
 /* Initial goals */
 
-!start.
-
 /* Plans */
 
-+!start : true <- .print("hello world.").
++drone(X, ausol) : true <- remplirFuel(X);
+				.send(X, achieve, decoller).
+				
++!identification(POSX, POSY)[source(X)] : allie(POSX, POSY) <- .send(X, tell, allie(POSX, POSY)).
++!identification(POSX, POSY)[source(X)] : not allie(POSX, POSY) <- .send(X, achieve, tirer(POSX, POSY)).
