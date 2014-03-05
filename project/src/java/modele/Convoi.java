@@ -9,8 +9,7 @@ import modele.percepts.AllPercepts;
 
 public class Convoi {
 
-	private List<Vehicule> leaders;
-	private List<Integer> file;
+	private List<Vehicule> file;
 
 	/**
 	 * Pointeurs uniquement pour ne pas avoir à le mettre dans chaque paramètre
@@ -20,50 +19,32 @@ public class Convoi {
 	private AllPercepts interpreteur;
 
 	public Convoi(int nbAgent, Location location, AllPercepts interpreteur, Location but, int[][] hauteur) {
-		Vehicule leader = new Vehicule(nbAgent, location);
-		leader.initLeaderPercept(interpreteur, but, hauteur);
 
-		leaders = new LinkedList<Vehicule>();
-		leaders.add(leader);
-
-		file = new LinkedList<Integer>();
+		file = new LinkedList<Vehicule>();
 		int a = 1;
 		for (; a < nbAgent; a++) {
-			file.add(a);
-			interpreteur.ajouterPositionVehicule(a, a, a - 1, 0);
-			interpreteur.ajouterPositionVehicule(a, a + 1, a, 0);
-			interpreteur.ajouterFollow(a, a + 1);
+			Vehicule v = new Vehicule(a, new Location(a - 1, 0), false, a == 1 ? null : file.get(a - 2));
+			v.initPercept(interpreteur, hauteur);
+			v.majPercept(interpreteur, hauteur);
+			file.add(v);
 		}
-		file.add(a);
+
+		Vehicule leader = new Vehicule(nbAgent, location, true, file.get(file.size() - 1));
+		leader.setBut(but);
+		leader.initPercept(interpreteur, hauteur);
+		leader.majPercept(interpreteur, hauteur);
+		file.add(leader);
 
 		this.interpreteur = interpreteur;
 		this.hauteur = hauteur;
 	}
 
 	public void majPercepts(int agent, Location l) {
-		boolean isLeader = false;
-		for (Vehicule leader : leaders)
-			if (leader.equals(agent)) {
-				leader.deplacer(l);
-				leader.majPercept(interpreteur, hauteur);
-				isLeader = true;
-				break;
-			}
-
-		if (!isLeader) {// si je ne suis pas un leader je met également à jour
-						// ma position
-			interpreteur.retirerPositionVehicule(agent, agent);
-			interpreteur.ajouterPositionVehicule(agent, agent, l.x, l.y);
-		}
-
-		// je met à jour le but de mon follower
 		int pos = file.indexOf(agent);
-		if (pos != 0) {
-			int follower = file.get(pos - 1);
-			// interpreteur.retirerFollow(follower);
-			// interpreteur.ajouterFollow(follower, l.x, l.y);
-			interpreteur.retirerPositionVehicule(follower, agent);
-			interpreteur.ajouterPositionVehicule(follower, agent, l.x, l.y);
-		}
+		System.out.println(pos);
+		Vehicule v = file.get(pos);
+
+		v.deplacer(l);
+		v.majPercept(interpreteur, hauteur);
 	}
 }

@@ -13,38 +13,37 @@ public class Vehicule {
 
 	private final int numero;
 
+	private Location but;
+
 	private Location l;
+
+	private boolean estLeader;
 
 	private static final int OUT = 500;
 
-	public Vehicule(int numero, Location l) {
+	private Vehicule follower;
+
+	public Vehicule(int numero, Location l, boolean leader, Vehicule follower) {
 		this.numero = numero;
 		this.l = l;
+		this.estLeader = leader;
+		this.follower = follower;
 	}
 
 	public int getNumero() {
 		return numero;
 	}
 
-	public void initLeaderPercept(AllPercepts interpreteur, Location but, int[][] hauteur) {
-		interpreteur.ajouterLeader(numero);
-		interpreteur.ajouterPositionVehicule(numero, numero, l.x, l.y);
-		interpreteur.ajouterPositionButVehicule(numero, but.x, but.y);
-		interpreteur.ajouterHeightmap(numero, l.x - 1 >= 0 ? hauteur[l.x - 1][l.y] : OUT, l.y - 1 >= 0 ? hauteur[l.x][l.y - 1] : OUT,
-				l.x + 1 < Variables.TAILLE_CARTE_X ? hauteur[l.x + 1][l.y] : OUT, l.y + 1 < Variables.TAILLE_CARTE_Y ? hauteur[l.x][l.y + 1] : OUT);
+	public Location getLocation() {
+		return l;
+	}
+
+	public boolean isEstLeader() {
+		return estLeader;
 	}
 
 	public void deplacer(Location nl) {
 		l = nl;
-	}
-
-	public void majPercept(AllPercepts interpreteur, int[][] hauteur) {
-		interpreteur.retirerPositionVehicule(numero, numero);
-		interpreteur.ajouterPositionVehicule(numero, numero, l.x, l.y);
-
-		interpreteur.retirerHeightmap(numero);
-		interpreteur.ajouterHeightmap(numero, l.x - 1 >= 0 ? hauteur[l.x - 1][l.y] : OUT, l.y - 1 >= 0 ? hauteur[l.x][l.y - 1] : OUT,
-				l.x + 1 < Variables.TAILLE_CARTE_X ? hauteur[l.x + 1][l.y] : OUT, l.y + 1 < Variables.TAILLE_CARTE_Y ? hauteur[l.x][l.y + 1] : OUT);
 	}
 
 	@Override
@@ -57,5 +56,34 @@ public class Vehicule {
 			return v == numero;
 		}
 		return false;
+	}
+
+	public void initPercept(AllPercepts interpreteur, int[][] hauteur) {
+		if (estLeader)
+			interpreteur.ajouterLeader(numero);
+		if (follower != null)
+			interpreteur.ajouterFollow(follower.getNumero(), numero);
+		if (but != null)
+			interpreteur.ajouterPositionButVehicule(numero, but.x, but.y);
+	}
+
+	public void majPercept(AllPercepts interpreteur, int[][] hauteur) {
+		interpreteur.retirerPositionVehicule(numero, numero);
+		interpreteur.ajouterPositionVehicule(numero, numero, l.x, l.y);
+
+		if (follower != null) {
+			interpreteur.retirerPositionVehicule(follower.getNumero(), numero);
+			interpreteur.ajouterPositionVehicule(follower.getNumero(), numero, l.x, l.y);
+		}
+
+		if (estLeader) {
+			interpreteur.retirerHeightmap(numero);
+			interpreteur.ajouterHeightmap(numero, l.x - 1 >= 0 ? hauteur[l.x - 1][l.y] : OUT, l.y - 1 >= 0 ? hauteur[l.x][l.y - 1] : OUT,
+					l.x + 1 < Variables.TAILLE_CARTE_X ? hauteur[l.x + 1][l.y] : OUT, l.y + 1 < Variables.TAILLE_CARTE_Y ? hauteur[l.x][l.y + 1] : OUT);
+		}
+	}
+
+	public void setBut(Location but) {
+		this.but = but;
 	}
 }
