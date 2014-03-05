@@ -1,10 +1,10 @@
 package modele;
 
 import jason.environment.grid.Location;
-import modele.percepts.AllPercepts;
 
 import java.util.List;
-import jason.environment.grid.Location;
+
+import modele.percepts.AllPercepts;
 
 public class Drone {
 
@@ -105,7 +105,7 @@ public class Drone {
 		
 		// position
 		interpreteur.retirerPositionDrone(id);
-		interpreteur.ajouterPositionDrone(id, l.x, l.y);		
+		interpreteur.ajouterPositionDrone(id, id, l.x, l.y);		
 
 		// vision
 		interpreteur.retirerVisionDrone(id);

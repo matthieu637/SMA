@@ -21,15 +21,15 @@ choose_direction(3, X, Y, GX, GY, _, _, C, D) :- GX >= X & GY >= Y & C > D.
 +!start : .my_name(X) & not leader(X) <- 
 	!follow.
 
-+!to_goal : goal(GX, GY) & location(X, Y) & heightmap(A, B, C, D) & 
++!to_goal : .my_name(L) & goal(GX, GY) & location(L, X, Y) & heightmap(A, B, C, D) & 
 			choose_direction(Dir, X, Y, GX, GY, A, B, C, D) <-
 	deplacer(Dir);
 	!to_goal.
 
-+!follow : follow(GX, GY) & location(X, Y) & 
++!follow : .my_name(L) & location(L, X, Y) & follow(S) & location(S, GX, GY)  & 
 			choose_direction(Dir, X, Y, GX, GY, 0, 0, 0, 0)<- 
 	deplacer(Dir);
 	!follow.
-	
+
 -!follow : true <-
 	!follow.

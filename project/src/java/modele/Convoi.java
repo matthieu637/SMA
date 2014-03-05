@@ -21,7 +21,7 @@ public class Convoi {
 
 	public Convoi(int nbAgent, Location location, AllPercepts interpreteur, Location but, int[][] hauteur) {
 		Vehicule leader = new Vehicule(nbAgent, location);
-		leader.initLeader(interpreteur, but, hauteur);
+		leader.initLeaderPercept(interpreteur, but, hauteur);
 
 		leaders = new LinkedList<Vehicule>();
 		leaders.add(leader);
@@ -30,8 +30,9 @@ public class Convoi {
 		int a = 1;
 		for (; a < nbAgent; a++) {
 			file.add(a);
-			interpreteur.ajouterPositionVehicule(a, a, 0);
-			interpreteur.ajouterFollow(a, a + 1, 0);
+			interpreteur.ajouterPositionVehicule(a, a, a - 1, 0);
+			interpreteur.ajouterPositionVehicule(a, a + 1, a, 0);
+			interpreteur.ajouterFollow(a, a + 1);
 		}
 		file.add(a);
 
@@ -43,23 +44,26 @@ public class Convoi {
 		boolean isLeader = false;
 		for (Vehicule leader : leaders)
 			if (leader.equals(agent)) {
-				leader.deplacer(interpreteur, l, hauteur);
+				leader.deplacer(l);
+				leader.majPercept(interpreteur, hauteur);
 				isLeader = true;
 				break;
 			}
 
 		if (!isLeader) {// si je ne suis pas un leader je met également à jour
 						// ma position
-			interpreteur.retirerPositionVehicule(agent);
-			interpreteur.ajouterPositionVehicule(agent, l.x, l.y);
+			interpreteur.retirerPositionVehicule(agent, agent);
+			interpreteur.ajouterPositionVehicule(agent, agent, l.x, l.y);
 		}
 
 		// je met à jour le but de mon follower
 		int pos = file.indexOf(agent);
 		if (pos != 0) {
 			int follower = file.get(pos - 1);
-			interpreteur.retirerFollow(follower);
-			interpreteur.ajouterFollow(follower, l.x, l.y);
+			// interpreteur.retirerFollow(follower);
+			// interpreteur.ajouterFollow(follower, l.x, l.y);
+			interpreteur.retirerPositionVehicule(follower, agent);
+			interpreteur.ajouterPositionVehicule(follower, agent, l.x, l.y);
 		}
 	}
 }
