@@ -62,8 +62,8 @@ public class CielModel extends Grille {
 		boolean outOfFuel = getDrone(agent-1).deplacer(c.first);
 		if (outOfFuel) {
 			
-			interpreteur.killDrone(this.getAgAtPos(c.first));
-			this.remove(GridWorldModelP.AGENT, c.first);
+			//interpreteur.killDrone(this.getAgAtPos(c.first));
+			//this.remove(GridWorldModelP.AGENT, c.first);
 			
 		}	
 		else {		
