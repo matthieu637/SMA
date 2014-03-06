@@ -124,7 +124,7 @@ public class Drone {
 		
 		// position
 		interpreteur.retirerPositionDrone(id);
-		interpreteur.ajouterPositionDrone(id, id, l.x, l.y);		
+		interpreteur.ajouterPositionDrone(id, id, this.l.x, this.l.y);		
 
 		// vision
 		interpreteur.retirerVisionDrone(id);

@@ -50,7 +50,7 @@ public class CielModel extends Grille {
 		int nbDrones = drones.size();
 		int d = 1;
 		for (; d <= nbDrones ; d++) {
-			getDrone(d-1).majPercepts(interpreteur, adversaire, civil);
+			getDrone(d).majPercepts(interpreteur, adversaire, civil);
 		}
 	}
 
@@ -58,22 +58,23 @@ public class CielModel extends Grille {
 	public Couple<Location, Boolean> deplacerCollision(int agent, int direction) {
 		
 		Couple<Location, Boolean> c = super.deplacerCollision(agent - 1, direction);  
-		
-		boolean outOfFuel = getDrone(agent-1).deplacer(c.first);
-		if (outOfFuel) {
-			
-			//interpreteur.killDrone(this.getAgAtPos(c.first));
-			//this.remove(GridWorldModelP.AGENT, c.first);
-			
-		}	
-		else {		
-			getDrone(agent-1).majPercepts(interpreteur, adversaire, civil);
+		if (c.second) {
+			boolean outOfFuel = getDrone(agent).deplacer(c.first);
+			if (outOfFuel) {
+				
+				interpreteur.killDrone(this.getAgAtPos(c.first));
+				this.remove(GridWorldModelP.AGENT, c.first);
+				
+			}	
+			else {		
+				getDrone(agent).majPercepts(interpreteur, adversaire, civil);
+			}
 		}
 		
 		return c;
 	}
 
 	public Drone getDrone(int id) {
-		return drones.get(id);
+		return drones.get(id-1);
 	}
 }

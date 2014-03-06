@@ -133,8 +133,8 @@ public class CarteModel {
 	
 	public void remplirFuel(String agName) {
 		Couple<Integer, Grille> c = dispatch(agName);
-		ciel.getDrone(c.first-1).remplirFuel();
-		ciel.getDrone(c.first-1).majPercepts(interpreteur, adversaire, civil);
+		ciel.getDrone(c.first).remplirFuel();
+		ciel.getDrone(c.first).majPercepts(interpreteur, adversaire, civil);
 	}
 	
 	public boolean decoller(String agName) {

@@ -37,7 +37,7 @@ public class CielView extends GridWorldViewPanel {
 	public void drawAgent(Graphics g, int x, int y, Color c, int id) {
 		super.drawEmpty(g, x, y);
 
-		if (getModele().getDrone(id).isHaute_altitude())
+		if (getModele().getDrone(id+1).isHaute_altitude())
 			g.setColor(dark_green);
 		else
 			g.setColor(lawn_green);
