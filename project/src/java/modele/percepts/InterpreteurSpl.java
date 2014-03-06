@@ -26,7 +26,19 @@ public abstract class InterpreteurSpl extends Interpreteur {
 	protected void ajouterDrone(int numero, String percept, Object... args) {
 		ajouter("d" + numero, String.format(percept, args));
 	}
+	
+	protected void ajouterTour(String percept, Object... args) {
+		ajouter("t", String.format(percept, args));
+	}
+	
+	protected void retirerTour(String percept, Object... args) {
+		retirer("t", String.format(percept, args));
+	}
 
+	protected void retirerTourUnif(String percept, Object... args) {
+		retirerUnif("t", String.format(percept, args));
+	}
+	
 	protected void retirerDrone(int numero, String percept, Object... args) {
 		retirer("d" + numero, String.format(percept, args));
 	}

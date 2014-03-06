@@ -78,6 +78,10 @@ public class CarteModel {
 		
 		generateur = new Random();
 		this.interpreteur = interpreteur;
+		
+		interpreteur.ajouterTourDroneAuSol(1);
+		interpreteur.ajouterTourDroneAuSol(2);
+		interpreteur.ajouterTourDroneAuSol(3);
 	}
 
 	public TerrainModel getTerrain() {
@@ -125,6 +129,24 @@ public class CarteModel {
 		if (c2 != null)
 			return c2.second;
 		return false;
+	}
+	
+	public void remplirFuel(String agName) {
+		Couple<Integer, Grille> c = dispatch(agName);
+		ciel.getDrone(c.first).remplirFuel();
+		ciel.getDrone(c.first).majPercepts(interpreteur, adversaire, civil);
+	}
+	
+	public boolean decoller(String agName) {
+		Couple<Integer, Grille> c = dispatch(agName);
+		interpreteur.retirerTourDroneAuSol(c.first);
+		return ciel.getDrone(c.first).decoller();
+	}
+	
+	public boolean atterir(String agName) {
+		Couple<Integer, Grille> c = dispatch(agName);
+		interpreteur.ajouterTourDroneAuSol(c.first);
+		return ciel.getDrone(c.first).atterir();
 	}
 
 	/**

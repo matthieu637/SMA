@@ -6,7 +6,7 @@
 
 /* Plans */
 
-+drone(X, ausol) : true <- remplirFuel(X);
++droneAuSol(X) : true <- remplirFuel(X);
 				.send(X, achieve, decoller).
 				
 +!identification(POSX, POSY)[source(X)] : allie(POSX, POSY) <- .send(X, tell, allie(POSX, POSY)).

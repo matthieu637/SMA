@@ -70,10 +70,23 @@ public class Env extends Environment implements Runnable {
 	public boolean executeAction(String agName, Structure action) {
 		boolean valide = true;
 
-		if (action.getFunctor().equals("deplacer"))
+		switch (action.getFunctor()) {
+		case "deplacer":
 			valide = modele.deplacerCollision(agName, Integer.parseInt(action.getTerm(0).toString()));
-		else
-			valide = false;
+			break;
+		case "remplirFuel":
+			modele.remplirFuel(action.getTerm(0).toString());
+			break;
+		case "decoller":
+			valide = modele.decoller(agName);
+			break;
+		case "atterir":
+			valide = modele.atterir(agName);
+			break;
+		default:	
+			valide = true;
+			break;
+		}
 
 		try {
 			Thread.sleep((long) (Variables.VITESSE_ACTION * Variables.getInstance().getVitesse()));

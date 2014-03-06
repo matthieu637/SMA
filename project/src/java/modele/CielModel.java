@@ -42,6 +42,16 @@ public class CielModel extends Grille {
 		this.interpreteur = interpreteur; 
 		this.adversaire = adversaire;
 		this.civil = civil;
+		
+		this.majPercepts();
+	}
+	
+	public void majPercepts() {
+		int nbDrones = drones.size();
+		int d = 1;
+		for (; d <= nbDrones ; d++) {
+			getDrone(d-1).majPercepts(interpreteur, adversaire, civil);
+		}
 	}
 
 	@Override

@@ -53,7 +53,7 @@ public class Variables {
 	/**
 	 * Capacité en fuel des drones (en nombre de case)
 	 */
-	public static int CAPACITE_FUEL_DRONE = 500;
+	public static int CAPACITE_FUEL_DRONE = 50;
 	
 	/**
 	 * Capacité en fuel des véhicules (en nombre de case)

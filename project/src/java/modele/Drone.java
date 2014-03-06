@@ -14,6 +14,7 @@ public class Drone {
 	private int champ_vision_haute_altitude;
 	private int fuel;
 	private int maxFuel;
+	private boolean auSol;
 	private Location l;
 
 	public Drone(int id, boolean haute_altitude, Location l, int maxFuel, int champ_vision_basse_altitude, int champ_vision_haute_altitude) {
@@ -21,7 +22,7 @@ public class Drone {
 		this.setPos(l);
 		this.setHaute_altitude(haute_altitude);
 		this.maxFuel = maxFuel;
-		this.fillFuel();
+		this.auSol = true;
 		this.champ_vision_basse_altitude = champ_vision_basse_altitude;
 		this.champ_vision_haute_altitude = champ_vision_haute_altitude;
 	}
@@ -38,7 +39,7 @@ public class Drone {
 		return this.maxFuel;
 	}
 	
-	public void fillFuel() {
+	public void remplirFuel() {
 		this.fuel = this.maxFuel;
 	}
 	
@@ -80,6 +81,24 @@ public class Drone {
 		
 	public boolean emptyFuel() {
 		return this.fuel <= 0;
+	}
+	
+	public boolean decoller() {
+		if (this.auSol == true) {
+			this.auSol = false;
+			return true;
+		}
+		else
+			return false;			
+	}
+	
+	public boolean atterir() {
+		if (this.auSol == false) {
+			this.auSol = true;
+			return true;
+		}
+		else
+			return false;			
 	}
 	
 	public boolean deplacer(Location nl) {

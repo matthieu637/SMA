@@ -20,6 +20,7 @@ public class AllPercepts extends InterpreteurSpl {
 	private final static String adversaire = "adversaire(%s, %s)";
 	private final static String civil = "civil(%s, %s)";
 	private final static String fuel = "fuel(%s)";
+	private final static String droneAuSol = "droneAuSol(%s)";
 
 	public AllPercepts(Environment env) {
 		super(env);
@@ -61,38 +62,46 @@ public class AllPercepts extends InterpreteurSpl {
 		retirerVehiculeUnif(follower, follow, "_", "_");
 	}
 
-	public void ajouterPositionDrone(int drone, int cible, int x, int y) {
-		ajouterDrone(drone, position, cible, x, y);
+	public void ajouterPositionDrone(int d, int cible, int x, int y) {
+		ajouterDrone(d, position, "d" + cible, x, y);
 	}
 
 	public void retirerPositionDrone(int agent) {
 		retirerDroneUnif(agent, position, "_", "_", "_");
 	}
 
-	public void ajouterDroneVoitVehicule(int drone, int x, int y) {
-		ajouterDrone(drone, vehicule, x, y);
+	public void ajouterDroneVoitVehicule(int d, int x, int y) {
+		ajouterDrone(d, vehicule, x, y);
 	}
 
-	public void ajouterDroneVoitAdversaire(int drone, int x, int y) {
-		ajouterDrone(drone, adversaire, x, y);
+	public void ajouterDroneVoitAdversaire(int d, int x, int y) {
+		ajouterDrone(d, adversaire, x, y);
 	}
 
-	public void ajouterDroneVoitCivil(int drone, int x, int y) {
-		ajouterDrone(drone, civil, x, y);
+	public void ajouterDroneVoitCivil(int d, int x, int y) {
+		ajouterDrone(d, civil, x, y);
 	}
 
-	public void retirerVisionDrone(int drone) {
-		retirerDroneUnif(drone, vehicule, "_", "_");
-		retirerDroneUnif(drone, adversaire, "_", "_");
-		retirerDroneUnif(drone, civil, "_", "_");
+	public void retirerVisionDrone(int d) {
+		retirerDroneUnif(d, vehicule, "_", "_");
+		retirerDroneUnif(d, adversaire, "_", "_");
+		retirerDroneUnif(d, civil, "_", "_");
 	}
 
-	public void ajouterDroneFuel(int drone, int f) {
-		ajouterDrone(drone, fuel, f);
+	public void ajouterDroneFuel(int d, int f) {
+		ajouterDrone(d, fuel, f);
 	}
 
-	public void retirerDroneFuel(int drone) {
-		retirerDroneUnif(drone, fuel, "_");
+	public void retirerDroneFuel(int d) {
+		retirerDroneUnif(d, fuel, "_");
+	}
+		
+	public void ajouterTourDroneAuSol(int id) {
+		ajouterTour(droneAuSol, "d" + id);
+	}
+	
+	public void retirerTourDroneAuSol(int id) {
+		retirerTour(droneAuSol, "d" + id);
 	}
 
 }
