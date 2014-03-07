@@ -54,22 +54,24 @@ public class Variables {
 	 * Capacité en fuel des drones (en nombre de case)
 	 */
 	public static int CAPACITE_FUEL_DRONE = 500;
-	
+
 	/**
 	 * Capacité en fuel des véhicules (en nombre de case)
 	 */
 	public static int CAPACITE_FUEL_VEHICULE = 100;
-	
+
 	/**
-	 * Champ de vision des drones à basse altitude, en nombre de cases 
+	 * Champ de vision des drones à basse altitude, en nombre de cases
 	 */
-	 public static int CHAMP_VISION_DRONE_BASSE_ALTITUDE = 3;
-	 
+	public static int CHAMP_VISION_DRONE_BASSE_ALTITUDE = 3;
+
 	/**
-	 * Champ de vision des drones à haute altitude, en nombre de cases 
+	 * Champ de vision des drones à haute altitude, en nombre de cases
 	 */
-	 public static int CHAMP_VISION_DRONE_HAUTE_ALTITUDE = 5;
-	 
+	public static int CHAMP_VISION_DRONE_HAUTE_ALTITUDE = 5;
+
+	public static float DIRECTION_IMPORTANCE_HAUTEUR = 0.05f;
+
 	/**
 	 * Vitesse d'exécution globale
 	 */
@@ -91,7 +93,7 @@ public class Variables {
 	}
 
 	public long getVitesse() {
-			return vitesse;
+		return vitesse;
 	}
 
 	public void setVitesse(long v) {
