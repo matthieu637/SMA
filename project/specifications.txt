@@ -18,15 +18,15 @@ avec des fractales, il vaut mieux en changer à chaque fois pour évaluer nos ag
 Véhicules:
 comportement des véhicules visible depuis la haute altitude (position du véhicule)
 nature des véhicules visible depuis la basse altitude
-nature: -véhicule humanitaire: civil
-	-véhicule de combat: méchants (ou allié : demander au centre de contrôle)
+nature: -véhicule civil
+	-véhicule militaire (pour savoir s'il est ennemi ou allié : demander au centre de contrôle)
 
 - Adversaires:
 on peut les ajouter en cliquant
 propriétés : portée visuelle, portée de tir (son tir n'est pas très précis : bruit gaussien proportionel à la distance de tir), temps de recharge (le temps de recharge est géré par le temps à accomplir l'action tirer)
 comportement : mobile : marche aléatoire, et quand il voit un véhicule, il s'approche jusqu'à ce qu'il puisse tirer dessus
 
-- Civils:
+- Civils et militaires alliés:
 on peut les ajouter en cliquant
 comportement : mobile : il va d'un point A à un point B en suivant le bas relief
 
