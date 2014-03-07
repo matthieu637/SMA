@@ -26,7 +26,7 @@ enoughFuel :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionInitiale
 +!checkFuel :  enoughFuel <- !move.			
 +!checkFuel : not enoughFuel <- !goHome.
 
-+!goHome : positionInitiale(IX, IY) <- !goto(IX, IY);
++!goHome : positionInitiale(IX, IY) <- .print("I go home."); !goto(IX, IY);
 			atterir.
 			
 +!goto(GX, GY) : .my_name(X) & location(X, GX, GY) <- true.
