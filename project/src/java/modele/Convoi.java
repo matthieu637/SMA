@@ -2,6 +2,7 @@ package modele;
 
 import jason.environment.grid.Location;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,11 +41,14 @@ public class Convoi {
 	}
 
 	public void majPercepts(int agent, Location l) {
-		int pos = file.indexOf(agent);
-		System.out.println(pos);
-		Vehicule v = file.get(pos);
+		Vehicule v = getVehicule(agent);
 
 		v.deplacer(l);
 		v.majPercept(interpreteur, hauteur);
+	}
+
+	public Vehicule getVehicule(int agent) {
+		int pos = Collections.binarySearch(file, agent);
+		return file.get(pos);
 	}
 }

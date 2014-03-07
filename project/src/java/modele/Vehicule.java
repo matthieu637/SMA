@@ -9,7 +9,7 @@ import modele.percepts.AllPercepts;
  *         Garde les informations du leader en mémoire pour mettre à jour les
  *         percepts
  */
-public class Vehicule {
+public class Vehicule implements Comparable<Integer> {
 
 	private final int numero;
 
@@ -79,11 +79,17 @@ public class Vehicule {
 		if (estLeader) {
 			interpreteur.retirerHeightmap(numero);
 			interpreteur.ajouterHeightmap(numero, l.x - 1 >= 0 ? hauteur[l.x - 1][l.y] : OUT, l.y - 1 >= 0 ? hauteur[l.x][l.y - 1] : OUT,
-					l.x + 1 < Variables.TAILLE_CARTE_X ? hauteur[l.x + 1][l.y] : OUT, l.y + 1 < Variables.TAILLE_CARTE_Y ? hauteur[l.x][l.y + 1] : OUT);
+					l.x + 1 < Variables.TAILLE_CARTE_X ? hauteur[l.x + 1][l.y] : OUT,
+					l.y + 1 < Variables.TAILLE_CARTE_Y ? hauteur[l.x][l.y + 1] : OUT);
 		}
 	}
 
 	public void setBut(Location but) {
 		this.but = but;
+	}
+
+	@Override
+	public int compareTo(Integer o) {
+		return Integer.compare(this.numero, o);
 	}
 }
