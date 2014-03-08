@@ -21,6 +21,7 @@ public class AllPercepts extends InterpreteurSpl {
 	private final static String civil = "civil(%s, %s)";
 	private final static String fuel = "fuel(%s)";
 	private final static String droneAuSol = "droneAuSol(%s)";
+	private final static String drone = "drone(%s)";	
 	private final static String fieldOfView = "fieldOfView(%s)";
 	private final static String altitude = "altitude(%s)";
 	
@@ -114,9 +115,15 @@ public class AllPercepts extends InterpreteurSpl {
 	public void retirerDroneFuel(int d) {
 		retirerDroneUnif(d, fuel, "_");
 	}
-		
+
 	public void ajouterTourDroneAuSol(int id) {
 		ajouterTour(droneAuSol, "d" + id);
+	}
+	
+	public void ajouterTourDrones(int nbDrones) {
+		for (int d = 0; d < nbDrones; d++) {
+			ajouterTour(drone, "d" + (d+1));
+		}
 	}
 	
 	public void retirerTourDroneAuSol(int id) {
