@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import modele.entite.Civil;
+import modele.entite.Comportement;
+import modele.entite.Ennemie;
 import modele.percepts.AllPercepts;
 import utils.Couple;
 import vue.FenetrePpale;
@@ -39,7 +42,7 @@ public class CarteModel {
 	 * Liste des adversaires sur les 2 modèles (on peut les voir sur les 2
 	 * grilles mais un adversaire ne peut être qu'au sol)
 	 */
-	private List<Adversaire> adversaire;
+	private List<Ennemie> adversaire;
 
 	/**
 	 * Liste des civils sur les 2 modèles (on peut les voir sur les 2 grilles
@@ -65,7 +68,7 @@ public class CarteModel {
 	 */
 	public CarteModel(AllPercepts interpreteur, int nombreVehicule, int nombreDrone) {
 
-		adversaire = new LinkedList<Adversaire>();
+		adversaire = new LinkedList<Ennemie>();
 		civil = new LinkedList<Civil>();
 
 		terrain = new TerrainModel(nombreVehicule, interpreteur);
@@ -194,7 +197,7 @@ public class CarteModel {
 	public void ajouterAgentAdverse(int x, int y) {
 		for (Grille g : lesGrilles)
 			g.add(Grille.ADVERSAIRE_CODE, x, y);
-		adversaire.add(new Adversaire(x, y, generateur.nextFloat() < Variables.PROBA_ADVERSAIRE_VIRULENT));
+		adversaire.add(new Ennemie(new Location(x, y), Comportement.DeplaceAleatoire));
 	}
 
 	/**
@@ -207,7 +210,7 @@ public class CarteModel {
 		for (Grille g : lesGrilles)
 			g.add(Grille.CIVIL_CODE, x, y);
 		Location but = this.terrain.getFreePos();
-		civil.add(new Civil(x, y, but));
+//		civil.add(new Civil(x, y, but));
 	}
 
 	/**
@@ -264,7 +267,7 @@ public class CarteModel {
 	public void runEnv() {
 
 		// Adversaires
-		for (Adversaire a : adversaire) {
+		for (Ennemie a : adversaire) {
 
 			Location l = a.getLocation();
 
@@ -275,7 +278,7 @@ public class CarteModel {
 				// vue et plutot visible, on s'en approche
 				// et/ou on tire
 
-				if (a.virulent()) { // on s'en approche
+				if (a.deplace()) { // on s'en approche
 
 					// on trouve dans quelle direction l'adversaire doit avancer
 					// : la direction qui le rapproche le plus de la cible
@@ -312,7 +315,7 @@ public class CarteModel {
 				}
 			} else { // sinon, on bouge alétoirement si on est virulent
 
-				if (a.virulent()) {
+				if (a.deplace()) {
 					for (Grille g : lesGrilles)
 						g.remove(Grille.ADVERSAIRE_CODE, a.getLocation());
 					Grille.deplacer(l, generateur.nextInt(4));
@@ -392,8 +395,8 @@ public class CarteModel {
 	}
 
 	public boolean tirer(int x, int y) {
-		Adversaire killed = null;
-		for (Adversaire a : adversaire)
+		Ennemie killed = null;
+		for (Ennemie a : adversaire)
 			if (a.getLocation().x == x && a.getLocation().y == y) {
 				killed = a;
 				break;

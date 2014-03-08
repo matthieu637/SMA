@@ -1,4 +1,4 @@
-package modele;
+package modele.entite;
 
 import jason.environment.grid.Location;
 

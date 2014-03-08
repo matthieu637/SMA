@@ -9,7 +9,7 @@ public class Act {
 		temps = System.currentTimeMillis();
 	}
 
-	boolean canAct() {
+	public boolean canAct() {
 		if ((System.currentTimeMillis() - temps) >= max.getMax()) {
 			temps = System.currentTimeMillis();
 			return true;

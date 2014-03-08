@@ -1,6 +1,9 @@
-package modele;
+package modele.entite;
 
 import jason.environment.grid.Location;
+import modele.Act;
+import modele.TimeLimit;
+import modele.Variables;
 import modele.percepts.AllPercepts;
 
 /**
@@ -9,14 +12,12 @@ import modele.percepts.AllPercepts;
  *         Garde les informations du leader en mémoire pour mettre à jour les
  *         percepts
  */
-public class Vehicule implements Comparable<Integer> {
+public class Vehicule extends EntiteLocalisable implements Comparable<Integer> {
 
 	private final int numero;
 
 	private Location but;
-
-	private Location l;
-
+	
 	private boolean estLeader;
 
 	private static final int OUT = 500;
@@ -26,8 +27,8 @@ public class Vehicule implements Comparable<Integer> {
 	private Act deplacement;
 
 	public Vehicule(int numero, Location l, boolean leader, Vehicule follower) {
+		super(l);
 		this.numero = numero;
-		this.l = l;
 		this.estLeader = leader;
 		this.follower = follower;
 		this.deplacement = new Act(new TimeLimit() {
@@ -45,10 +46,6 @@ public class Vehicule implements Comparable<Integer> {
 
 	public int getNumero() {
 		return numero;
-	}
-
-	public Location getLocation() {
-		return l;
 	}
 
 	public boolean estLeader() {

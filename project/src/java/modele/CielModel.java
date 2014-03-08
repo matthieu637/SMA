@@ -5,9 +5,12 @@ import jason.environment.grid.Location;
 import java.util.ArrayList;
 import java.util.List;
 
+import modele.entite.Civil;
+import modele.entite.Drone;
+import modele.entite.Ennemie;
 import modele.percepts.AllPercepts;
-import ext.GridWorldModelP;
 import utils.Couple;
+import ext.GridWorldModelP;
 
 /**
  * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
@@ -22,12 +25,12 @@ public class CielModel extends Grille {
 	/*
 	* Pointeurs pour récupérer les adversaires et civils
 	*/
-	private List<Adversaire> adversaire;	
+	private List<Ennemie> adversaire;	
 	private List<Civil> civil;
 	
 	private AllPercepts interpreteur;
 
-	protected CielModel(int nbAgent, AllPercepts interpreteur, List<Adversaire> adversaire, List<Civil> civil) {
+	protected CielModel(int nbAgent, AllPercepts interpreteur, List<Ennemie> adversaire, List<Civil> civil) {
 		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent, interpreteur);
 		int nombre_drone_basse_altitude = (int) (nbAgent * Variables.PROPORTION_DRONE_BASSE_HAUTE_ALTITUDE);
 		int nombre_drone_haute_altitude = nbAgent - nombre_drone_basse_altitude;
