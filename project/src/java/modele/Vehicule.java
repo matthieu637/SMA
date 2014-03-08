@@ -113,4 +113,8 @@ public class Vehicule implements Comparable<Integer> {
 	public void setFollower(Vehicule devant) {
 		follower = devant;
 	}
+
+	public void setLeader() {
+		estLeader = true; 
+	}
 }
