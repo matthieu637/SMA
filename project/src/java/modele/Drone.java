@@ -35,6 +35,18 @@ public class Drone {
 		this.haute_altitude = haute_altitude;
 	}
 	
+	public int changerAltitude() {
+		this.haute_altitude = !this.haute_altitude;
+		return this.getAltitude();
+	}
+	
+	public int getAltitude() {
+		if (this.haute_altitude)
+			return 1;
+		else
+			return 0;
+	}
+	
 	public int getMaxFuel() {
 		return this.maxFuel;
 	}
@@ -117,6 +129,13 @@ public class Drone {
 	}
 	
 	public void majPercepts(AllPercepts interpreteur, List<Adversaire> adversaire, List<Civil> civil) {
+		
+		// altitude
+		interpreteur.retirerAltitude(id);
+		interpreteur.ajouterAltitude(id, this.getAltitude());
+		
+		// champ de vision
+		interpreteur.ajouterFieldOfView(id, this.getAltitude()==1 ? this.getChamp_vision_haute_altitude() : this.getChamp_vision_basse_altitude());
 		
 		// fuel
 		interpreteur.retirerDroneFuel(id);

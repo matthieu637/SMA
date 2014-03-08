@@ -21,6 +21,9 @@ public class AllPercepts extends InterpreteurSpl {
 	private final static String civil = "civil(%s, %s)";
 	private final static String fuel = "fuel(%s)";
 	private final static String droneAuSol = "droneAuSol(%s)";
+	private final static String fieldOfView = "fieldOfView(%s)";
+	private final static String altitude = "altitude(%s)";
+	
 
 	public AllPercepts(Environment env) {
 		super(env);
@@ -82,6 +85,14 @@ public class AllPercepts extends InterpreteurSpl {
 		ajouterDrone(d, civil, x, y);
 	}
 
+	public void ajouterFieldOfView(int d, int fov) {
+		ajouterDrone(d, fieldOfView, fov);
+	}
+	
+	public void retirerFieldOfView(int d) {
+		retirerDrone(d, fieldOfView, "_");
+	}
+
 	public void retirerVisionDrone(int d) {
 		retirerDroneUnif(d, vehicule, "_", "_");
 		retirerDroneUnif(d, adversaire, "_", "_");
@@ -90,6 +101,14 @@ public class AllPercepts extends InterpreteurSpl {
 
 	public void ajouterDroneFuel(int d, int f) {
 		ajouterDrone(d, fuel, f);
+	}
+	
+	public void ajouterAltitude(int d, int f) {
+		ajouterDrone(d, altitude, f);
+	}
+	
+	public void retirerAltitude(int d) {
+		retirerDrone(d, altitude, "_");
 	}
 
 	public void retirerDroneFuel(int d) {

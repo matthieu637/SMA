@@ -147,6 +147,16 @@ public class CarteModel {
 		Couple<Integer, Grille> c = dispatch(agName);
 		interpreteur.ajouterTourDroneAuSol(c.first);
 		return ciel.getDrone(c.first).atterir();
+	}	
+	
+	public boolean changerAltitude(String agName) {
+		Couple<Integer, Grille> c = dispatch(agName);
+		interpreteur.retirerAltitude(c.first);
+		interpreteur.retirerFieldOfView(c.first);
+		int altitude = ciel.getDrone(c.first).changerAltitude();
+		interpreteur.ajouterAltitude(c.first, altitude);
+		interpreteur.ajouterFieldOfView(c.first, altitude==1 ? ciel.getDrone(c.first).getChamp_vision_haute_altitude() : ciel.getDrone(c.first).getChamp_vision_basse_altitude());
+		return true;
 	}
 
 	/**
