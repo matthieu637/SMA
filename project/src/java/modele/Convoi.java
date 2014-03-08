@@ -70,13 +70,8 @@ public class Convoi {
 
 	public void remove(int agent) {
 		Vehicule mort = getVehicule(agent);
-		Vehicule devant = null;
-		for (Vehicule candidat : file) {
-			if (candidat.getFollower() != null && candidat.getFollower().equals(mort)) {
-				devant = candidat;
-				break;
-			}
-		}
+		Vehicule devant = getDevant(mort);
+		
 		if (mort.getFollower() != null)
 			devant.setFollower(mort.getFollower());
 		devant.majPercept(interpreteur, hauteur);
@@ -86,5 +81,30 @@ public class Convoi {
 		synchronized (file) {
 			file.remove(mort);
 		}
+	}
+
+	public boolean scinder(int agent) {
+		Vehicule nouveau_leader = getVehicule(agent);
+		//retire en tant que follower
+		Vehicule devant = getDevant(nouveau_leader);
+		if(devant != null)
+			devant.setFollower(null);
+		nouveau_leader.setLeader();
+		
+		devant.majPercept(interpreteur, hauteur);
+		nouveau_leader.majPercept(interpreteur, hauteur);
+		return true;
+	}
+	
+	public Vehicule getDevant(Vehicule v){
+		Vehicule devant = null;
+		for (Vehicule candidat : file) {
+			if (candidat.getFollower() != null && candidat.getFollower().equals(v)) {
+				devant = candidat;
+				break;
+			}
+		}
+		
+		return devant;
 	}
 }

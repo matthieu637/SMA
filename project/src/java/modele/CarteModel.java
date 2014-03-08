@@ -386,4 +386,23 @@ public class CarteModel {
 			}
 		}
 	}
+
+	public boolean scinder(int agent) {
+		return terrain.scinder(agent);
+	}
+
+	public boolean tirer(int x, int y) {
+		Adversaire killed = null;
+		for (Adversaire a : adversaire)
+			if (a.getLocation().x == x && a.getLocation().y == y) {
+				killed = a;
+				break;
+			}
+		if (killed != null) {
+			adversaire.remove(killed);
+			for (Grille g : lesGrilles)
+				g.remove(Grille.ADVERSAIRE_CODE, killed.getLocation());
+		}
+		return false;
+	}
 }
