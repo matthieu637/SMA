@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import modele.entite.Convoi;
 import modele.percepts.AllPercepts;
 import utils.Couple;
 

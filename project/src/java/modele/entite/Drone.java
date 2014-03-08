@@ -1,4 +1,4 @@
-package modele;
+package modele.entite;
 
 import jason.environment.grid.Location;
 
@@ -128,7 +128,7 @@ public class Drone {
 		this.id = id;
 	}
 	
-	public void majPercepts(AllPercepts interpreteur, List<Adversaire> adversaire, List<Civil> civil) {
+	public void majPercepts(AllPercepts interpreteur, List<Ennemie> adversaire, List<Civil> civil) {
 		
 		// altitude
 		interpreteur.retirerAltitude(id);
@@ -149,7 +149,7 @@ public class Drone {
 		interpreteur.retirerVisionDrone(id);
 		
 		if (this.isHaute_altitude()) {				
-			for (Adversaire a : adversaire) {
+			for (Militaire a : adversaire) {
 				Location la = a.getLocation();
 				if (this.l.distanceEuclidean(la) < this.champ_vision_haute_altitude)
 					interpreteur.ajouterDroneVoitVehicule(id, la.x, la.y);
@@ -161,7 +161,7 @@ public class Drone {
 			}
 		}
 		else {	
-			for (Adversaire a : adversaire) {
+			for (Militaire a : adversaire) {
 				Location la = a.getLocation();
 				if (this.l.distanceEuclidean(la) < this.champ_vision_basse_altitude)
 					interpreteur.ajouterDroneVoitMilitaire(id, la.x, la.y);
