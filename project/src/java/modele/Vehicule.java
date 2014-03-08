@@ -51,7 +51,7 @@ public class Vehicule implements Comparable<Integer> {
 		return l;
 	}
 
-	public boolean isEstLeader() {
+	public boolean estLeader() {
 		return estLeader;
 	}
 
@@ -104,5 +104,13 @@ public class Vehicule implements Comparable<Integer> {
 	@Override
 	public int compareTo(Integer o) {
 		return Integer.compare(this.numero, o);
+	}
+
+	public Vehicule getFollower() {
+		return follower;
+	}
+
+	public void setFollower(Vehicule devant) {
+		follower = devant;
 	}
 }

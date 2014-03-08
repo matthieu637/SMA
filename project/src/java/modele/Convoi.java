@@ -49,10 +49,42 @@ public class Convoi {
 
 	public Vehicule getVehicule(int agent) {
 		int pos = Collections.binarySearch(file, agent);
+		if (pos < 0)
+			return null;
 		return file.get(pos);
 	}
 
 	public boolean canAct(int agent) {
-		return getVehicule(agent).canAct();
+		if (getVehicule(agent) != null)
+			return getVehicule(agent).canAct();
+		return false;
+	}
+
+	public List<Vehicule> getLeaders() {
+		List<Vehicule> leads = new LinkedList<>();
+		for (Vehicule v : file)
+			if (v.estLeader())
+				leads.add(v);
+		return leads;
+	}
+
+	public void remove(int agent) {
+		Vehicule mort = getVehicule(agent);
+		Vehicule devant = null;
+		for (Vehicule candidat : file) {
+			if (candidat.getFollower() != null && candidat.getFollower().equals(mort)) {
+				devant = candidat;
+				break;
+			}
+		}
+		if (mort.getFollower() != null)
+			devant.setFollower(mort.getFollower());
+		devant.majPercept(interpreteur, hauteur);
+
+		for (Vehicule leader : getLeaders())
+			interpreteur.ajouterMort(leader.getNumero(), mort.getNumero());
+		synchronized (file) {
+			file.remove(mort);
+		}
 	}
 }

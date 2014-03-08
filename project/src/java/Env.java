@@ -80,6 +80,9 @@ public class Env extends Environment implements Runnable {
 		case "decoller":
 			valide = modele.decoller(agName);
 			break;
+		case "changerAltitude":
+			valide = modele.changerAltitude(agName);
+			break;
 		case "atterir":
 			valide = modele.atterir(agName);
 			break;

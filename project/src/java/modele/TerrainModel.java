@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import ext.GridWorldModelP;
 import modele.percepts.AllPercepts;
 import utils.Couple;
 
@@ -143,5 +144,11 @@ public class TerrainModel extends Grille {
 			c = new Couple<Location, Boolean>(null, false);
 
 		return c;
+	}
+
+	public void kill(Location t) {
+		int pos = getAgAtPos(t);
+		removeAgent(pos);
+		convoi.remove(pos + 1);
 	}
 }

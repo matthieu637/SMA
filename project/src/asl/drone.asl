@@ -1,12 +1,8 @@
 // Agent drone in project project
 
 
-/* Initial beliefs and rules */
-priorite(leader).
-priorite(devant).
-priorite(derriere).
+enoughFuel :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionInitiale(IX, IY) & math.abs(POSX - IX) + math.abs(POSY - IY) <= F - 10. 
 
-enoughFuel(BX,BY):- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionInitiale(IX, IY) & math.abs(BX - IX) + math.abs(BY - IY) + math.abs(POSX - BX) + math.abs(POSY - BY)<= F - 10. 
 
 /* Initial goals */
 /* Plans */
@@ -33,7 +29,7 @@ enoughFuel(BX,BY):- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionIn
 			atterir.
 			
 +!goto(GX, GY) : .my_name(X) & location(X, GX, GY) <- true.
-+!goto(GX, GY) : .my_name(X) & location(X, POSX, POSY) & ia.choose_direction(D, POSX,  POSY, GX, GY) & checkFuel(GX,GY)<- deplacer(D) ; !goto(GX, GY).
++!goto(GX, GY) : .my_name(X) & location(X, POSX, POSY) & ia.choose_direction(D, POSX,  POSY, GX, GY) <- deplacer(D) ; !goto(GX, GY).
 	
 	
 +!suspect(POSX, POSY) : true <- .send(t, achieve, identification(POSX, POSY)).
