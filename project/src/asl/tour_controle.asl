@@ -9,9 +9,9 @@
 
 
 +!attribuer_mission : .findall(X, drone(X), L)
-	<- 	.send(L, tell, mission(d1,leader));
-		.send(L, tell, mission(d2,devant));
-		.send(L, tell, mission(d3,derriere)).
+	<- 	.send(L, tell, mission(d1,derriere));
+		.send(L, tell, mission(d2,leader));
+		.send(L, tell, mission(d3,devant)).
 
 +droneAuSol(X) : true <- remplirFuel(X);
 				.send(X, achieve, decoller).

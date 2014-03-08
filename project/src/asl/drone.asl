@@ -31,7 +31,7 @@ enoughFuel :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionInitiale
 +!goto(GX, GY) : .my_name(X) & location(X, POSX, POSY) & ia.choose_direction(D, POSX,  POSY, GX, GY) <- deplacer(D) ; !goto(GX, GY).
 	
 -!goto(GX,GY) : true
-<- !goto.
+<- !goto(GX, GY).
 	
 +!suspect(POSX, POSY) : true <- .send(t, achieve, identification(POSX, POSY)).
 
@@ -41,10 +41,13 @@ enoughFuel :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionInitiale
 
 
 
-+!surveiller(M): .my_name(D) & leader(L) & .send(L, askOne, location(L,X,Y), R1) & R1 = location(L,POSX,POSY) 
-		& .send(L, askOne, goal(X,Y), R2) & R2 = goal(BX,BY) 
-	& mission(D, M) & fieldOfView(F) & ia.positionSurveillance(SX,SY,BX,BY,POSX,POSY,M,F)
-	<- !goto(SX,SY) ; 
++!surveiller(M): .my_name(D) & leader(L) & 
+	mission(D, M) & fieldOfView(F)
+	<- 
+	.send(L, askOne, location(L,_,_), location(L,POSX,POSY));
+	.send(L, askOne, goal(_,_), goal(BX,BY) );
+	ia.positionSurveillance(SX,SY,BX,BY,POSX,POSY,M,F); 
+	!goto(SX,SY) ; 
 		!surveiller(M).
 
 +!surveiller(X) : not leader(_)
