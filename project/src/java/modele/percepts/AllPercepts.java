@@ -23,10 +23,14 @@ public class AllPercepts extends InterpreteurSpl {
 	private final static String droneAuSol = "droneAuSol(%s)";
 	private final static String fieldOfView = "fieldOfView(%s)";
 	private final static String altitude = "altitude(%s)";
-	
+	private final static String dead = "dead(%s)";
 
 	public AllPercepts(Environment env) {
 		super(env);
+	}
+
+	public void ajouterMort(int leader, int vehicule) {
+		ajouterVehicule(leader, dead, "v" + vehicule);
 	}
 
 	public void ajouterPositionVehicule(int vehicule, int cible, int x, int y) {
@@ -88,7 +92,7 @@ public class AllPercepts extends InterpreteurSpl {
 	public void ajouterFieldOfView(int d, int fov) {
 		ajouterDrone(d, fieldOfView, fov);
 	}
-	
+
 	public void retirerFieldOfView(int d) {
 		retirerDrone(d, fieldOfView, "_");
 	}
@@ -102,11 +106,11 @@ public class AllPercepts extends InterpreteurSpl {
 	public void ajouterDroneFuel(int d, int f) {
 		ajouterDrone(d, fuel, f);
 	}
-	
+
 	public void ajouterAltitude(int d, int f) {
 		ajouterDrone(d, altitude, f);
 	}
-	
+
 	public void retirerAltitude(int d) {
 		retirerDrone(d, altitude, "_");
 	}
@@ -114,11 +118,11 @@ public class AllPercepts extends InterpreteurSpl {
 	public void retirerDroneFuel(int d) {
 		retirerDroneUnif(d, fuel, "_");
 	}
-		
+
 	public void ajouterTourDroneAuSol(int id) {
 		ajouterTour(droneAuSol, "d" + id);
 	}
-	
+
 	public void retirerTourDroneAuSol(int id) {
 		retirerTour(droneAuSol, "d" + id);
 	}
