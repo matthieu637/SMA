@@ -12,8 +12,7 @@ enoughFuel :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionInitiale
 	
 +!decoller : .my_name(X) & location(X, POSX, POSY) 
 				<- +positionInitiale(POSX, POSY);
-					decoller;
-					!move.
+					decoller.
 					
 +!move : .random(R) & X = math.floor(4*R)
 	<- deplacer(X);
@@ -36,12 +35,15 @@ enoughFuel :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionInitiale
 	
 +!suspect(POSX, POSY) : true <- .send(t, achieve, identification(POSX, POSY)).
 
+//+location(L,X,Y)[source(L)] : true <- -location(L,_,_);
 
 +!tirer(POSX, POSY) : true <- tirerAdversaire(POSX, POSY).
 
 
 
-+!surveiller(M): leader(L) & location(L, POSX, POSY) & mission(D, M) & fielOfView(F) & ia.positionSurveillance(SX,SY,BX,BY,POSX,POSY,M,F)
++!surveiller(M): .my_name(D) & leader(L) & .send(L, askOne, location(L,X,Y), R1) & R1 = location(L,POSX,POSY) 
+		& .send(L, askOne, goal(X,Y), R2) & R2 = goal(BX,BY) 
+	& mission(D, M) & fieldOfView(F) & ia.positionSurveillance(SX,SY,BX,BY,POSX,POSY,M,F)
 	<- !goto(SX,SY) ; 
 		!surveiller(M).
 

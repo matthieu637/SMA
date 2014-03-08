@@ -18,8 +18,9 @@
 
 +!to_goal : .my_name(L) & goal(GX, GY) & location(L, X, Y) & heightmap(A, B, C, D) & 
 			ia.choose_direction(Dir, X, Y, GX, GY, A, B, C, D) <-
-	deplacer(Dir);
-	!to_goal.
+		.findall(DX, drone(DX), LD);
+		deplacer(Dir);
+		!to_goal.
 	
 -!to_goal : true <-
 	!to_goal.
