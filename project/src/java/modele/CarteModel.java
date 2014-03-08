@@ -84,6 +84,7 @@ public class CarteModel {
 		interpreteur.ajouterTourDroneAuSol(1);
 		interpreteur.ajouterTourDroneAuSol(2);
 		interpreteur.ajouterTourDroneAuSol(3);
+		interpreteur.ajouterDrones(nombreDrone, nombreVehicule);
 	}
 
 	public TerrainModel getTerrain() {
