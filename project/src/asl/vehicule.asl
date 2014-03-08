@@ -27,5 +27,8 @@
 	deplacer(Dir);
 	!follow.
 
++!follow : true <-
+	!follow.
+
 -!follow : true <-
 	!follow.

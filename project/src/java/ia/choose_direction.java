@@ -4,7 +4,7 @@ import jason.JasonException;
 import jason.asSemantics.DefaultInternalAction;
 import jason.asSemantics.TransitionSystem;
 import jason.asSemantics.Unifier;
-import jason.asSyntax.ASSyntax;
+import jason.asSyntax.NumberTermImpl;
 import jason.asSyntax.Term;
 import jason.environment.grid.Location;
 
@@ -28,8 +28,12 @@ public class choose_direction extends DefaultInternalAction {
 
 	private final Random generateur = new Random();
 
+	private static final Object lock = new Object();
+	
 	@Override
 	public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
+		synchronized (lock) {
+
 
 		if (args.length == 5 || args.length == 9) {
 			int i = 1;
@@ -47,6 +51,7 @@ public class choose_direction extends DefaultInternalAction {
 				loc.add(new DLocation(x - 1, y, 0));
 			if (y - 1 >= 0)
 				loc.add(new DLocation(x, y - 1, 1));
+//			loc.add(new DLocation(x, y, -1));
 
 			Location goal = new Location(gx, gy);
 			List<DLocation> mins = null;
@@ -62,10 +67,10 @@ public class choose_direction extends DefaultInternalAction {
 				mins = UtilList.minList(loc, new Distance(goal));
 
 			int indice = generateur.nextInt(mins.size());
-			return un.unifies(args[0], ASSyntax.parseTerm("" + mins.get(indice).getDirection()));
-
+			return un.unifies(args[0], new NumberTermImpl(mins.get(indice).getDirection()));
 		} else
 			throw new JasonException("5 ou 9 arguments nécessaires");
+		}
 	}
 }
 
@@ -126,7 +131,7 @@ class DistanceHeightmap implements Comparator<DLocation> {
 		case 3:
 			return hb;
 		default:
-			return -1;
+			return 256;
 		}
 	}
 }
