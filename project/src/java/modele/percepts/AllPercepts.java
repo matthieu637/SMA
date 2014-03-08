@@ -17,7 +17,7 @@ public class AllPercepts extends InterpreteurSpl {
 	private final static String heightmap = "heightmap(%s, %s, %s, %s)";
 	private final static String follow = "follow(%s)";
 	private final static String vehicule = "vehicule(%s, %s)";
-	private final static String adversaire = "adversaire(%s, %s)";
+	private final static String militaire = "militaire(%s, %s)";
 	private final static String civil = "civil(%s, %s)";
 	private final static String fuel = "fuel(%s)";
 	private final static String droneAuSol = "droneAuSol(%s)";
@@ -82,8 +82,8 @@ public class AllPercepts extends InterpreteurSpl {
 		ajouterDrone(d, vehicule, x, y);
 	}
 
-	public void ajouterDroneVoitAdversaire(int d, int x, int y) {
-		ajouterDrone(d, adversaire, x, y);
+	public void ajouterDroneVoitMilitaire(int d, int x, int y) {
+		ajouterDrone(d, militaire, x, y);
 	}
 
 	public void ajouterDroneVoitCivil(int d, int x, int y) {
@@ -100,7 +100,7 @@ public class AllPercepts extends InterpreteurSpl {
 
 	public void retirerVisionDrone(int d) {
 		retirerDroneUnif(d, vehicule, "_", "_");
-		retirerDroneUnif(d, adversaire, "_", "_");
+		retirerDroneUnif(d, militaire, "_", "_");
 		retirerDroneUnif(d, civil, "_", "_");
 	}
 

@@ -164,7 +164,7 @@ public class Drone {
 			for (Adversaire a : adversaire) {
 				Location la = a.getLocation();
 				if (this.l.distanceEuclidean(la) < this.champ_vision_basse_altitude)
-					interpreteur.ajouterDroneVoitAdversaire(id, la.x, la.y);
+					interpreteur.ajouterDroneVoitMilitaire(id, la.x, la.y);
 			}
 			for (Civil c : civil) {
 				Location lc = c.getLocation();
