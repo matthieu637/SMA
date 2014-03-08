@@ -38,6 +38,7 @@ enoughFuel :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionInitiale
 +!tirer(POSX, POSY) : true <- tirerAdversaire(POSX, POSY).
 
 
+
 +!surveiller(M): leader(L) & location(L, POSX, POSY) & mission(D, M) & fielOfView(F) & ia.positionSurveillance(SX,SY,BX,BY,POSX,POSY,M,F)
 	<- !goto(SX,SY) ; 
 		!surveiller(M).
@@ -54,7 +55,7 @@ enoughFuel :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionInitiale
 	!informer_mission.
 	
 
-+!informer_mission : my_name(D) & mission(M)
++!informer_mission : my_name(D) & mission(D, M)
 	<- .findall(X,drone(X) & X \== D, L); 
 	.send(L, tell, mission(D, M)).
 

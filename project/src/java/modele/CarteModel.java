@@ -81,6 +81,7 @@ public class CarteModel {
 		interpreteur.ajouterTourDroneAuSol(1);
 		interpreteur.ajouterTourDroneAuSol(2);
 		interpreteur.ajouterTourDroneAuSol(3);
+		interpreteur.ajouterDrones(nombreDrone, nombreVehicule);
 	}
 
 	public TerrainModel getTerrain() {
@@ -385,5 +386,24 @@ public class CarteModel {
 					g.add(Grille.CIVIL_CODE, c.getLocation());
 			}
 		}
+	}
+
+	public boolean scinder(int agent) {
+		return terrain.scinder(agent);
+	}
+
+	public boolean tirer(int x, int y) {
+		Adversaire killed = null;
+		for (Adversaire a : adversaire)
+			if (a.getLocation().x == x && a.getLocation().y == y) {
+				killed = a;
+				break;
+			}
+		if (killed != null) {
+			adversaire.remove(killed);
+			for (Grille g : lesGrilles)
+				g.remove(Grille.ADVERSAIRE_CODE, killed.getLocation());
+		}
+		return false;
 	}
 }

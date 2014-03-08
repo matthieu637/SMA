@@ -124,12 +124,17 @@ public class AllPercepts extends InterpreteurSpl {
 		ajouterTour(droneAuSol, "d" + id);
 	}
 
-	public void ajouterTourDrones(int nbDrones) {
+	public void ajouterDrones(int nbDrones, int nbV) {
+		for (int v = 1; v < nbV; v++) {
+			for (int d = 0; d < nbDrones; d++) {
+				ajouterVehicule(v, drone, "d" + (d + 1));
+			}
+		} 
 		for (int d = 0; d < nbDrones; d++) {
 			ajouterTour(drone, "d" + (d + 1));
 		}
 	}
-
+	
 	public void retirerTourDroneAuSol(int id) {
 		retirerTour(droneAuSol, "d" + id);
 	}
