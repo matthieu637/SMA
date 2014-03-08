@@ -23,11 +23,24 @@ public class Vehicule implements Comparable<Integer> {
 
 	private Vehicule follower;
 
+	private Act deplacement;
+
 	public Vehicule(int numero, Location l, boolean leader, Vehicule follower) {
 		this.numero = numero;
 		this.l = l;
 		this.estLeader = leader;
 		this.follower = follower;
+		this.deplacement = new Act(new TimeLimit() {
+
+			@Override
+			public long getMax() {
+				return (long) (Variables.getInstance().getVitesse() * Variables.VITESSE_DEPLACEMENT_VEHICULE);
+			}
+		});
+	}
+
+	public boolean canAct() {
+		return deplacement.canAct();
 	}
 
 	public int getNumero() {

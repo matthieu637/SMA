@@ -89,7 +89,7 @@ public class Env extends Environment implements Runnable {
 		}
 
 		try {
-			Thread.sleep((long) (Variables.VITESSE_ACTION * Variables.getInstance().getVitesse()));
+			Thread.sleep((long) (Variables.TEMPS_REFLEXION * Variables.getInstance().getVitesse()));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -135,9 +135,12 @@ public class TerrainModel extends Grille {
 
 	@Override
 	public Couple<Location, Boolean> deplacerCollision(int agent, int direction) {
-		Couple<Location, Boolean> c = super.deplacerCollision(agent - 1, direction);
-
-		convoi.majPercepts(agent, c.first);
+		Couple<Location, Boolean> c = null;
+		if (convoi.canAct(agent)) {
+			c = super.deplacerCollision(agent - 1, direction);
+			convoi.majPercepts(agent, c.first);
+		} else
+			c = new Couple<Location, Boolean>(null, false);
 
 		return c;
 	}

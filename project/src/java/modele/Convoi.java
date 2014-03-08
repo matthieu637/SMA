@@ -51,4 +51,8 @@ public class Convoi {
 		int pos = Collections.binarySearch(file, agent);
 		return file.get(pos);
 	}
+
+	public boolean canAct(int agent) {
+		return getVehicule(agent).canAct();
+	}
 }

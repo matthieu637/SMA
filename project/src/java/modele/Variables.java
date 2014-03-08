@@ -32,9 +32,15 @@ public class Variables {
 	public static float PROPORTION_DRONE_BASSE_HAUTE_ALTITUDE = 0.6f;
 
 	/**
-	 * Facteur de vitesse d'action du MAS
+	 * Facteur de vitesse d'action / temps de réflexion de chaque agent du MAS
+	 * Evite d'avoir le CPU qui tourne à 100%.
 	 */
-	public static float VITESSE_ACTION = 1.f;
+	public static float TEMPS_REFLEXION = 0.2f;
+
+	/**
+	 * Quel pas de temps pour le deplacement des vehicule
+	 */
+	public static final float VITESSE_DEPLACEMENT_VEHICULE = 1.5f;
 	/**
 	 * Quel pas de temps pour le deplacement des adversaires
 	 */
