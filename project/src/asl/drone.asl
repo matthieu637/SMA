@@ -39,7 +39,7 @@ enoughFuel :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionInitiale
 
 
 +!surveiller(M): leader(L) & location(L, POSX, POSY) & mission(M) & fielOfView(F) & ia.positionSurveillance(SX,SY,BX,BY,POSX,POSY,M,F)
-	<-  deplacer(Dir); !goto(SX,SY) ; 
+	<-  !goto(SX,SY) ; 
 		!surveiller(M).
 
 -!surveiller(X) : true

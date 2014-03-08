@@ -44,7 +44,6 @@ public class CielModel extends Grille {
 		this.civil = civil;
 		
 		this.majPercepts();
-		this.interpreteur.ajouterTourDrones(nbAgent);
 	}
 	
 	public void majPercepts() {
