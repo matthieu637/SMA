@@ -125,9 +125,12 @@ public class AllPercepts extends InterpreteurSpl {
 	}
 
 	public void ajouterDrones(int nbDrones, int nbV) {
-		for (int v = 1; v <= nbV; v++) {
-			for (int d = 0; d < nbDrones; d++) {
+		for (int d = 0; d < nbDrones; d++) {
+			for (int v = 1; v <= nbV; v++) {
 				ajouterVehicule(v, drone, "d" + (d + 1));
+			}
+			for (int d2 = 0; d2 <= nbDrones; d2++) {
+				ajouterDrone(d2+1, drone, "d" + (d + 1));
 			}
 		} 
 		for (int d = 0; d < nbDrones; d++) {
