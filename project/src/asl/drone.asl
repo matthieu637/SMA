@@ -6,6 +6,12 @@ enoughFuel(BX, BY) :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & position
 						
 enoughFuel(N) :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionInitiale(IX, IY) 
 						& math.abs(IX - POSX) + math.abs(IY - POSY) + 2 * N <= F - 10. 
+
+
+priorite(leader, 1).
+priorite(devant, 2).
+priorite(derriere, 3).
+
 goHome.
 
 /* Initial goals */
@@ -18,12 +24,12 @@ goHome.
 
 +!informerAllouer : .my_name(D)<-
 		.findall(X,drone(X) & X \== D, L); 
-		.send(L, achieve, allocAll);.print("I have informed Allouer");
+		.send(L, achieve, alloc);.print("I have informed Allouer");
 		.abolish(mission(D,M));
 		.print(L).
 	
-+!choisirMission : .my_name(D) & mission(D,M) <- true.
-+!choisirMission : .my_name(D) & .random(R) & R <= 0.01 & .findall(X, mission(DD,X), S) & .difference([leader,devant,derriere], S, L) & .max(L, M) 
++!choisirMission : .my_name(D) & mission(D,M) <- .print("Jai deja une mission").
++!choisirMission : .my_name(D) & .random(R) & R <= 0.1 & .findall(X, mission(DD,X), S) & .difference([leader,devant,derriere], S, L) & .max(L, M) 
 	<- .print("I choose mission : ", M);.print(L);
 	+mission(D,M);
 	!informerMission.
@@ -40,8 +46,10 @@ goHome.
 				<- +positionInitiale(POSX, POSY);
 					decoller;.print("I am flying");-goHome;!choisirMission; !doMission.					
 					
-+!allocAll : goHome <- .abolish(mission(D,M));.print("I have DeAllocated").
-+!allocAll : true <- .abolish(mission(D,M));.print("I have DeAllocated");!choisirMission.
++!alloc[source(DD)] : .my_name(D) & mission(D,M) & priorite(M,P) & .count(mission(_, _), NDM) & P > NDM-1
+						 & not goHome <- .abolish(mission(DD,_));.abolish(mission(D,_));.print("I have DeAllocated1 ", DD);!choisirMission.
+						 
++!alloc[source(DD)] : .count(mission(_, _), NDM) <- .abolish(mission(DD,_));.print("I have DeAllocated2 ", DD).
 
 				
 /* Random move */	

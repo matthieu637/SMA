@@ -5,6 +5,7 @@ import jason.environment.grid.Location;
 import java.util.List;
 
 import modele.percepts.AllPercepts;
+import java.util.Random;
 
 public class Drone {
 
@@ -16,12 +17,14 @@ public class Drone {
 	private int maxFuel;
 	private boolean auSol;
 	private Location l;
+	private Random generateur;
 
 	public Drone(int id, boolean haute_altitude, Location l, int maxFuel, int champ_vision_basse_altitude, int champ_vision_haute_altitude) {
 		this.setId(id);
 		this.setPos(l);
 		this.setHaute_altitude(haute_altitude);
-		this.maxFuel = maxFuel;
+		generateur = new Random();
+		this.maxFuel = maxFuel+generateur.nextInt(200);
 		this.auSol = true;
 		this.champ_vision_basse_altitude = champ_vision_basse_altitude;
 		this.champ_vision_haute_altitude = champ_vision_haute_altitude;
