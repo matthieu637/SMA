@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import modele.CielModel;
+import modele.entite.Drone;
 import ext.GridWorldModelP;
 import ext.GridWorldViewPanel;
 
