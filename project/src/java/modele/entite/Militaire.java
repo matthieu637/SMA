@@ -15,6 +15,11 @@ public class Militaire extends EntiteDeplacable {
 		super(l, c);
 	}
 
+	public Militaire(Location l, Comportement c, Location but) {
+		super(l, c);
+		this.setBut(but);
+	}
+
 	@Override
 	public void deplacer() {
 		// TODO Auto-generated method stub

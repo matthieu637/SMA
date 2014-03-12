@@ -19,6 +19,7 @@ public class AllPercepts extends InterpreteurSpl {
 	private final static String vehicule = "vehicule(%s, %s)";
 	private final static String militaire = "militaire(%s, %s)";
 	private final static String civil = "civil(%s, %s)";
+	private final static String allie = "allie(%s, %s)";
 	private final static String fuel = "fuel(%s)";
 	private final static String droneAuSol = "droneAuSol(%s)";
 	private final static String drone = "drone(%s)";
@@ -89,6 +90,11 @@ public class AllPercepts extends InterpreteurSpl {
 	public void ajouterDroneVoitCivil(int d, int x, int y) {
 		ajouterDrone(d, civil, x, y);
 	}
+	
+	public void ajouterDroneVoitAllie(int d, int x, int y) {
+		ajouterDrone(d, allie, x, y);
+		
+	}
 
 	public void ajouterFieldOfView(int d, int fov) {
 		ajouterDrone(d, fieldOfView, fov);
@@ -141,5 +147,14 @@ public class AllPercepts extends InterpreteurSpl {
 	public void retirerTourDroneAuSol(int id) {
 		retirerTour(droneAuSol, "d" + id);
 	}
+
+	public void ajouterTourAllie(int x, int y) {
+		ajouterTour(allie, x, y);		
+	}
+
+	public void retirerTourAllies() {
+		retirerTourUnif(allie, "_", "_");		
+	}
+
 
 }

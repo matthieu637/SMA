@@ -10,6 +10,7 @@ import java.util.Random;
 import modele.entite.Civil;
 import modele.entite.Comportement;
 import modele.entite.Ennemie;
+import modele.entite.Militaire;
 import modele.percepts.AllPercepts;
 import utils.Couple;
 import vue.FenetrePpale;
@@ -45,6 +46,11 @@ public class CarteModel {
 	private List<Ennemie> adversaire;
 
 	/**
+	 * Liste des allies
+	 */
+	private List<Militaire> allies;
+
+	/**
 	 * Liste des civils sur les 2 modèles (on peut les voir sur les 2 grilles
 	 * mais un civil ne peut être qu'au sol)
 	 */
@@ -69,6 +75,7 @@ public class CarteModel {
 	public CarteModel(AllPercepts interpreteur, int nombreVehicule, int nombreDrone) {
 
 		adversaire = new LinkedList<Ennemie>();
+		allies = new LinkedList<Militaire>();
 		civil = new LinkedList<Civil>();
 
 		terrain = new TerrainModel(nombreVehicule, interpreteur);
@@ -211,7 +218,20 @@ public class CarteModel {
 		for (Grille g : lesGrilles)
 			g.add(Grille.CIVIL_CODE, x, y);
 		Location but = this.terrain.getFreePos();
-//		civil.add(new Civil(x, y, but));
+		civil.add(new Civil(new Location(x,y), Comportement.But, but));
+	}
+	
+	/**
+	 * Ajoute un militaire allie dans chacune des grilles à la position x,y
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public void ajouterAgentAllie(int x, int y) {
+		for (Grille g : lesGrilles)	
+			g.add(Grille.ALLIE_CODE, x, y);
+		Location but = this.terrain.getFreePos();
+		allies.add(new Militaire(new Location(x,y), Comportement.But, but));
 	}
 
 	/**
@@ -234,6 +254,7 @@ public class CarteModel {
 				}
 			}
 		}
+		
 		return this.terrain.getAgPos(mn);
 	}
 
@@ -274,7 +295,7 @@ public class CarteModel {
 
 			Location t = this.find_target(l);
 
-			if ((l.distanceEuclidean(t) < a.vision()) & (this.visibilite(l, t) > generateur.nextDouble())) {
+			if (t != null & (l.distanceEuclidean(t) < a.vision()) & (this.visibilite(l, t) > generateur.nextDouble())) {
 				// s'il y a une cible à portee de
 				// vue et plutot visible, on s'en approche
 				// et/ou on tire
@@ -327,6 +348,69 @@ public class CarteModel {
 			}
 		}
 
+		// Militaires alliés
+		for (Militaire c : allies) {
+
+			Location l = c.getLocation();
+			Location but = c.getBut();
+
+			int dx = but.x - l.x;
+			int dy = but.y - l.y;
+			int direction;
+
+			if (but.equals(l)) { // c est arrivé à son but, on le supprime
+
+			} else {
+				if (dx == 0) {
+					if (dy > 0)
+						direction = 3;
+					else
+						direction = 1;
+				} else if (dy == 0) {
+					if (dx > 0)
+						direction = 2;
+					else
+						direction = 0;
+				} else {
+
+					// on trouve dans quelle direction le civil doit avancer
+					// : la direction qui le rapproche le plus de son but
+					// tout en restant le plus bas possible
+
+					int rx; // relief de la case d'à coté en x
+					if (dx > 0)
+						rx = this.terrain.getHauteur(l.x + 1, l.y);
+					else
+						rx = this.terrain.getHauteur(l.x - 1, l.y);
+
+					int ry; // relief de la case d'à coté en y
+					if (dy > 0)
+						ry = this.terrain.getHauteur(l.x, l.y + 1);
+					else
+						ry = this.terrain.getHauteur(l.x, l.y - 1);
+
+					if (rx > ry) {
+						if (dy > 0)
+							direction = 3;
+						else
+							direction = 1;
+					} else {
+						if (dx > 0)
+							direction = 2;
+						else
+							direction = 0;
+					}
+				}
+
+				for (Grille g : lesGrilles)
+					g.remove(Grille.ALLIE_CODE, c.getLocation());
+				Grille.deplacer(l, direction);
+				c.setLocation(l);
+				for (Grille g : lesGrilles)
+					g.add(Grille.ALLIE_CODE, c.getLocation());
+			}
+		}
+		
 		// Civils
 		for (Civil c : civil) {
 
@@ -388,6 +472,12 @@ public class CarteModel {
 				for (Grille g : lesGrilles)
 					g.add(Grille.CIVIL_CODE, c.getLocation());
 			}
+		}
+		
+		interpreteur.retirerTourAllies();
+		for (Militaire a : allies) {
+			Location la = a.getLocation();			
+			interpreteur.ajouterTourAllie(la.x, la.y);
 		}
 	}
 

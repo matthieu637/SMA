@@ -9,9 +9,9 @@ import jason.environment.grid.Location;
  */
 public class Civil extends EntiteDeplacable {
 
-	public Civil(Location l, Comportement c) {
+	public Civil(Location l, Comportement c, Location but) {
 		super(l, c);
-		// TODO Auto-generated constructor stub
+		this.setBut(but);
 	}
 
 	@Override

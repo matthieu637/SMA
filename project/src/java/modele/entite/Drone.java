@@ -156,7 +156,7 @@ public class Drone {
 				Location la = a.getLocation();
 				if (this.l.distanceEuclidean(la) < this.champ_vision_haute_altitude)
 					interpreteur.ajouterDroneVoitVehicule(id, la.x, la.y);
-			}
+			}		
 			for (Civil c : civil) {
 				Location lc = c.getLocation();
 				if (this.l.distanceEuclidean(lc) < this.champ_vision_haute_altitude)
