@@ -26,12 +26,16 @@
 	!to_goal.
 
 +!follow : .my_name(L) & location(L, X, Y) & follow(S) & location(S, GX, GY)  & 
-			ia.choose_direction(Dir, X, Y, GX, GY)  <- 
+			ia.choose_direction(Dir, X, Y, GX, GY) & not leader(L)  <- 
 	deplacer(Dir);
 	!follow.
 
-+!follow : true <-
++!follow : not leader(L) & .my_name(L) <-
 	!follow.
 
 -!follow : true <-
 	!follow.
+	
++!follow : leader(L) & .my_name(L) <-
+	!start.
+	

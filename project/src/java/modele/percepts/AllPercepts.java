@@ -157,4 +157,12 @@ public class AllPercepts extends InterpreteurSpl {
 	}
 
 
+	public void retirerLeader(int numero) {
+		retirerVehiculeUnif(numero, leader, "_");
+	}
+
+	public void retirerPositionButVehicule(int leader) {
+		retirerVehiculeUnif(leader, goal, "_", "_");
+	}
+
 }
