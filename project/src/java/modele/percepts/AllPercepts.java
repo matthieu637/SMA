@@ -101,7 +101,7 @@ public class AllPercepts extends InterpreteurSpl {
 	}
 
 	public void retirerFieldOfView(int d) {
-		retirerDrone(d, fieldOfView, "_");
+		retirerDroneUnif(d, fieldOfView, "_");
 	}
 
 	public void retirerVisionDrone(int d) {
