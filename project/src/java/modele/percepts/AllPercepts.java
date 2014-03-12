@@ -142,4 +142,12 @@ public class AllPercepts extends InterpreteurSpl {
 		retirerTour(droneAuSol, "d" + id);
 	}
 
+	public void retirerLeader(int numero) {
+		retirerVehiculeUnif(numero, leader, "_");
+	}
+
+	public void retirerPositionButVehicule(int leader) {
+		retirerVehiculeUnif(leader, goal, "_", "_");
+	}
+
 }

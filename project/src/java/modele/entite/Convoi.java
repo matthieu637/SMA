@@ -18,6 +18,7 @@ public class Convoi {
 	 */
 	private int[][] hauteur;
 	private AllPercepts interpreteur;
+	private Location but;
 
 	public Convoi(int nbAgent, Location location, AllPercepts interpreteur, Location but, int[][] hauteur) {
 
@@ -38,6 +39,7 @@ public class Convoi {
 
 		this.interpreteur = interpreteur;
 		this.hauteur = hauteur;
+		this.but = but;
 	}
 
 	public void majPercepts(int agent, Location l) {
@@ -71,13 +73,22 @@ public class Convoi {
 	public void remove(int agent) {
 		Vehicule mort = getVehicule(agent);
 		Vehicule devant = getDevant(mort);
-		
-		if (mort.getFollower() != null)
+
+		if (mort.getFollower() != null && devant != null)
 			devant.setFollower(mort.getFollower());
-		devant.majPercept(interpreteur, hauteur);
+		if (devant != null)
+			devant.majPercept(interpreteur, hauteur);
 
 		for (Vehicule leader : getLeaders())
 			interpreteur.ajouterMort(leader.getNumero(), mort.getNumero());
+		
+		if(mort.estLeader() && mort.getFollower() != null){
+			Vehicule nouveau_leader = mort.getFollower();
+			nouveau_leader.setLeader();
+			nouveau_leader.setBut(but);
+			nouveau_leader.majPercept(interpreteur, hauteur);
+		}
+
 		synchronized (file) {
 			file.remove(mort);
 		}
@@ -85,18 +96,18 @@ public class Convoi {
 
 	public boolean scinder(int agent) {
 		Vehicule nouveau_leader = getVehicule(agent);
-		//retire en tant que follower
+		// retire en tant que follower
 		Vehicule devant = getDevant(nouveau_leader);
-		if(devant != null)
+		if (devant != null)
 			devant.setFollower(null);
 		nouveau_leader.setLeader();
-		
+
 		devant.majPercept(interpreteur, hauteur);
 		nouveau_leader.majPercept(interpreteur, hauteur);
 		return true;
 	}
-	
-	public Vehicule getDevant(Vehicule v){
+
+	public Vehicule getDevant(Vehicule v) {
 		Vehicule devant = null;
 		for (Vehicule candidat : file) {
 			if (candidat.getFollower() != null && candidat.getFollower().equals(v)) {
@@ -104,7 +115,7 @@ public class Convoi {
 				break;
 			}
 		}
-		
+
 		return devant;
 	}
 }

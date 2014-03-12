@@ -69,12 +69,8 @@ public class Vehicule extends EntiteLocalisable implements Comparable<Integer> {
 	}
 
 	public void initPercept(AllPercepts interpreteur, int[][] hauteur) {
-		if (estLeader)
-			interpreteur.ajouterLeader(numero);
 		if (follower != null)
 			interpreteur.ajouterFollow(follower.getNumero(), numero);
-		if (but != null)
-			interpreteur.ajouterPositionButVehicule(numero, but.x, but.y);
 	}
 
 	public void majPercept(AllPercepts interpreteur, int[][] hauteur) {
@@ -87,10 +83,18 @@ public class Vehicule extends EntiteLocalisable implements Comparable<Integer> {
 		}
 
 		if (estLeader) {
+			interpreteur.retirerLeader(numero);
+			interpreteur.ajouterLeader(numero);
+			
 			interpreteur.retirerHeightmap(numero);
 			interpreteur.ajouterHeightmap(numero, l.x - 1 >= 0 ? hauteur[l.x - 1][l.y] : OUT, l.y - 1 >= 0 ? hauteur[l.x][l.y - 1] : OUT,
 					l.x + 1 < Variables.TAILLE_CARTE_X ? hauteur[l.x + 1][l.y] : OUT,
 					l.y + 1 < Variables.TAILLE_CARTE_Y ? hauteur[l.x][l.y + 1] : OUT);
+		}
+		
+		if(but != null){
+			interpreteur.retirerPositionButVehicule(numero);
+			interpreteur.ajouterPositionButVehicule(numero, but.x, but.y);
 		}
 	}
 
