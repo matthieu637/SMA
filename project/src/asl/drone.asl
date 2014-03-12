@@ -19,8 +19,25 @@ goHome.
 
 /* Mission */
 	
-+!doMission : .my_name(D) & mission(D,M) <- !posSurveillance(M); !randMove(5); !goHome; !doMission.	
++!doMission : .my_name(D) & mission(D,M) <- !posSurveillance(M); !detecterAdversaire;!randMove(5); !goHome; !doMission.	
 +!doMission.
+
++!detecterAdversaire : altitude(0) & militaire(POSX,POSY) &  allie(POSX,POSY).
++!detecterAdversaire : altitude(0) & militaire(POSX,POSY) & not allie(POSX,POSY)
+	<- !suspect(POSX,POSY);
+		!detecterAdversaire.
+
++!detecterAdversaire : altitude(1) & vehicule(POSX,POSY) 
+	<- changerAltitude;
+	!detecterAdversaire.
+	
++!detecterAdversaire : altitude(0) & civil(POSX,POSY)
+	<- changerAltitude.
++!detecterAdversaire : altitude(0) 
+	<- changerAltitude.
+
+-!detecterAdversaire : true
+	<- !detecterAdversaire.
 
 +!informerAllouer : .my_name(D)<-
 		.findall(X,drone(X) & X \== D, L); 
@@ -108,9 +125,7 @@ goHome.
 
 /* */
 
-	
 +!suspect(POSX, POSY) : true <- .send(t, achieve, identification(POSX, POSY)).
-
 
 +!tirer(POSX, POSY) : true <- tirerAdversaire(POSX, POSY).
 
