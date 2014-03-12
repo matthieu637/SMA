@@ -19,7 +19,7 @@ goHome.
 
 /* Mission */
 	
-+!doMission : .my_name(D) & mission(D,M) <- !posSurveillance(M); !detecterAdversaire;!randMove(5); !goHome; !doMission.	
++!doMission : .my_name(D) & mission(D,M) <- !posSurveillance(M); !detecterAdversaire; !randMove(5); !goHome; !doMission.	
 +!doMission.
 
 +!detecterAdversaire : altitude(0) & militaire(POSX,POSY) &  allie(POSX,POSY).
@@ -35,6 +35,8 @@ goHome.
 	<- changerAltitude.
 +!detecterAdversaire : altitude(0) 
 	<- changerAltitude.
+	
++!detecterAdversaire : altitude(1).
 
 -!detecterAdversaire : true
 	<- !detecterAdversaire.

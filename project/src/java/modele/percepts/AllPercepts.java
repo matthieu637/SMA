@@ -119,7 +119,7 @@ public class AllPercepts extends InterpreteurSpl {
 	}
 
 	public void retirerAltitude(int d) {
-		retirerDrone(d, altitude, "_");
+		retirerDroneUnif(d, altitude, "_");
 	}
 
 	public void retirerDroneFuel(int d) {

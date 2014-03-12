@@ -138,6 +138,7 @@ public class Drone {
 		interpreteur.ajouterAltitude(id, this.getAltitude());
 		
 		// champ de vision
+		interpreteur.retirerFieldOfView(id);
 		interpreteur.ajouterFieldOfView(id, this.getAltitude()==1 ? this.getChamp_vision_haute_altitude() : this.getChamp_vision_basse_altitude());
 		
 		// fuel
