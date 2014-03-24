@@ -93,12 +93,23 @@ public class TerrainModel extends Grille {
 
 				if (i + 1 < Variables.TAILLE_CARTE_X)
 					sum += hauteur[i + 1][j];
+				else
+					sum += Variables.HAUTEUR_HORS_CARTE;
+				
 				if (j + 1 < Variables.TAILLE_CARTE_Y)
 					sum += hauteur[i][j + 1];
+				else
+					sum += Variables.HAUTEUR_HORS_CARTE;
+				
 				if (i - 1 > 0)
 					sum += hauteur[i - 1][j];
+				else
+					sum += Variables.HAUTEUR_HORS_CARTE;
+				
 				if (j - 1 > 0)
 					sum += hauteur[i][j - 1];
+				else
+					sum += Variables.HAUTEUR_HORS_CARTE;
 				hauteur[i][j] = sum / 4;
 			}
 		}
