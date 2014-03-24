@@ -1,10 +1,11 @@
-package modele;
+package modele.entite;
 
 import jason.environment.grid.Location;
 
 import java.util.List;
 
 import modele.percepts.AllPercepts;
+import java.util.Random;
 
 public class Drone {
 
@@ -16,12 +17,14 @@ public class Drone {
 	private int maxFuel;
 	private boolean auSol;
 	private Location l;
+	private Random generateur;
 
 	public Drone(int id, boolean haute_altitude, Location l, int maxFuel, int champ_vision_basse_altitude, int champ_vision_haute_altitude) {
 		this.setId(id);
 		this.setPos(l);
 		this.setHaute_altitude(haute_altitude);
-		this.maxFuel = maxFuel;
+		generateur = new Random();
+		this.maxFuel = maxFuel+generateur.nextInt(200);
 		this.auSol = true;
 		this.champ_vision_basse_altitude = champ_vision_basse_altitude;
 		this.champ_vision_haute_altitude = champ_vision_haute_altitude;
@@ -33,6 +36,18 @@ public class Drone {
 
 	public void setHaute_altitude(boolean haute_altitude) {
 		this.haute_altitude = haute_altitude;
+	}
+	
+	public int changerAltitude() {
+		this.haute_altitude = !this.haute_altitude;
+		return this.getAltitude();
+	}
+	
+	public int getAltitude() {
+		if (this.haute_altitude)
+			return 1;
+		else
+			return 0;
 	}
 	
 	public int getMaxFuel() {
@@ -116,7 +131,15 @@ public class Drone {
 		this.id = id;
 	}
 	
-	public void majPercepts(AllPercepts interpreteur, List<Adversaire> adversaire, List<Civil> civil) {
+	public void majPercepts(AllPercepts interpreteur, List<Ennemie> adversaire, List<Civil> civil) {
+		
+		// altitude
+		interpreteur.retirerAltitude(id);
+		interpreteur.ajouterAltitude(id, this.getAltitude());
+		
+		// champ de vision
+		interpreteur.retirerFieldOfView(id);
+		interpreteur.ajouterFieldOfView(id, this.getAltitude()==1 ? this.getChamp_vision_haute_altitude() : this.getChamp_vision_basse_altitude());
 		
 		// fuel
 		interpreteur.retirerDroneFuel(id);
@@ -130,11 +153,11 @@ public class Drone {
 		interpreteur.retirerVisionDrone(id);
 		
 		if (this.isHaute_altitude()) {				
-			for (Adversaire a : adversaire) {
+			for (Militaire a : adversaire) {
 				Location la = a.getLocation();
 				if (this.l.distanceEuclidean(la) < this.champ_vision_haute_altitude)
 					interpreteur.ajouterDroneVoitVehicule(id, la.x, la.y);
-			}
+			}		
 			for (Civil c : civil) {
 				Location lc = c.getLocation();
 				if (this.l.distanceEuclidean(lc) < this.champ_vision_haute_altitude)
@@ -142,10 +165,10 @@ public class Drone {
 			}
 		}
 		else {	
-			for (Adversaire a : adversaire) {
+			for (Militaire a : adversaire) {
 				Location la = a.getLocation();
 				if (this.l.distanceEuclidean(la) < this.champ_vision_basse_altitude)
-					interpreteur.ajouterDroneVoitAdversaire(id, la.x, la.y);
+					interpreteur.ajouterDroneVoitMilitaire(id, la.x, la.y);
 			}
 			for (Civil c : civil) {
 				Location lc = c.getLocation();

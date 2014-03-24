@@ -3,8 +3,15 @@
 /* Initial beliefs and rules */
 
 /* Initial goals */
+!attribuer_mission.
 
 /* Plans */
+
+
++!attribuer_mission : .findall(X, drone(X), L)
+	<- 	.send(L, tell, mission(d1,derriere));
+		.send(L, tell, mission(d2,leader));
+		.send(L, tell, mission(d3,devant)).
 
 +droneAuSol(X) : true <- remplirFuel(X);
 				.send(X, achieve, decoller).

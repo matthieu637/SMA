@@ -15,6 +15,7 @@ public abstract class Grille extends GridWorldModelP {
 
 	public static final int ADVERSAIRE_CODE = 8;
 	public static final int CIVIL_CODE = 16;
+	public static final int ALLIE_CODE = 32;
 
 	protected AllPercepts interpreteur;
 

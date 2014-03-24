@@ -1,6 +1,9 @@
-package modele;
+package modele.entite;
 
 import jason.environment.grid.Location;
+import modele.Act;
+import modele.TimeLimit;
+import modele.Variables;
 import modele.percepts.AllPercepts;
 
 /**
@@ -9,14 +12,12 @@ import modele.percepts.AllPercepts;
  *         Garde les informations du leader en mémoire pour mettre à jour les
  *         percepts
  */
-public class Vehicule implements Comparable<Integer> {
+public class Vehicule extends EntiteLocalisable implements Comparable<Integer> {
 
 	private final int numero;
 
 	private Location but;
-
-	private Location l;
-
+	
 	private boolean estLeader;
 
 	private static final int OUT = 500;
@@ -26,8 +27,8 @@ public class Vehicule implements Comparable<Integer> {
 	private Act deplacement;
 
 	public Vehicule(int numero, Location l, boolean leader, Vehicule follower) {
+		super(l);
 		this.numero = numero;
-		this.l = l;
 		this.estLeader = leader;
 		this.follower = follower;
 		this.deplacement = new Act(new TimeLimit() {
@@ -47,11 +48,7 @@ public class Vehicule implements Comparable<Integer> {
 		return numero;
 	}
 
-	public Location getLocation() {
-		return l;
-	}
-
-	public boolean isEstLeader() {
+	public boolean estLeader() {
 		return estLeader;
 	}
 
@@ -72,12 +69,8 @@ public class Vehicule implements Comparable<Integer> {
 	}
 
 	public void initPercept(AllPercepts interpreteur, int[][] hauteur) {
-		if (estLeader)
-			interpreteur.ajouterLeader(numero);
 		if (follower != null)
 			interpreteur.ajouterFollow(follower.getNumero(), numero);
-		if (but != null)
-			interpreteur.ajouterPositionButVehicule(numero, but.x, but.y);
 	}
 
 	public void majPercept(AllPercepts interpreteur, int[][] hauteur) {
@@ -90,10 +83,18 @@ public class Vehicule implements Comparable<Integer> {
 		}
 
 		if (estLeader) {
+			interpreteur.retirerLeader(numero);
+			interpreteur.ajouterLeader(numero);
+			
 			interpreteur.retirerHeightmap(numero);
 			interpreteur.ajouterHeightmap(numero, l.x - 1 >= 0 ? hauteur[l.x - 1][l.y] : OUT, l.y - 1 >= 0 ? hauteur[l.x][l.y - 1] : OUT,
 					l.x + 1 < Variables.TAILLE_CARTE_X ? hauteur[l.x + 1][l.y] : OUT,
 					l.y + 1 < Variables.TAILLE_CARTE_Y ? hauteur[l.x][l.y + 1] : OUT);
+		}
+		
+		if(but != null){
+			interpreteur.retirerPositionButVehicule(numero);
+			interpreteur.ajouterPositionButVehicule(numero, but.x, but.y);
 		}
 	}
 
@@ -104,5 +105,17 @@ public class Vehicule implements Comparable<Integer> {
 	@Override
 	public int compareTo(Integer o) {
 		return Integer.compare(this.numero, o);
+	}
+
+	public Vehicule getFollower() {
+		return follower;
+	}
+
+	public void setFollower(Vehicule devant) {
+		follower = devant;
+	}
+
+	public void setLeader() {
+		estLeader = true; 
 	}
 }

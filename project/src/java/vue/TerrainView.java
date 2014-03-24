@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import modele.CarteModel;
 import modele.TerrainModel;
 import ext.GridWorldModelP;
 import ext.GridWorldViewPanel;
@@ -16,13 +15,13 @@ import ext.GridWorldViewPanel;
  *         Vue au sol du convoi et du but. On peut ajouter des adversaires en
  *         cliquant sur cette vue.
  */
-public class TerrainView extends GridWorldViewPanel {
+public class TerrainView extends GridWorldViewPanel{
 
 	private static final long serialVersionUID = 1L;
 
 	private boolean cache = false;
 
-	public TerrainView(GridWorldModelP model, int windowSize, final CarteModel carte) {
+	public TerrainView(GridWorldModelP model, int windowSize, final FenetrePpale ppale) {
 		super(model, windowSize);
 
 		drawArea.addMouseListener(new MouseAdapter() {
@@ -30,8 +29,7 @@ public class TerrainView extends GridWorldViewPanel {
 			public void mouseReleased(MouseEvent e) {
 				int x = e.getX() / cellSizeW;
 				int y = e.getY() / cellSizeH;
-				carte.ajouterAgentAdverse(x, y);
-				//carte.ajouterAgentCivil(x, y);
+				ppale.ajouterAgent(x, y);
 			}
 		});
 

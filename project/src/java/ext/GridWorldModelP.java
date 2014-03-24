@@ -45,6 +45,11 @@ public class GridWorldModelP {
 		}
 	}
 
+	public void removeAgent(int i) {
+		remove(AGENT, getAgPos(i));
+		agPos[i] = new Location(-1, -1);
+	}
+
 	public void setView(GridWorldViewPanel gridWorldViewPanel) {
 		view = gridWorldViewPanel;
 	}

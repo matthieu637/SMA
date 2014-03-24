@@ -1,4 +1,3 @@
-
 import jason.asSyntax.Structure;
 import jason.environment.Environment;
 import jason.mas2j.AgentParameters;
@@ -80,10 +79,18 @@ public class Env extends Environment implements Runnable {
 		case "decoller":
 			valide = modele.decoller(agName);
 			break;
+		case "changerAltitude":
+			valide = modele.changerAltitude(agName);
+			break;
 		case "atterir":
 			valide = modele.atterir(agName);
 			break;
-		default:	
+		case "scinder":
+			valide = modele.scinder(Integer.parseInt(action.getTerm(0).toString()));
+			break;
+		case "tirer":
+			valide = modele.tirer(Integer.parseInt(action.getTerm(0).toString()), Integer.parseInt(action.getTerm(0).toString()));
+		default:
 			valide = true;
 			break;
 		}

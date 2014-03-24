@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import modele.entite.Convoi;
 import modele.percepts.AllPercepts;
 import utils.Couple;
 
@@ -154,5 +155,15 @@ public class TerrainModel extends Grille {
 			c = new Couple<Location, Boolean>(null, false);
 
 		return c;
+	}
+
+	public void kill(Location t) {
+		int pos = getAgAtPos(t);
+		removeAgent(pos);
+		convoi.remove(pos + 1);
+	}
+
+	public boolean scinder(int agent) {
+		return convoi.scinder(agent);
 	}
 }

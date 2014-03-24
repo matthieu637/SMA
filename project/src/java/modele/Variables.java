@@ -47,11 +47,6 @@ public class Variables {
 	public static float VITESSE_ACTION_ADVERSAIRE = 1.f;
 
 	/**
-	 * Probabilité qu'un adversaire ait un comportement intégrant un déplacement
-	 */
-	public static float PROBA_ADVERSAIRE_VIRULENT = 0.4f;
-
-	/**
 	 * Singleton pour modifier dynamiquement la vitesse
 	 */
 	private static final Variables singleton = new Variables();
