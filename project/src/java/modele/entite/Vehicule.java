@@ -2,6 +2,7 @@ package modele.entite;
 
 import jason.environment.grid.Location;
 import modele.Act;
+import modele.Grille;
 import modele.TimeLimit;
 import modele.Variables;
 import modele.percepts.AllPercepts;
@@ -27,7 +28,7 @@ public class Vehicule extends EntiteLocalisable implements Comparable<Integer> {
 	private Act deplacement;
 
 	public Vehicule(int numero, Location l, boolean leader, Vehicule follower) {
-		super(l);
+		super(l, Grille.AGENT);
 		this.numero = numero;
 		this.estLeader = leader;
 		this.follower = follower;

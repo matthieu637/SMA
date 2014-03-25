@@ -1,6 +1,9 @@
 package modele.entite;
 
 import jason.environment.grid.Location;
+import modele.CarteModel;
+import modele.Grille;
+import modele.percepts.AllPercepts;
 
 
 /**
@@ -8,21 +11,33 @@ import jason.environment.grid.Location;
  * 
  *         Représente un adversaire
  */
-public class Militaire extends EntiteDeplacable {
+public class Militaire extends EntiteComportement {
 
 
-	public Militaire(Location l, Comportement c) {
-		super(l, c);
+	public Militaire(Location l, Comportement c, int code) {
+		super(l, c, code);
 	}
 
-	public Militaire(Location l, Comportement c, Location but) {
-		super(l, c);
-		this.setBut(but);
+	public Militaire(Location l, Location but, int code) {
+		super(l, but, code);
+	}
+
+	public Militaire(Location l, Comportement c) {
+		super(l, c, Grille.ALLIE_CODE);
+	}
+
+	public Militaire(Location l, Location but) {
+		super(l, but, Grille.ALLIE_CODE);
 	}
 
 	@Override
-	public void deplacer() {
-		// TODO Auto-generated method stub
+	public void majPercept(AllPercepts interpreteur) {
+		interpreteur.ajouterTourAllie(getLocation().x, getLocation().y);
+	}
+
+	@Override
+	public void _agir(CarteModel carteModel) {
 		
 	}
+
 }

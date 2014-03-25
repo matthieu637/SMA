@@ -7,9 +7,11 @@ import jason.environment.grid.Location;
 public abstract class EntiteLocalisable {
 
 	protected Location l;
+	private final int codeAffichage;
 	
-	public EntiteLocalisable(Location l){
+	public EntiteLocalisable(Location l, int codeAffichage){
 		this.l = l;
+		this.codeAffichage = codeAffichage;
 	}
 	
 	public Location getLocation(){
@@ -26,5 +28,9 @@ public abstract class EntiteLocalisable {
 	
 	public void setY(int y){
 		this.l.y = y;
+	}
+	
+	public int getCode(){
+		return codeAffichage;
 	}
 }

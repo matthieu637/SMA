@@ -166,4 +166,8 @@ public class TerrainModel extends Grille {
 	public boolean scinder(int agent) {
 		return convoi.scinder(agent);
 	}
+
+	public int[][] getHauteurs() {
+		return hauteur;
+	}
 }

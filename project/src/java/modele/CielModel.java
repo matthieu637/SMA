@@ -5,9 +5,8 @@ import jason.environment.grid.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-import modele.entite.Civil;
 import modele.entite.Drone;
-import modele.entite.Ennemie;
+import modele.entite.EntiteComportement;
 import modele.percepts.AllPercepts;
 import utils.Couple;
 import ext.GridWorldModelP;
@@ -25,13 +24,14 @@ public class CielModel extends Grille {
 	/*
 	* Pointeurs pour récupérer les adversaires et civils
 	*/
-	private List<Ennemie> adversaire;	
-	private List<Civil> civil;
+	private List<EntiteComportement> agentsSupplementaires;
 	
 	private AllPercepts interpreteur;
 
-	protected CielModel(int nbAgent, AllPercepts interpreteur, List<Ennemie> adversaire, List<Civil> civil) {
+	protected CielModel(int nbAgent, AllPercepts interpreteur, List<EntiteComportement> agentsSupplementaires) {
 		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent, interpreteur);
+		this.agentsSupplementaires = agentsSupplementaires;
+		
 		int nombre_drone_basse_altitude = (int) (nbAgent * Variables.PROPORTION_DRONE_BASSE_HAUTE_ALTITUDE);
 		int nombre_drone_haute_altitude = nbAgent - nombre_drone_basse_altitude;
 
@@ -43,17 +43,15 @@ public class CielModel extends Grille {
 			drones.add(new Drone(i + 1, true, getAgPos(i), Variables.CAPACITE_FUEL_DRONE, Variables.CHAMP_VISION_DRONE_BASSE_ALTITUDE, Variables.CHAMP_VISION_DRONE_HAUTE_ALTITUDE));
 		
 		this.interpreteur = interpreteur; 
-		this.adversaire = adversaire;
-		this.civil = civil;
 		
 		this.majPercepts();
 	}
-	
+
 	public void majPercepts() {
 		int nbDrones = drones.size();
 		int d = 1;
 		for (; d <= nbDrones ; d++) {
-			getDrone(d).majPercepts(interpreteur, adversaire, civil);
+			getDrone(d).majPercepts(interpreteur, agentsSupplementaires);
 		}
 	}
 
@@ -70,7 +68,7 @@ public class CielModel extends Grille {
 				
 			}	
 			else {		
-				getDrone(agent).majPercepts(interpreteur, adversaire, civil);
+				getDrone(agent).majPercepts(interpreteur, agentsSupplementaires);
 			}
 		}
 		

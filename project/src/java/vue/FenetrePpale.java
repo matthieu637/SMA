@@ -1,5 +1,7 @@
 package vue;
 
+import jason.environment.grid.Location;
+
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -16,6 +18,10 @@ import javax.swing.event.ChangeListener;
 
 import modele.CarteModel;
 import modele.Variables;
+import modele.entite.Civil;
+import modele.entite.Comportement;
+import modele.entite.Ennemie;
+import modele.entite.Militaire;
 
 public class FenetrePpale extends JFrame {
 
@@ -26,6 +32,9 @@ public class FenetrePpale extends JFrame {
 	private TerrainView terrain;
 	private CielView ciel;
 	private CarteModel modele;
+
+	private JRadioButton type1, type2, type3, fixe, aleatoire, but;
+	private Location entite;
 
 	public FenetrePpale(CarteModel modele) {
 		setSize(1250, 780);
@@ -72,16 +81,15 @@ public class FenetrePpale extends JFrame {
 		});
 		c.add(v);
 
-		JRadioButton type1 = new JRadioButton("Militaire Ennemi");
+		type1 = new JRadioButton("Militaire Ennemi");
 		type1.setBounds(20, 600 + 20 + 30 + 40, 150, 25);
 		c.add(type1);
 
-		JRadioButton type2 = new JRadioButton("Militaire Allié");
+		type2 = new JRadioButton("Militaire Allié");
 		type2.setBounds(20 + 150, 600 + 20 + 30 + 40, 130, 25);
 		c.add(type2);
 
-		JRadioButton type3 = new JRadioButton("Civil");
-		type3.setEnabled(true);
+		type3 = new JRadioButton("Civil");
 		type3.setBounds(20 + 150 + 130, 600 + 20 + 30 + 40, 150, 25);
 		c.add(type3);
 
@@ -89,17 +97,17 @@ public class FenetrePpale extends JFrame {
 		types.add(type1);
 		types.add(type2);
 		types.add(type3);
+		types.setSelected(type3.getModel(), true);
 
-		JRadioButton fixe = new JRadioButton("Fixe");
+		fixe = new JRadioButton("Fixe");
 		fixe.setBounds(20, 600 + 20 + 30 + 40 + 25, 60, 25);
 		c.add(fixe);
 
-		JRadioButton aleatoire = new JRadioButton("Aleatoire");
+		aleatoire = new JRadioButton("Aleatoire");
 		aleatoire.setBounds(20 + 60, 600 + 20 + 30 + 40 + 25, 100, 25);
-		aleatoire.setEnabled(true);
 		c.add(aleatoire);
 
-		JRadioButton but = new JRadioButton("But");
+		but = new JRadioButton("But");
 		but.setBounds(20 + 60 + 100, 600 + 20 + 30 + 40 + 25, 80, 25);
 		c.add(but);
 
@@ -107,6 +115,7 @@ public class FenetrePpale extends JFrame {
 		comportements.add(fixe);
 		comportements.add(aleatoire);
 		comportements.add(but);
+		comportements.setSelected(aleatoire.getModel(), true);
 
 		setVisible(true);
 		this.modele = modele;
@@ -121,6 +130,42 @@ public class FenetrePpale extends JFrame {
 	}
 
 	public void ajouterAgent(int x, int y) {
-		modele.ajouterAgentAdverse(x, y);
+		Location l = new Location(x, y);
+
+		Comportement c = parseComportement();
+
+		if (!but.isSelected()) {
+			if (type1.isSelected())
+				modele.ajouterAgent(new Ennemie(l, c));
+			else if (type2.isSelected())
+				modele.ajouterAgent(new Militaire(l, c));
+			else if (type3.isSelected())
+				modele.ajouterAgent(new Civil(l, c));
+			entite = null;
+		} else {
+			if (entite == null) {
+				entite = l;
+			} else {
+				Location but = l;
+				if (type1.isSelected())
+					modele.ajouterAgent(new Ennemie(entite, but));
+				else if (type2.isSelected())
+					modele.ajouterAgent(new Militaire(entite, but));
+				else if (type3.isSelected())
+					modele.ajouterAgent(new Civil(entite, but));
+				
+				entite = null;
+			}
+		}
+	}
+
+	private Comportement parseComportement() {
+		if (aleatoire.isSelected())
+			return Comportement.DeplaceAleatoire;
+		if (fixe.isSelected())
+			return Comportement.Fixe;
+		if (but.isSelected())
+			return Comportement.But;
+		throw new Error("impossible");
 	}
 }

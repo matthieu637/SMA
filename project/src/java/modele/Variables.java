@@ -44,7 +44,7 @@ public class Variables {
 	/**
 	 * Quel pas de temps pour le deplacement des adversaires
 	 */
-	public static float VITESSE_ACTION_ADVERSAIRE = 1.f;
+	public static float VITESSE_ACTION_ADVERSAIRE = 1.5f;
 
 	/**
 	 * Singleton pour modifier dynamiquement la vitesse

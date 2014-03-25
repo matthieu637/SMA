@@ -5,12 +5,8 @@ import jason.environment.grid.Location;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
-import modele.entite.Civil;
-import modele.entite.Comportement;
-import modele.entite.Ennemie;
-import modele.entite.Militaire;
+import modele.entite.EntiteComportement;
 import modele.percepts.AllPercepts;
 import utils.Couple;
 import vue.FenetrePpale;
@@ -40,23 +36,10 @@ public class CarteModel {
 	private List<Grille> lesGrilles;
 
 	/**
-	 * Liste des adversaires sur les 2 modèles (on peut les voir sur les 2
-	 * grilles mais un adversaire ne peut être qu'au sol)
-	 */
-	private List<Ennemie> adversaire;
-
-	/**
-	 * Liste des allies
-	 */
-	private List<Militaire> allies;
-
-	/**
 	 * Liste des civils sur les 2 modèles (on peut les voir sur les 2 grilles
 	 * mais un civil ne peut être qu'au sol)
 	 */
-	private List<Civil> civil;
-
-	private Random generateur;
+	private List<EntiteComportement> agentsSupplementaires;
 
 	private AllPercepts interpreteur;
 
@@ -73,19 +56,15 @@ public class CarteModel {
 	 *            nombre de drone
 	 */
 	public CarteModel(AllPercepts interpreteur, int nombreVehicule, int nombreDrone) {
-
-		adversaire = new LinkedList<Ennemie>();
-		allies = new LinkedList<Militaire>();
-		civil = new LinkedList<Civil>();
+		agentsSupplementaires = new LinkedList<>();
 
 		terrain = new TerrainModel(nombreVehicule, interpreteur);
-		ciel = new CielModel(nombreDrone, interpreteur, adversaire, civil);
+		ciel = new CielModel(nombreDrone, interpreteur, agentsSupplementaires);
 
 		lesGrilles = new ArrayList<Grille>(2);
 		lesGrilles.add(terrain);
 		lesGrilles.add(ciel);
 
-		generateur = new Random();
 		this.interpreteur = interpreteur;
 
 		interpreteur.ajouterTourDroneAuSol(1);
@@ -144,7 +123,7 @@ public class CarteModel {
 	public void remplirFuel(String agName) {
 		Couple<Integer, Grille> c = dispatch(agName);
 		ciel.getDrone(c.first).remplirFuel();
-		ciel.getDrone(c.first).majPercepts(interpreteur, adversaire, civil);
+		ciel.getDrone(c.first).majPercepts(interpreteur, agentsSupplementaires);
 	}
 
 	public boolean decoller(String agName) {
@@ -165,8 +144,9 @@ public class CarteModel {
 		interpreteur.retirerFieldOfView(c.first);
 		int altitude = ciel.getDrone(c.first).changerAltitude();
 		interpreteur.ajouterAltitude(c.first, altitude);
-		interpreteur.ajouterFieldOfView(c.first, altitude == 1 ? ciel.getDrone(c.first).getChamp_vision_haute_altitude() : ciel.getDrone(c.first)
-				.getChamp_vision_basse_altitude());
+		interpreteur.ajouterFieldOfView(c.first,
+				altitude == 1 ? ciel.getDrone(c.first).getChamp_vision_haute_altitude() : ciel.getDrone(c.first)
+						.getChamp_vision_basse_altitude());
 		return true;
 	}
 
@@ -197,41 +177,17 @@ public class CarteModel {
 	}
 
 	/**
-	 * Ajoute un agent adversaire dans chacune des grilles à la position x,y
+	 * Ajoute un agent dans chacune des grilles
 	 * 
 	 * @param x
 	 * @param y
+	 * @param ennemie
 	 */
-	public void ajouterAgentAdverse(int x, int y) {
+	public void ajouterAgent(EntiteComportement a) {
 		for (Grille g : lesGrilles)
-			g.add(Grille.ADVERSAIRE_CODE, x, y);
-		adversaire.add(new Ennemie(new Location(x, y), Comportement.DeplaceAleatoire));
-	}
+			g.add(a.getCode(), a.getLocation());
 
-	/**
-	 * Ajoute un civil dans chacune des grilles à la position x,y
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	public void ajouterAgentCivil(int x, int y) {
-		for (Grille g : lesGrilles)
-			g.add(Grille.CIVIL_CODE, x, y);
-		Location but = this.terrain.getFreePos();
-		civil.add(new Civil(new Location(x,y), Comportement.But, but));
-	}
-	
-	/**
-	 * Ajoute un militaire allie dans chacune des grilles à la position x,y
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	public void ajouterAgentAllie(int x, int y) {
-		for (Grille g : lesGrilles)	
-			g.add(Grille.ALLIE_CODE, x, y);
-		Location but = this.terrain.getFreePos();
-		allies.add(new Militaire(new Location(x,y), Comportement.But, but));
+		agentsSupplementaires.add(a);
 	}
 
 	/**
@@ -254,7 +210,7 @@ public class CarteModel {
 				}
 			}
 		}
-		
+
 		return this.terrain.getAgPos(mn);
 	}
 
@@ -288,214 +244,45 @@ public class CarteModel {
 	 */
 	public void runEnv() {
 
-		// Adversaires
-		for (Ennemie a : adversaire) {
+		for (EntiteComportement e : agentsSupplementaires) {
+			e.definirBut(this);
+			if (e.seDeplace()) {
+				for (Grille g : lesGrilles)
+					g.remove(e.getCode(), e.getLocation());
 
-			Location l = a.getLocation();
+				e.deplacer(terrain.getHauteurs());
 
-			Location t = this.find_target(l);
-
-			if (t != null & (l.distanceEuclidean(t) < a.vision()) & (this.visibilite(l, t) > generateur.nextDouble())) {
-				// s'il y a une cible à portee de
-				// vue et plutot visible, on s'en approche
-				// et/ou on tire
-
-				if (a.deplace()) { // on s'en approche
-
-					// on trouve dans quelle direction l'adversaire doit avancer
-					// : la direction qui le rapproche le plus de la cible
-					int dx = t.x - l.x;
-					int dy = t.y - l.y;
-					int direction;
-
-					if (Math.abs(dx) > Math.abs(dy)) {
-						if (dx > 0) {
-							direction = 2;
-						} else {
-							direction = 0;
-						}
-					} else {
-						if (dy > 0) {
-							direction = 3;
-						} else {
-							direction = 1;
-						}
-					}
-
-					for (Grille g : lesGrilles)
-						g.remove(Grille.ADVERSAIRE_CODE, a.getLocation());
-					Grille.deplacer(l, direction);
-					a.setLocation(l);
-					for (Grille g : lesGrilles)
-						g.add(Grille.ADVERSAIRE_CODE, a.getLocation());
-				}
-
-				if (l.distanceEuclidean(t) < a.portee()) { // on tire
-					Location trou = a.tir(t, generateur.nextGaussian(), generateur.nextGaussian());
-					if (trou.isInArea(new Location(0, 0), new Location(this.terrain.getWidth(), this.terrain.getHeight())))
-						this.destruction(trou);
-				}
-			} else { // sinon, on bouge alétoirement si on est virulent
-
-				if (a.deplace()) {
-					for (Grille g : lesGrilles)
-						g.remove(Grille.ADVERSAIRE_CODE, a.getLocation());
-					Grille.deplacer(l, generateur.nextInt(4));
-					a.setLocation(l);
-					for (Grille g : lesGrilles)
-						g.add(Grille.ADVERSAIRE_CODE, a.getLocation());
-				}
+				for (Grille g : lesGrilles)
+					g.add(e.getCode(), e.getLocation());
 			}
+			e.agir(this);
 		}
 
-		// Militaires alliés
-		for (Militaire c : allies) {
-
-			Location l = c.getLocation();
-			Location but = c.getBut();
-
-			int dx = but.x - l.x;
-			int dy = but.y - l.y;
-			int direction;
-
-			if (but.equals(l)) { // c est arrivé à son but, on le supprime
-
-			} else {
-				if (dx == 0) {
-					if (dy > 0)
-						direction = 3;
-					else
-						direction = 1;
-				} else if (dy == 0) {
-					if (dx > 0)
-						direction = 2;
-					else
-						direction = 0;
-				} else {
-
-					// on trouve dans quelle direction le civil doit avancer
-					// : la direction qui le rapproche le plus de son but
-					// tout en restant le plus bas possible
-
-					int rx; // relief de la case d'à coté en x
-					if (dx > 0)
-						rx = this.terrain.getHauteur(l.x + 1, l.y);
-					else
-						rx = this.terrain.getHauteur(l.x - 1, l.y);
-
-					int ry; // relief de la case d'à coté en y
-					if (dy > 0)
-						ry = this.terrain.getHauteur(l.x, l.y + 1);
-					else
-						ry = this.terrain.getHauteur(l.x, l.y - 1);
-
-					if (rx > ry) {
-						if (dy > 0)
-							direction = 3;
-						else
-							direction = 1;
-					} else {
-						if (dx > 0)
-							direction = 2;
-						else
-							direction = 0;
-					}
-				}
-
-				for (Grille g : lesGrilles)
-					g.remove(Grille.ALLIE_CODE, c.getLocation());
-				Grille.deplacer(l, direction);
-				c.setLocation(l);
-				for (Grille g : lesGrilles)
-					g.add(Grille.ALLIE_CODE, c.getLocation());
-			}
-		}
-		
-		// Civils
-		for (Civil c : civil) {
-
-			Location l = c.getLocation();
-			Location but = c.getBut();
-
-			int dx = but.x - l.x;
-			int dy = but.y - l.y;
-			int direction;
-
-			if (but.equals(l)) { // c est arrivé à son but, on le supprime
-
-			} else {
-				if (dx == 0) {
-					if (dy > 0)
-						direction = 3;
-					else
-						direction = 1;
-				} else if (dy == 0) {
-					if (dx > 0)
-						direction = 2;
-					else
-						direction = 0;
-				} else {
-
-					// on trouve dans quelle direction le civil doit avancer
-					// : la direction qui le rapproche le plus de son but
-					// tout en restant le plus bas possible
-
-					int rx; // relief de la case d'à coté en x
-					if (dx > 0)
-						rx = this.terrain.getHauteur(l.x + 1, l.y);
-					else
-						rx = this.terrain.getHauteur(l.x - 1, l.y);
-
-					int ry; // relief de la case d'à coté en y
-					if (dy > 0)
-						ry = this.terrain.getHauteur(l.x, l.y + 1);
-					else
-						ry = this.terrain.getHauteur(l.x, l.y - 1);
-
-					if (rx > ry) {
-						if (dy > 0)
-							direction = 3;
-						else
-							direction = 1;
-					} else {
-						if (dx > 0)
-							direction = 2;
-						else
-							direction = 0;
-					}
-				}
-
-				for (Grille g : lesGrilles)
-					g.remove(Grille.CIVIL_CODE, c.getLocation());
-				Grille.deplacer(l, direction);
-				c.setLocation(l);
-				for (Grille g : lesGrilles)
-					g.add(Grille.CIVIL_CODE, c.getLocation());
-			}
-		}
-		
 		interpreteur.retirerTourAllies();
-		for (Militaire a : allies) {
-			Location la = a.getLocation();			
-			interpreteur.ajouterTourAllie(la.x, la.y);
-		}
+		for (EntiteComportement e : agentsSupplementaires)
+			e.majPercept(interpreteur);
 	}
 
 	public boolean scinder(int agent) {
 		return terrain.scinder(agent);
 	}
 
+	public void detruireAgentSupplementaire(EntiteComportement e) {
+		agentsSupplementaires.remove(e);
+		for (Grille g : lesGrilles)
+			g.remove(e.getCode(), e.getLocation());
+	}
+
 	public boolean tirer(int x, int y) {
-		Ennemie killed = null;
-		for (Ennemie a : adversaire)
+		EntiteComportement killed = null;
+		for (EntiteComportement a : agentsSupplementaires)
 			if (a.getLocation().x == x && a.getLocation().y == y) {
 				killed = a;
 				break;
 			}
 		if (killed != null) {
-			adversaire.remove(killed);
-			for (Grille g : lesGrilles)
-				g.remove(Grille.ADVERSAIRE_CODE, killed.getLocation());
+			detruireAgentSupplementaire(killed);
+			return true;
 		}
 		return false;
 	}
