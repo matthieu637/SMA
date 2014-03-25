@@ -10,7 +10,6 @@
 
 +!start : .my_name(Y) & leader(Y) <- 
 	.findall(X, drone(X), L);
-	.send(L, tell, leader(Y));
 	!to_goal.
 	
 +!start : .my_name(X) & not leader(X) <- 

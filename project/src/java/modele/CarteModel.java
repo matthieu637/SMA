@@ -59,7 +59,7 @@ public class CarteModel {
 		agentsSupplementaires = new LinkedList<>();
 
 		terrain = new TerrainModel(nombreVehicule, interpreteur);
-		ciel = new CielModel(nombreDrone, interpreteur, agentsSupplementaires);
+		ciel = new CielModel(nombreDrone, interpreteur, agentsSupplementaires, terrain.getConvoi());
 
 		lesGrilles = new ArrayList<Grille>(2);
 		lesGrilles.add(terrain);
@@ -123,7 +123,7 @@ public class CarteModel {
 	public void remplirFuel(String agName) {
 		Couple<Integer, Grille> c = dispatch(agName);
 		ciel.getDrone(c.first).remplirFuel();
-		ciel.getDrone(c.first).majPercepts(interpreteur, agentsSupplementaires);
+		ciel.getDrone(c.first).majPercepts(interpreteur, agentsSupplementaires, terrain.getConvoi());
 	}
 
 	public boolean decoller(String agName) {

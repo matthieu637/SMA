@@ -90,10 +90,10 @@ public class AllPercepts extends InterpreteurSpl {
 	public void ajouterDroneVoitCivil(int d, int x, int y) {
 		ajouterDrone(d, civil, x, y);
 	}
-	
+
 	public void ajouterDroneVoitAllie(int d, int x, int y) {
 		ajouterDrone(d, allie, x, y);
-		
+
 	}
 
 	public void ajouterFieldOfView(int d, int fov) {
@@ -136,26 +136,25 @@ public class AllPercepts extends InterpreteurSpl {
 				ajouterVehicule(v, drone, "d" + (d + 1));
 			}
 			for (int d2 = 0; d2 <= nbDrones; d2++) {
-				ajouterDrone(d2+1, drone, "d" + (d + 1));
+				ajouterDrone(d2 + 1, drone, "d" + (d + 1));
 			}
-		} 
+		}
 		for (int d = 0; d < nbDrones; d++) {
 			ajouterTour(drone, "d" + (d + 1));
 		}
 	}
-	
+
 	public void retirerTourDroneAuSol(int id) {
 		retirerTour(droneAuSol, "d" + id);
 	}
 
 	public void ajouterTourAllie(int x, int y) {
-		ajouterTour(allie, x, y);		
+		ajouterTour(allie, x, y);
 	}
 
 	public void retirerTourAllies() {
-		retirerTourUnif(allie, "_", "_");		
+		retirerTourUnif(allie, "_", "_");
 	}
-
 
 	public void retirerLeader(int numero) {
 		retirerVehiculeUnif(numero, leader, "_");
@@ -163,6 +162,14 @@ public class AllPercepts extends InterpreteurSpl {
 
 	public void retirerPositionButVehicule(int leader) {
 		retirerVehiculeUnif(leader, goal, "_", "_");
+	}
+
+	public void retirerLeaderDrone(int id) {
+		retirerDroneUnif(id, leader, "_");
+	}
+
+	public void ajouterLeaderDrone(int id, int numero) {
+		ajouterDrone(id, leader, "v" + numero);
 	}
 
 }

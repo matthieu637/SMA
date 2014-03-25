@@ -129,7 +129,7 @@ public class Drone {
 		this.id = id;
 	}
 
-	public void majPercepts(AllPercepts interpreteur, List<EntiteComportement> agentsSupplementaires) {
+	public void majPercepts(AllPercepts interpreteur, List<EntiteComportement> agentsSupplementaires, Convoi c) {
 
 		// altitude
 		interpreteur.retirerAltitude(id);
@@ -147,6 +147,11 @@ public class Drone {
 		// position
 		interpreteur.retirerPositionDrone(id);
 		interpreteur.ajouterPositionDrone(id, id, this.l.x, this.l.y);
+		
+		// leader
+		interpreteur.retirerLeaderDrone(id);
+		for(Vehicule v : c.getLeaders())
+			interpreteur.ajouterLeaderDrone(id, v.getNumero());
 
 		// vision
 		interpreteur.retirerVisionDrone(id);

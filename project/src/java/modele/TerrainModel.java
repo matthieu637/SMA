@@ -176,4 +176,8 @@ public class TerrainModel extends Grille {
 	public int[][] getHauteurs() {
 		return hauteur;
 	}
+
+	public Convoi getConvoi() {
+		return convoi;
+	}
 }
