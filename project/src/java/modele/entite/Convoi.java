@@ -70,7 +70,7 @@ public class Convoi {
 		return leads;
 	}
 
-	public void remove(int agent) {
+	public void remove(int agent, boolean killed) {
 		Vehicule mort = getVehicule(agent);
 		Vehicule devant = getDevant(mort);
 
@@ -79,10 +79,11 @@ public class Convoi {
 		if (devant != null)
 			devant.majPercept(interpreteur, hauteur);
 
-		for (Vehicule leader : getLeaders())
-			interpreteur.ajouterMort(leader.getNumero(), mort.getNumero());
-		
-		if(mort.estLeader() && mort.getFollower() != null){
+		if (killed)
+			for (Vehicule leader : getLeaders())
+				interpreteur.ajouterMort(leader.getNumero(), mort.getNumero());
+
+		if (mort.estLeader() && mort.getFollower() != null) {
 			Vehicule nouveau_leader = mort.getFollower();
 			nouveau_leader.setLeader();
 			nouveau_leader.setBut(but);

@@ -219,8 +219,8 @@ public class CarteModel {
 	 */
 	public void destruction(Location t) {
 		if (terrain.getAgAtPos(t) != -1) {
+			terrain.retirerAgent(t, true);
 			interpreteur.killVehicule(terrain.getAgAtPos(t));
-			terrain.kill(t);
 		}
 	}
 

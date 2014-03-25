@@ -43,7 +43,7 @@ public class Ennemie extends Militaire {
 	@Override
 	public void definirBut(CarteModel carteModel) {
 		Location target = carteModel.find_target(getLocation());
-		if (target != null & (l.distanceEuclidean(target) < vision()) & (carteModel.visibilite(l, target) > generateur.nextDouble())) {
+		if (target != null && (l.distanceEuclidean(target) < vision) && (carteModel.visibilite(l, target) > generateur.nextDouble())) {
 			// s'il y a une cible à portee de
 			// vue et plutot visible, on s'en approche
 			// et/ou on tire

@@ -96,17 +96,17 @@ public class TerrainModel extends Grille {
 					sum += hauteur[i + 1][j];
 				else
 					sum += Variables.HAUTEUR_HORS_CARTE;
-				
+
 				if (j + 1 < Variables.TAILLE_CARTE_Y)
 					sum += hauteur[i][j + 1];
 				else
 					sum += Variables.HAUTEUR_HORS_CARTE;
-				
+
 				if (i - 1 > 0)
 					sum += hauteur[i - 1][j];
 				else
 					sum += Variables.HAUTEUR_HORS_CARTE;
-				
+
 				if (j - 1 > 0)
 					sum += hauteur[i][j - 1];
 				else
@@ -154,13 +154,19 @@ public class TerrainModel extends Grille {
 		} else
 			c = new Couple<Location, Boolean>(null, false);
 
+		if (c.second && but.equals(c.first)) {
+			System.out.println("Congratz!");
+			retirerAgent(c.first, false);
+			interpreteur.killVehicule(getAgAtPos(c.first));
+		}
+
 		return c;
 	}
 
-	public void kill(Location t) {
+	public void retirerAgent(Location t, boolean killed) {
 		int pos = getAgAtPos(t);
 		removeAgent(pos);
-		convoi.remove(pos + 1);
+		convoi.remove(pos + 1, killed);
 	}
 
 	public boolean scinder(int agent) {
