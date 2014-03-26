@@ -89,7 +89,8 @@ public class Env extends Environment implements Runnable {
 			valide = modele.scinder(Integer.parseInt(action.getTerm(0).toString()));
 			break;
 		case "tirer":
-			valide = modele.tirer(Integer.parseInt(action.getTerm(0).toString()), Integer.parseInt(action.getTerm(0).toString()));
+			valide = modele.tirer(Integer.parseInt(action.getTerm(0).toString()), Integer.parseInt(action.getTerm(1).toString()));
+			break;
 		default:
 			valide = false;
 			break;

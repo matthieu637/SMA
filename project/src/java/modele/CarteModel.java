@@ -281,6 +281,7 @@ public class CarteModel {
 				break;
 			}
 		if (killed != null) {
+			System.out.println("target killed");
 			detruireAgentSupplementaire(killed);
 			return true;
 		}

@@ -13,6 +13,7 @@ enoughFuel(N) :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionIniti
 priorite(leader, 1).
 priorite(devant, 2).
 priorite(derriere, 3).
+porte(2).
 
 goHome.
 
@@ -152,9 +153,12 @@ goHome.
 			.send(t, achieve, identification(S));
 			!suspect(Suspects).
 
-+!tirer(ID) : .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) <-
++!tirer(ID) : .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) & 
+					.max(ListePosition, pos(T, POSX, POSY)) & porte(P) & .my_name(N) & 
+					location(N, MYX, MYY) & math.abs(MYX - POSX) + math.abs(MYY - POSY) <= P & altitude(0)
+					 <-
 			+ennemi(ID);
-			.max(ListePosition, pos(T, POSX, POSY));
-			tirer(POSX, POSY).
+			tirer(POSX, POSY);
+			+dead(ID).
 
 
