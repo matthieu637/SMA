@@ -152,7 +152,9 @@ goHome.
 			.send(t, achieve, identification(S));
 			!suspect(Suspects).
 
-+!tirer(ID) : true <- 
-			tirerAdversaire(POSX, POSY).
++!tirer(ID) : .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) <-
+			+ennemi(ID);
+			.max(ListePosition, pos(T, POSX, POSY));
+			tirer(POSX, POSY).
 
 
