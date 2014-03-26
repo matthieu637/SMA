@@ -170,6 +170,7 @@ public class Drone {
 			Location la = a.getLocation();
 			EntitePercu ep = new EntitePercu(a);
 			EntitePercu actuelConnaissance = entites.get(ep.getId());
+			boolean chercheIdentite = false;
 
 			if (this.isHaute_altitude()) {
 				if (this.l.distanceEuclidean(la) < this.champ_vision_haute_altitude) {
@@ -179,23 +180,31 @@ public class Drone {
 					if (actuelConnaissance == null || (!actuelConnaissance.isIdentifie() && !ep.positionEgale(actuelConnaissance))) {
 						interpreteur.ajouterDroneVoitVehicule(id, a.getID(), la.x, la.y, System.currentTimeMillis());
 						entites.put(ep.getId(), ep);
-					}
+					} // s'il est déjà identifié mais que je suis en haute
+						// altitude, je mets juste à jour sa position
+					else if (actuelConnaissance != null && actuelConnaissance.isIdentifie())
+						chercheIdentite = true;
+
 				}
 			} else {// basse altitude
 				if (this.l.distanceEuclidean(la) < this.champ_vision_basse_altitude) {
-					// si je ne l'ai jamais vu
-					// ou qu'il a bougé
-					if (actuelConnaissance == null || !ep.positionEgale(actuelConnaissance))
-						if (a instanceof Militaire) {
-							interpreteur.ajouterDroneVoitMilitaire(id, a.getID(), la.x, la.y, System.currentTimeMillis());
-							ep.setIdentifie(true);
-							entites.put(ep.getId(), ep);
-						} else if (a instanceof Civil) {
-							interpreteur.ajouterDroneVoitCivil(id, a.getID(), la.x, la.y, System.currentTimeMillis());
-							ep.setIdentifie(true);
-							entites.put(ep.getId(), ep);
-						}
+					chercheIdentite = true;
 				}
+			}
+
+			if (chercheIdentite) {
+				// si je ne l'ai jamais vu
+				// ou qu'il a bougé
+				if (actuelConnaissance == null || !ep.positionEgale(actuelConnaissance))
+					if (a instanceof Militaire) {
+						interpreteur.ajouterDroneVoitMilitaire(id, a.getID(), la.x, la.y, System.currentTimeMillis());
+						ep.setIdentifie(true);
+						entites.put(ep.getId(), ep);
+					} else if (a instanceof Civil) {
+						interpreteur.ajouterDroneVoitCivil(id, a.getID(), la.x, la.y, System.currentTimeMillis());
+						ep.setIdentifie(true);
+						entites.put(ep.getId(), ep);
+					}
 			}
 		}
 	}
