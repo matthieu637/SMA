@@ -13,8 +13,12 @@
 		.send(L, tell, mission(d2,leader));
 		.send(L, tell, mission(d3,devant)).
 
-+droneAuSol(X) : true <- remplirFuel(X);
-				.send(X, achieve, decoller).
++droneAuSol(X) : true <- 
+			remplirFuel(X);
+			.send(X, achieve, decoller).
 				
-+!identification(ID)[source(X)] : allie(ID) <- .send(X, tell, allie(ID)).
-+!identification(ID)[source(X)] : not allie(ID) <- .send(X, achieve, tirer(ID)).
++!identification(ID)[source(X)] : allie(ID) <- 
+			.send(X, tell, allie(ID)).
+			
++!identification(ID)[source(X)] : not allie(ID) <- 
+			.send(X, achieve, tirer(ID)).
