@@ -6,6 +6,7 @@ import java.util.Random;
 
 import modele.CarteModel;
 import modele.Grille;
+import modele.TerrainModel;
 import modele.Variables;
 
 public abstract class EntiteDeplacable extends EntiteLocalisable {
@@ -43,7 +44,7 @@ public abstract class EntiteDeplacable extends EntiteLocalisable {
 		return c == Comportement.But || c == Comportement.DeplaceAleatoire;
 	}
 
-	public void deplacer(int[][] hauteur) {
+	public void deplacer(TerrainModel terrain) {
 		int dx = but.x - l.x;
 		int dy = but.y - l.y;
 
@@ -70,15 +71,15 @@ public abstract class EntiteDeplacable extends EntiteLocalisable {
 
 				int rx; // relief de la case d'à coté en x
 				if (dx > 0)
-					rx = hauteur[l.x + 1][l.y];
+					rx = terrain.getHauteur(l.x + 1, l.y);
 				else
-					rx = hauteur[l.x - 1][l.y];
+					rx = terrain.getHauteur(l.x - 1, l.y);
 
 				int ry; // relief de la case d'à coté en y
 				if (dy > 0)
-					ry = hauteur[l.x][l.y + 1];
+					ry = terrain.getHauteur(l.x, l.y + 1);
 				else
-					ry = hauteur[l.x][l.y - 1];
+					ry = terrain.getHauteur(l.x, l.y - 1);
 
 				if (rx > ry) {
 					if (dy > 0)
@@ -93,7 +94,9 @@ public abstract class EntiteDeplacable extends EntiteLocalisable {
 				}
 			}
 
-			setLocation(Grille.deplacer(getLocation(), direction));
+			Location nl = Grille.deplacer(getLocation(), direction);
+			if (terrain.isFree(nl))
+				setLocation(nl);
 		}
 	}
 
