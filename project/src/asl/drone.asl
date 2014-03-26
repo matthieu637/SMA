@@ -162,6 +162,7 @@ goHome.
 			.send(L, tell, ennemi(ID));
 			tirer(POSX, POSY);
 			+dead(ID);
+			.abolish(pos(T,POSX,POSY));
 			.send(L, tell, dead(ID)).
 			
 +!tirer(ID) : .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) & 
@@ -174,6 +175,7 @@ goHome.
 			.send(L, tell, ennemi(ID));
 			tirer(POSX, POSY);
 			+dead(ID);
+			.abolish(pos(T,POSX,POSY));
 			.send(L, tell, dead(ID)).
 			
 +!tirer(ID) : .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) & 
