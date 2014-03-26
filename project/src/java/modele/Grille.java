@@ -64,11 +64,15 @@ public abstract class Grille extends GridWorldModelP {
 
 		nl = deplacer(l, direction);
 
-		if (getAgAtPos(nl) == -1) {
+		if (getAgAtPos(nl) == -1 && data[nl.x][nl.y] == 0) {
 			setAgPos(agent, nl);
 			return new Couple<Location, Boolean>(nl, true);
 		} else
 			return new Couple<Location, Boolean>(l, false);
+	}
+
+	public boolean isFree(Location l) {
+		return data[l.x][l.y] == 0;
 	}
 
 	/**

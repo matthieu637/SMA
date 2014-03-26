@@ -254,7 +254,7 @@ public class CarteModel {
 				for (Grille g : lesGrilles)
 					g.remove(e.getCode(), e.getLocation());
 
-				e.deplacer(terrain.getHauteurs());
+				e.deplacer(terrain);
 
 				for (Grille g : lesGrilles)
 					g.add(e.getCode(), e.getLocation());

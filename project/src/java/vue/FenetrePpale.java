@@ -131,6 +131,10 @@ public class FenetrePpale extends JFrame {
 
 	public void ajouterAgent(int x, int y) {
 		Location l = new Location(x, y);
+		if(!modele.getTerrain().isFree(l)){
+			System.out.println("Already something here !");
+			return ;
+		}
 
 		Comportement c = parseComportement();
 
