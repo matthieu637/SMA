@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import modele.CielModel;
-
+import modele.Grille;
 import ext.GridWorldModelP;
 import ext.GridWorldViewPanel;
 
@@ -32,13 +32,19 @@ public class CielView extends GridWorldViewPanel {
 		g.setColor(azurin);
 		g.fillRect(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 1, cellSizeH - 1);
 		g.setColor(c);
+		
+		if(x < 3 && y == 0){
+			g.setColor(Color.white);
+			super.drawStringOffset(g, x, y, defaultFont, "P");
+			g.setColor(c);
+		}
 	}
 
 	@Override
 	public void drawAgent(Graphics g, int x, int y, Color c, int id) {
 		super.drawEmpty(g, x, y);
 
-		if (getModele().getDrone(id+1).isHaute_altitude())
+		if (getModele().getDrone(id + 1).isHaute_altitude())
 			g.setColor(dark_green);
 		else
 			g.setColor(lawn_green);
@@ -48,7 +54,12 @@ public class CielView extends GridWorldViewPanel {
 	@Override
 	public void draw(Graphics g, int x, int y, int object) {
 		Color c = g.getColor();
-		g.setColor(Color.red);
+		if ((object & Grille.ADVERSAIRE_CODE) != 0)
+			g.setColor(Color.red);
+		else if ((object & Grille.ALLIE_CODE) != 0)
+			g.setColor(Color.green);
+		else if ((object & Grille.CIVIL_CODE) != 0)
+			g.setColor(Color.PINK);
 		g.fillOval(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
 		g.setColor(c);
 	}

@@ -4,11 +4,8 @@ import jason.environment.grid.Location;
 
 import java.awt.Container;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
@@ -59,14 +56,17 @@ public class FenetrePpale extends JFrame {
 		l.setBounds(870, 5, 150, 20);
 		c.add(l);
 
-		JCheckBox j = new JCheckBox("Cacher zones non découverte");
-		j.setFont(defaultFont);
+//		JCheckBox j = new JCheckBox("Cacher zones non découverte");
+//		j.setFont(defaultFont);
+//		j.setBounds(20, 600 + 20 + 20, 270, 20);
+//		j.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				terrain.cacherNonDecouvert();
+//			}
+//		});
+//		c.add(j);
+		JLabel j = new JLabel("Vitesse :");
 		j.setBounds(20, 600 + 20 + 20, 270, 20);
-		j.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				terrain.cacherNonDecouvert();
-			}
-		});
 		c.add(j);
 
 		JSlider v = new JSlider(1, 1000);
