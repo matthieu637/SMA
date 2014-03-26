@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import modele.entite.Drone;
 import modele.entite.EntiteComportement;
 import modele.percepts.AllPercepts;
 import utils.Couple;
@@ -140,13 +141,15 @@ public class CarteModel {
 
 	public boolean changerAltitude(String agName) {
 		Couple<Integer, Grille> c = dispatch(agName);
-		interpreteur.retirerAltitude(c.first);
-		interpreteur.retirerFieldOfView(c.first);
-		int altitude = ciel.getDrone(c.first).changerAltitude();
-		interpreteur.ajouterAltitude(c.first, altitude);
-		interpreteur.ajouterFieldOfView(c.first,
-				altitude == 1 ? ciel.getDrone(c.first).getChamp_vision_haute_altitude() : ciel.getDrone(c.first)
-						.getChamp_vision_basse_altitude());
+		Drone d = ciel.getDrone(c.first);
+		d.changerAltitude();
+		d.majPercepts(interpreteur, agentsSupplementaires, terrain.getConvoi());
+//		interpreteur.retirerAltitude(c.first);
+//		interpreteur.retirerFieldOfView(c.first);
+//		int altitude = ciel.getDrone(c.first).changerAltitude();
+//		interpreteur.ajouterAltitude(c.first, altitude);
+//		interpreteur.ajouterFieldOfView(c.first, altitude == 1 ? ciel.getDrone(c.first).getChamp_vision_haute_altitude() : ciel.getDrone(c.first)
+//				.getChamp_vision_basse_altitude());
 		return true;
 	}
 
@@ -220,7 +223,7 @@ public class CarteModel {
 	public void destruction(Location t) {
 		if (terrain.getAgAtPos(t) != -1) {
 			terrain.retirerAgent(t, true);
-			ciel.updatePercepts();
+			ciel.majPercepts();
 			interpreteur.killVehicule(terrain.getAgAtPos(t));
 		}
 	}

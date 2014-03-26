@@ -1,5 +1,11 @@
 // Agent drone in project project
 
+distance(X1, Y1, X2, Y2, D) :- D = math.abs(X1 - X2) + math.abs(Y1 - Y2).
+ 
+distanceInf(X1, Y1, X2, Y2, L) :- distance(X1, Y1, X2, Y2, D) & D <= L.
+
+dernierePositionM(ID, X, Y) :- .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) & 
+					.max(ListePosition, pos(T, X, Y)).
 
 enoughFuel(BX, BY) :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionInitiale(IX, IY) 
 						& math.abs(POSX - BX) + math.abs(POSY - BY) + math.abs(IX - BX) + math.abs(IY - BY) 
@@ -13,7 +19,8 @@ enoughFuel(N) :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionIniti
 priorite(leader, 1).
 priorite(devant, 2).
 priorite(derriere, 3).
-porte(2).
+porte(3).
+menace(10).
 
 goHome.
 
@@ -22,19 +29,34 @@ goHome.
 
 /* Mission */
 	
-+!doMission : .my_name(D) & mission(D,M) <- !posSurveillance(M); !detecterAdversaire; !goHome; !doMission.	
++!doMission : .my_name(D) & mission(D,M) <- 
+			!posSurveillance(M); 
+			!detecterAdversaire; 
+			!verifierMenace;
+			!randMove(1); 
+			!goHome; 
+			!doMission.	
 +!doMission.
+
++!verifierMenace : positionSurveillance(BX, BY) & menace(L) &
+					.findall(pos(D, ID), ennemi(ID) & not dead(ID) & dernierePositionM(ID, POSX, POSY) &  distance(BX, BY, POSX, POSY, D) & D <= L, ListeMenace) &
+					len(ListeMenace) > 0 & .min(ListeMenace, pos(D, ID))
+					 <- 
+					!tirer(ID).
++!verifierMenace.
 
 //allie, civil, militaire, ... tous identifié par un ID pas des positions car ils peuvent se déplacer
 //si je suis bas et que je vois un militaire n'étant pas allié, je demande son identification
 +!detecterAdversaire : altitude(0) & 
-					   .findall( ID, militaire(ID, _,_,_) & not allie(ID, _ , _, _), Suspects) & 
+					   .findall( ID, militaire(ID, _,_,_) & not allie(ID), Suspects) & 
 					   len(Suspects) > 0 <-  
 			!suspect(Suspects).
 		
 //si je suis haut et que je vois un vehicule que je n'ai pas déjà vu, je change d'altitude et l'identifie
-+!detecterAdversaire : altitude(1) & vehicule(ID, _,_,_) & not civil(ID, _,_ ,_) & not militaire(ID, _,_ ,_) <- 
++!detecterAdversaire : altitude(1) & .findall( pos(T, POSX, POSY), vehicule(ID, POSX, POSY, T)  & not civil(ID, _,_ ,_) & not militaire(ID, _,_ ,_) , ListePosition)  
+			& len(ListePosition) > 0 & .max(ListePosition, pos(T, POSX, POSY)) <- 
 			changerAltitude;
+			!goto(POSX, POSY);
 			!detecterAdversaire.
 
 //sinon ok
@@ -131,11 +153,12 @@ goHome.
 +!posSurveillance(M): .my_name(D) & leader(L) & mission(D, M) & fieldOfView(F) & not goHome <- 
 			.send(L, askOne, location(L,_,_), location(L,POSX,POSY));
 			.send(L, askOne, goal(_,_), goal(BX,BY) );
-			ia.positionSurveillance(SX,SY,BX,BY,POSX,POSY,M,F); 
+			ia.positionSurveillance(SX,SY,BX,BY,POSX,POSY,M,F);
+			-+positionSurveillance(SX, SY);
 			!goto(SX,SY).
 
-+!posSurveillance(X) : not leader(_)
-			<- !posSurveillance(X).
+//+!posSurveillance(X) : not leader(_)
+//			<- !posSurveillance(X).
 	
 +!posSurveillance(X) : goHome 
 			<- true.
@@ -153,48 +176,62 @@ goHome.
 			.send(t, achieve, identification(S));
 			!suspect(Suspects).
 
-+!tirer(ID) : .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) & 
-					.max(ListePosition, pos(T, POSX, POSY)) & porte(P) & .my_name(N) & 
-					location(N, MYX, MYY) & math.abs(MYX - POSX) + math.abs(MYY - POSY) <= P & altitude(0) & not dead(ID)
-					 <-
-			+ennemi(ID);
++allie(_) : altitude(0) <-
+			 changerAltitude.
++dead(_) :  altitude(0) <-
+			 changerAltitude.
+
+//si la tour me préviens du type d'un ennemi j'en informe mes collègues
++ennemi(ID)[source(t)] : .my_name(N) <- 
 			.findall(X,drone(X) & X \== N, L); 
-			.send(L, tell, ennemi(ID));
+			.send(L, tell, ennemi(ID)). 
+			 
++!tirer(ID) :  not dead(ID) & dernierePositionM(ID, POSX, POSY) & porte(P) & .my_name(N) & 
+					location(N, MYX, MYY) & distanceInf(MYX, MYY, POSX, POSY, P) & altitude(0)
+					 <-
 			tirer(POSX, POSY);
 			+dead(ID);
-			.abolish(pos(T,POSX,POSY));
-			.send(L, tell, dead(ID)).
+			.send(L, tell, dead(ID));
+			.print("tirer1").
 			
-+!tirer(ID) : .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) & 
-					.max(ListePosition, pos(T, POSX, POSY)) & porte(P) & .my_name(N) & 
-					location(N, MYX, MYY) & math.abs(MYX - POSX) + math.abs(MYY - POSY) <= P & altitude(1) & not dead(ID)
++!tirer(ID) : not dead(ID) & dernierePositionM(ID, POSX, POSY) & .my_name(N) & 
+					location(N, MYX, MYY) & distanceInf(MYX, MYY, POSX, POSY, P) & altitude(1)
 					 <-
 			changerAltitude;
-			+ennemi(ID);
-			.findall(X,drone(X) & X \== N, L); 
-			.send(L, tell, ennemi(ID));
 			tirer(POSX, POSY);
 			+dead(ID);
-			.abolish(pos(T,POSX,POSY));
-			.send(L, tell, dead(ID)).
+			.send(L, tell, dead(ID));
+			.print("tirer2").
 			
-+!tirer(ID) : .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) & 
-					.max(ListePosition, pos(T, POSX, POSY)) & porte(P) & .my_name(N) & 
-					location(N, MYX, MYY) & math.abs(MYX - POSX) + math.abs(MYY - POSY) > P & altitude(0) & not dead(ID)
++!tirer(ID) : not dead(ID) & dernierePositionM(ID, POSX, POSY) & porte(P) & .my_name(N) & 
+					location(N, MYX, MYY) & not distanceInf(MYX, MYY, POSX, POSY, P) & altitude(0)
 					 <-
 		ia.choose_direction(Dir, MYX, MYY, POSX, POSY);
+		.print("ici1 ", MYX," ", MYY," ", POSX," ", POSY," ",Dir);
 		deplacer(Dir);
-		!tirer(ID).		
+		!tirer(ID).
 
-+!tirer(ID) : .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) & 
-					.max(ListePosition, pos(T, POSX, POSY)) & porte(P) & .my_name(N) & 
-					location(N, MYX, MYY) & math.abs(MYX - POSX) + math.abs(MYY - POSY) > P & altitude(1) & not dead(ID)
++!tirer(ID) : not dead(ID) & dernierePositionM(ID, POSX, POSY) & porte(P) & .my_name(N) & 
+					location(N, MYX, MYY) & not distanceInf(MYX, MYY, POSX, POSY, P) & altitude(1)
 					 <-
 		changerAltitude;
+		.print("ici2");
 		ia.choose_direction(Dir, MYX, MYY, POSX, POSY);
 		deplacer(Dir);
-		!tirer(ID).	
+		!tirer(ID).
 		
--!tirer(ID) : true
+-!tirer(ID) : not dead(ID)
 		<- !tirer(ID).
+
+-!tirer(ID) : dead(ID).
+
+-leader(_) : true
+	<- !rentrer.
+	
++!rentrer : leader(_).
+	
++!rentrer : .my_name(D) & not leader(_)
+	<- .send(t, tell, terminer); 
+	+goHome. 
+	
 
