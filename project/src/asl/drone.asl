@@ -155,10 +155,44 @@ goHome.
 
 +!tirer(ID) : .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) & 
 					.max(ListePosition, pos(T, POSX, POSY)) & porte(P) & .my_name(N) & 
-					location(N, MYX, MYY) & math.abs(MYX - POSX) + math.abs(MYY - POSY) <= P & altitude(0)
+					location(N, MYX, MYY) & math.abs(MYX - POSX) + math.abs(MYY - POSY) <= P & altitude(0) & not dead(ID)
 					 <-
 			+ennemi(ID);
+			.findall(X,drone(X) & X \== N, L); 
+			.send(L, tell, ennemi(ID));
 			tirer(POSX, POSY);
-			+dead(ID).
+			+dead(ID);
+			.send(L, tell, dead(ID)).
+			
++!tirer(ID) : .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) & 
+					.max(ListePosition, pos(T, POSX, POSY)) & porte(P) & .my_name(N) & 
+					location(N, MYX, MYY) & math.abs(MYX - POSX) + math.abs(MYY - POSY) <= P & altitude(1) & not dead(ID)
+					 <-
+			changerAltitude;
+			+ennemi(ID);
+			.findall(X,drone(X) & X \== N, L); 
+			.send(L, tell, ennemi(ID));
+			tirer(POSX, POSY);
+			+dead(ID);
+			.send(L, tell, dead(ID)).
+			
++!tirer(ID) : .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) & 
+					.max(ListePosition, pos(T, POSX, POSY)) & porte(P) & .my_name(N) & 
+					location(N, MYX, MYY) & math.abs(MYX - POSX) + math.abs(MYY - POSY) > P & altitude(0) & not dead(ID)
+					 <-
+		ia.choose_direction(Dir, MYX, MYY, POSX, POSY);
+		deplacer(Dir);
+		!tirer(ID).		
 
++!tirer(ID) : .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) & 
+					.max(ListePosition, pos(T, POSX, POSY)) & porte(P) & .my_name(N) & 
+					location(N, MYX, MYY) & math.abs(MYX - POSX) + math.abs(MYY - POSY) > P & altitude(1) & not dead(ID)
+					 <-
+		changerAltitude;
+		ia.choose_direction(Dir, MYX, MYY, POSX, POSY);
+		deplacer(Dir);
+		!tirer(ID).	
+		
+-!tirer(ID) : true
+		<- !tirer(ID).
 
