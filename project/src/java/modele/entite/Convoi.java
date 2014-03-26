@@ -79,16 +79,16 @@ public class Convoi {
 		if (devant != null)
 			devant.majPercept(interpreteur, hauteur);
 
-		if (killed)
-			for (Vehicule leader : getLeaders())
-				interpreteur.ajouterMort(leader.getNumero(), mort.getNumero());
-
 		if (mort.estLeader() && mort.getFollower() != null) {
 			Vehicule nouveau_leader = mort.getFollower();
 			nouveau_leader.setLeader();
 			nouveau_leader.setBut(but);
 			nouveau_leader.majPercept(interpreteur, hauteur);
 		}
+		
+		if (killed)
+			for (Vehicule leader : getLeaders())
+				interpreteur.ajouterMort(leader.getNumero(), mort.getNumero());
 
 		synchronized (file) {
 			file.remove(mort);
@@ -103,7 +103,8 @@ public class Convoi {
 			devant.setFollower(null);
 		nouveau_leader.setLeader();
 
-		devant.majPercept(interpreteur, hauteur);
+		if(devant != null)
+			devant.majPercept(interpreteur, hauteur);
 		nouveau_leader.majPercept(interpreteur, hauteur);
 		return true;
 	}
@@ -118,5 +119,9 @@ public class Convoi {
 		}
 
 		return devant;
+	}
+
+	public boolean arriver() {
+		return file.size() == 0;
 	}
 }

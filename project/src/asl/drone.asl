@@ -21,7 +21,8 @@ priorite(devant, 2).
 priorite(derriere, 3).
 porte(3).
 menace(10).
-ingerable(4).
+ingerable_milieu(2).
+ingerable_devant(3).
 
 goHome.
 
@@ -40,31 +41,40 @@ goHome.
 +!doMission.
 
 +!verifierMenace : positionSurveillance(BX, BY) & menace(L) &
-					.findall(pos(D, ID), ennemi(ID) & not dead(ID) & dernierePositionM(ID, POSX, POSY) &  distance(BX, BY, POSX, POSY, D) & D <= L, ListeMenace)& .print(ListeMenace)  &
-					len(ListeMenace) > 0 & .min(ListeMenace, pos(D, ID)) <-
-					 !prevenirLeader(len(ListeMenace));
+					.findall(pos(D, ID), ennemi(ID) & not dead(ID) & dernierePositionM(ID, POSX, POSY) &  distance(BX, BY, POSX, POSY, D) & D <= L, ListeMenace)& 
+					.length(ListeMenace) > 0 & .min(ListeMenace, pos(D, ID)) <-
+					 !prevenirLeader(.length(ListeMenace));
 					 !tirer(ID).
-+!verifierMenace.
+					 
++!verifierMenace : leader(L) & .my_name(D) & mission(D, devant)  <-
+				.send(L, untell, attend).
+				
++!verifierMenace.				
 
-+!prevenirLeader(T) :  ingerable(I) & T < I.
++!prevenirLeader(T) :  ingerable_milieu(I) & T < I & .my_name(D) & mission(D, leader).
++!prevenirLeader(T) :  ingerable_devant(I) & T < I & .my_name(D) & mission(D, devant).
 
-+!prevenirLeader(T) : ingerable(I) & leader(LD) & T >= I & .my_name(D) & mission(D, devant) <-
++!prevenirLeader(T) : ingerable_devant(I) & leader(LD) & T >= I & .my_name(D) & mission(D, devant) <-
 			.print("ATTEND");
 			.send(LD, tell, attend).
 			
-+!prevenirLeader(T) : ingerable(I) & leader(LD) & T >= I & .my_name(D) & mission(D, leader) <-
++!prevenirLeader(T) : ingerable_milieu(I) & leader(LD) & T >= I & .my_name(D) & mission(D, leader) <-
 			.send(LD, achieve, scinder). 
+			
+//si le leader est mort entre temps, préviens le nouveau
+-!prevenirLeader(T) : true <-
+			!prevenirLeader(T).
 
 //allie, civil, militaire, ... tous identifié par un ID pas des positions car ils peuvent se déplacer
 //si je suis bas et que je vois un militaire n'étant pas allié, je demande son identification
 +!detecterAdversaire : altitude(0) & 
 					   .findall( ID, militaire(ID, _,_,_) & not allie(ID), Suspects) & 
-					   len(Suspects) > 0 <-  
+					   .length(Suspects) > 0 <-  
 			!suspect(Suspects).
 		
 //si je suis haut et que je vois un vehicule que je n'ai pas déjà vu, je change d'altitude et l'identifie
 +!detecterAdversaire : altitude(1) & .findall( pos(T, POSX, POSY), vehicule(ID, POSX, POSY, T)  & not civil(ID, _,_ ,_) & not militaire(ID, _,_ ,_) , ListePosition)  
-			& len(ListePosition) > 0 & .max(ListePosition, pos(T, POSX, POSY)) <- 
+			& .length(ListePosition) > 0 & .max(ListePosition, pos(T, POSX, POSY)) <- 
 			changerAltitude;
 			!goto(POSX, POSY);
 			!detecterAdversaire.

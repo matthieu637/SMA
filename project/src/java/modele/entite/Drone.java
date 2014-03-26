@@ -51,6 +51,10 @@ public class Drone {
 		return this.getAltitude();
 	}
 
+	public boolean isAuSol() {
+		return auSol;
+	}
+
 	public int getAltitude() {
 		if (this.haute_altitude)
 			return 1;

@@ -16,15 +16,16 @@ public class AllPercepts extends InterpreteurSpl {
 	private final static String goal = "goal(%s, %s)";
 	private final static String heightmap = "heightmap(%s, %s, %s, %s)";
 	private final static String follow = "follow(%s)";
-	
-	//id x y time
+	private final static String convoi = "convoi(%s)";
+
+	// id x y time
 	private final static String vehicule = "vehicule(%s, %s, %s, %s)";
 	private final static String militaire = "militaire(%s, %s, %s, %s)";
 	private final static String civil = "civil(%s, %s, %s, %s)";
-	
-	//pour tour
+
+	// pour tour
 	private final static String allie = "allie(%s)";
-	
+
 	private final static String fuel = "fuel(%s)";
 	private final static String droneAuSol = "droneAuSol(%s)";
 	private final static String drone = "drone(%s)";
@@ -170,6 +171,10 @@ public class AllPercepts extends InterpreteurSpl {
 
 	public void ajouterLeaderDrone(int id, int numero) {
 		ajouterDrone(id, leader, "v" + numero);
+	}
+
+	public void ajouterVehicule(int i, int j) {
+		ajouterVehicule(i, convoi, "v" + j);
 	}
 
 }

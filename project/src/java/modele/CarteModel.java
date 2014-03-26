@@ -68,10 +68,12 @@ public class CarteModel {
 
 		this.interpreteur = interpreteur;
 
-		interpreteur.ajouterTourDroneAuSol(1);
-		interpreteur.ajouterTourDroneAuSol(2);
-		interpreteur.ajouterTourDroneAuSol(3);
+		for (int i = 1; i <= nombreDrone; i++)
+			interpreteur.ajouterTourDroneAuSol(i);
 		interpreteur.ajouterDrones(nombreDrone, nombreVehicule);
+		for (int i = 1; i <= nombreVehicule; i++)
+			for (int j = 1; j <= nombreVehicule; j++)
+				interpreteur.ajouterVehicule(i, j);
 	}
 
 	public TerrainModel getTerrain() {
@@ -144,12 +146,14 @@ public class CarteModel {
 		Drone d = ciel.getDrone(c.first);
 		d.changerAltitude();
 		d.majPercepts(interpreteur, agentsSupplementaires, terrain.getConvoi());
-//		interpreteur.retirerAltitude(c.first);
-//		interpreteur.retirerFieldOfView(c.first);
-//		int altitude = ciel.getDrone(c.first).changerAltitude();
-//		interpreteur.ajouterAltitude(c.first, altitude);
-//		interpreteur.ajouterFieldOfView(c.first, altitude == 1 ? ciel.getDrone(c.first).getChamp_vision_haute_altitude() : ciel.getDrone(c.first)
-//				.getChamp_vision_basse_altitude());
+		// interpreteur.retirerAltitude(c.first);
+		// interpreteur.retirerFieldOfView(c.first);
+		// int altitude = ciel.getDrone(c.first).changerAltitude();
+		// interpreteur.ajouterAltitude(c.first, altitude);
+		// interpreteur.ajouterFieldOfView(c.first, altitude == 1 ?
+		// ciel.getDrone(c.first).getChamp_vision_haute_altitude() :
+		// ciel.getDrone(c.first)
+		// .getChamp_vision_basse_altitude());
 		return true;
 	}
 
@@ -267,8 +271,9 @@ public class CarteModel {
 			e.majPercept(interpreteur);
 	}
 
-	public boolean scinder(int agent) {
-		return terrain.scinder(agent);
+	public boolean scinder(String agent) {
+		Couple<Integer, Grille> c = dispatch(agent);
+		return terrain.scinder(c.first);
 	}
 
 	public void detruireAgentSupplementaire(EntiteComportement e) {
@@ -290,5 +295,9 @@ public class CarteModel {
 			return true;
 		}
 		return false;
+	}
+
+	public boolean termine() {
+		return terrain.convoiArrive() && ciel.droneTermine();
 	}
 }

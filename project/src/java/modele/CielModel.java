@@ -37,19 +37,12 @@ public class CielModel extends Grille {
 		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent, interpreteur, false);
 		this.agentsSupplementaires = agentsSupplementaires;
 		this.convoi = convoi;
-
-		int nombre_drone_basse_altitude = (int) (nbAgent * Variables.PROPORTION_DRONE_BASSE_HAUTE_ALTITUDE);
-		int nombre_drone_haute_altitude = nbAgent - nombre_drone_basse_altitude;
-
+		
 		drones = new ArrayList<Drone>(nbAgent);
 		int i = 0;
-		for (; i < nombre_drone_basse_altitude; i++)
-			drones.add(new Drone(i + 1, false, getAgPos(i), Variables.CAPACITE_FUEL_DRONE, Variables.CHAMP_VISION_DRONE_BASSE_ALTITUDE,
-					Variables.CHAMP_VISION_DRONE_HAUTE_ALTITUDE));
-		for (; i < nombre_drone_haute_altitude + nombre_drone_basse_altitude; i++)
+		for (; i < nbAgent; i++)
 			drones.add(new Drone(i + 1, true, getAgPos(i), Variables.CAPACITE_FUEL_DRONE, Variables.CHAMP_VISION_DRONE_BASSE_ALTITUDE,
 					Variables.CHAMP_VISION_DRONE_HAUTE_ALTITUDE));
-
 		this.interpreteur = interpreteur;
 
 		this.majPercepts();
@@ -83,5 +76,12 @@ public class CielModel extends Grille {
 
 	public Drone getDrone(int id) {
 		return drones.get(id - 1);
+	}
+
+	public boolean droneTermine() {
+		for(Drone d : drones)
+			if(!d.isAuSol())
+				return false;
+		return true;
 	}
 }

@@ -35,7 +35,11 @@ public class choose_direction extends DefaultInternalAction {
 		synchronized (lock) {
 
 
-		if (args.length == 5 || args.length == 9) {
+		if (args.length == 5 || args.length == 9 || args.length == 6 || args.length == 10) {
+			boolean random = false;
+			if(args.length == 6 || args.length == 10)
+				random = generateur.nextFloat() < Variables.PROBA_DEPLACEMENT_ALEATOIRE;
+			
 			int i = 1;
 			int x = Integer.parseInt(args[i++].toString());
 			int y = Integer.parseInt(args[i++].toString());
@@ -52,6 +56,11 @@ public class choose_direction extends DefaultInternalAction {
 			if (y - 1 >= 0)
 				loc.add(new DLocation(x, y - 1, 1));
 //			loc.add(new DLocation(x, y, -1));
+			
+			if(random){
+				int indice = generateur.nextInt(loc.size());
+				return un.unifies(args[0], new NumberTermImpl(loc.get(indice).getDirection()));
+			}
 
 			Location goal = new Location(gx, gy);
 			List<DLocation> mins = null;

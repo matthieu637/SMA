@@ -86,7 +86,7 @@ public class Env extends Environment implements Runnable {
 			valide = modele.atterir(agName);
 			break;
 		case "scinder":
-			valide = modele.scinder(Integer.parseInt(action.getTerm(0).toString()));
+			valide = modele.scinder(action.getTerm(0).toString());
 			break;
 		case "tirer":
 			valide = modele.tirer(Integer.parseInt(action.getTerm(0).toString()), Integer.parseInt(action.getTerm(1).toString()));
@@ -113,7 +113,7 @@ public class Env extends Environment implements Runnable {
 
 	@Override
 	public void run() {
-		while (this.isRunning()) {
+		while (this.isRunning() && !modele.termine()) {
 			try {
 				Thread.sleep((long) (Variables.VITESSE_ACTION_ADVERSAIRE * Variables.getInstance().getVitesse()));
 			} catch (InterruptedException e) {

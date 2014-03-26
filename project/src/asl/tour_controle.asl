@@ -21,5 +21,5 @@
 			.send(X, tell, allie(ID)).
 			
 +!identification(ID)[source(X)] : not allie(ID) <-
-			.print(ID, " est un ennemi"); 
+			//.print(ID, " est un ennemi"); 
 			.send(X, tell, ennemi(ID)).

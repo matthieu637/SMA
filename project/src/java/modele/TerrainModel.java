@@ -180,4 +180,8 @@ public class TerrainModel extends Grille {
 	public Convoi getConvoi() {
 		return convoi;
 	}
+
+	public boolean convoiArrive() {
+		return convoi.arriver();
+	}
 }

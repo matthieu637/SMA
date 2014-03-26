@@ -27,11 +27,6 @@ public class Variables {
 	public static int SMOOTH_CARTE = 2;
 
 	/**
-	 * A l'initialisation combien de drone seront en haute/basse altitude?
-	 */
-	public static float PROPORTION_DRONE_BASSE_HAUTE_ALTITUDE = 0.6f;
-
-	/**
 	 * Facteur de vitesse d'action / temps de réflexion de chaque agent du MAS
 	 * Evite d'avoir le CPU qui tourne à 100%.
 	 */
@@ -82,6 +77,8 @@ public class Variables {
 	 */
 	public static int HAUTEUR_HORS_CARTE = 150;
 
+	public static final float PROBA_DEPLACEMENT_ALEATOIRE = 0.01f;
+	
 	/**
 	 * Vitesse d'exécution globale
 	 */
