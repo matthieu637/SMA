@@ -85,4 +85,9 @@ public class CielModel extends Grille {
 	public Drone getDrone(int id) {
 		return drones.get(id - 1);
 	}
+
+	public void updatePercepts() {
+		for (Drone d : drones)
+			d.majPercepts(interpreteur, agentsSupplementaires, convoi);
+	}
 }
