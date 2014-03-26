@@ -65,11 +65,15 @@ public class Variables {
 	 * Champ de vision des drones à basse altitude, en nombre de cases
 	 */
 	public static int CHAMP_VISION_DRONE_BASSE_ALTITUDE = 3;
+	
+	public static final int VISION_ENNEMI = 5;
+	
+	public static final int PORTE_ENNEMI = 4;
 
 	/**
 	 * Champ de vision des drones à haute altitude, en nombre de cases
 	 */
-	public static int CHAMP_VISION_DRONE_HAUTE_ALTITUDE = 5;
+	public static int CHAMP_VISION_DRONE_HAUTE_ALTITUDE = 6;
 
 	public static float DIRECTION_IMPORTANCE_HAUTEUR = 0.05f;
 	

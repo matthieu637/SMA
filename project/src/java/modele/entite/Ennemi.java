@@ -3,9 +3,10 @@ package modele.entite;
 import jason.environment.grid.Location;
 import modele.CarteModel;
 import modele.Grille;
+import modele.Variables;
 import modele.percepts.AllPercepts;
 
-public class Ennemie extends Militaire {
+public class Ennemi extends Militaire {
 
 	private double vision; // portee de la vision
 	private double portee; // portee de tir
@@ -13,19 +14,19 @@ public class Ennemie extends Militaire {
 								// imprecision = 1 -> un tir à 5 cases est dévié
 								// en moyenne de 5 cases en x et y
 
-	public Ennemie(Location l, Comportement c) {
+	public Ennemi(Location l, Comportement c) {
 		super(l, c, Grille.ADVERSAIRE_CODE);
 		init();
 	}
 
-	public Ennemie(Location l, Location but) {
+	public Ennemi(Location l, Location but) {
 		super(l, but, Grille.ADVERSAIRE_CODE);
 		init();
 	}
 
 	private void init() {
-		this.vision = 10.;
-		this.portee = 5.;
+		this.vision = Variables.VISION_ENNEMI;
+		this.portee = Variables.PORTE_ENNEMI;
 		this.imprecision = 0.3;
 	}
 

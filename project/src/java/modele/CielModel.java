@@ -67,15 +67,14 @@ public class CielModel extends Grille {
 	public Couple<Location, Boolean> deplacerCollision(int agent, int direction) {
 
 		Couple<Location, Boolean> c = super.deplacerCollision(agent - 1, direction);
+		
 		if (c.second) {
 			boolean outOfFuel = getDrone(agent).deplacer(c.first);
+			getDrone(agent).majPercepts(interpreteur, agentsSupplementaires, convoi);
+			
 			if (outOfFuel) {
-
 				interpreteur.killDrone(this.getAgAtPos(c.first));
 				this.remove(GridWorldModelP.AGENT, c.first);
-
-			} else {
-				getDrone(agent).majPercepts(interpreteur, agentsSupplementaires, convoi);
 			}
 		}
 
@@ -84,10 +83,5 @@ public class CielModel extends Grille {
 
 	public Drone getDrone(int id) {
 		return drones.get(id - 1);
-	}
-
-	public void updatePercepts() {
-		for (Drone d : drones)
-			d.majPercepts(interpreteur, agentsSupplementaires, convoi);
 	}
 }

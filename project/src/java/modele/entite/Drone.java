@@ -145,8 +145,7 @@ public class Drone {
 
 		// champ de vision
 		interpreteur.retirerFieldOfView(id);
-		interpreteur.ajouterFieldOfView(id,
-				this.getAltitude() == 1 ? this.getChamp_vision_haute_altitude() : this.getChamp_vision_basse_altitude());
+		interpreteur.ajouterFieldOfView(id, this.getAltitude() == 1 ? this.getChamp_vision_haute_altitude() : this.getChamp_vision_basse_altitude());
 
 		// fuel
 		interpreteur.retirerDroneFuel(id);
@@ -193,7 +192,8 @@ public class Drone {
 			if (chercheIdentite) {
 				// si je ne l'ai jamais vu
 				// ou qu'il a bougé
-				if (actuelConnaissance == null || !ep.positionEgale(actuelConnaissance))
+				// ou que la position n'a pas changé mais je ne l'ai pas encore identifié
+				if (actuelConnaissance == null || !ep.positionEgale(actuelConnaissance) || (ep.positionEgale(actuelConnaissance) && !actuelConnaissance.isIdentifie() ))
 					if (a instanceof Militaire) {
 						interpreteur.ajouterDroneVoitMilitaire(id, a.getID(), la.x, la.y, System.currentTimeMillis());
 						ep.setIdentifie(true);

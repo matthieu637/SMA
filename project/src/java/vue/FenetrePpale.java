@@ -17,7 +17,7 @@ import modele.CarteModel;
 import modele.Variables;
 import modele.entite.Civil;
 import modele.entite.Comportement;
-import modele.entite.Ennemie;
+import modele.entite.Ennemi;
 import modele.entite.Militaire;
 
 public class FenetrePpale extends JFrame {
@@ -69,7 +69,7 @@ public class FenetrePpale extends JFrame {
 		j.setBounds(20, 600 + 20 + 20, 270, 20);
 		c.add(j);
 
-		JSlider v = new JSlider(1, 1000);
+		JSlider v = new JSlider(1, 500);
 		v.setBounds(20, 600 + 20 + 20 + 30, 250, 20);
 		v.addChangeListener(new ChangeListener() {
 
@@ -136,7 +136,7 @@ public class FenetrePpale extends JFrame {
 
 		if (!but.isSelected()) {
 			if (type1.isSelected())
-				modele.ajouterAgent(new Ennemie(l, c));
+				modele.ajouterAgent(new Ennemi(l, c));
 			else if (type2.isSelected())
 				modele.ajouterAgent(new Militaire(l, c));
 			else if (type3.isSelected())
@@ -148,7 +148,7 @@ public class FenetrePpale extends JFrame {
 			} else {
 				Location but = l;
 				if (type1.isSelected())
-					modele.ajouterAgent(new Ennemie(entite, but));
+					modele.ajouterAgent(new Ennemi(entite, but));
 				else if (type2.isSelected())
 					modele.ajouterAgent(new Militaire(entite, but));
 				else if (type3.isSelected())

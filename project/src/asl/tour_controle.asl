@@ -21,4 +21,4 @@
 			.send(X, tell, allie(ID)).
 			
 +!identification(ID)[source(X)] : not allie(ID) <- 
-			.send(X, achieve, tirer(ID)).
+			.send(X, tell, ennemi(ID)).
