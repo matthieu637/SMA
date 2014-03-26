@@ -33,7 +33,7 @@ public class TerrainModel extends Grille {
 	private Convoi convoi;
 
 	protected TerrainModel(int nbAgent, AllPercepts interpreteur) {
-		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent, interpreteur);
+		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent, interpreteur, true);
 
 		construire_fractale();
 

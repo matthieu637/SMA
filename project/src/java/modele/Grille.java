@@ -18,14 +18,16 @@ public abstract class Grille extends GridWorldModelP {
 	public static final int ALLIE_CODE = 32;
 
 	protected AllPercepts interpreteur;
+	private boolean colisionInterObject;
 
-	protected Grille(int w, int h, int nbAgs, AllPercepts interpreteur) {
+	protected Grille(int w, int h, int nbAgs, AllPercepts interpreteur, boolean colisionInterObject) {
 		super(w, h, nbAgs);
 
 		for (int a = 0; a < nbAgs; a++)
 			setAgPos(a, a, 0);
 
 		this.interpreteur = interpreteur;
+		this.colisionInterObject = colisionInterObject;
 	}
 
 	/**
@@ -64,7 +66,10 @@ public abstract class Grille extends GridWorldModelP {
 
 		nl = deplacer(l, direction);
 
-		if (getAgAtPos(nl) == -1 && data[nl.x][nl.y] == 0) {
+		if (colisionInterObject && getAgAtPos(nl) == -1 && data[nl.x][nl.y] == CLEAN) {
+			setAgPos(agent, nl);
+			return new Couple<Location, Boolean>(nl, true);
+		} else if (!colisionInterObject && getAgAtPos(nl) == -1) {
 			setAgPos(agent, nl);
 			return new Couple<Location, Boolean>(nl, true);
 		} else
@@ -72,7 +77,7 @@ public abstract class Grille extends GridWorldModelP {
 	}
 
 	public boolean isFree(Location l) {
-		return data[l.x][l.y] == 0;
+		return data[l.x][l.y] == CLEAN;
 	}
 
 	/**

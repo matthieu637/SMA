@@ -21,6 +21,7 @@ priorite(devant, 2).
 priorite(derriere, 3).
 porte(3).
 menace(10).
+ingerable(4).
 
 goHome.
 
@@ -39,11 +40,20 @@ goHome.
 +!doMission.
 
 +!verifierMenace : positionSurveillance(BX, BY) & menace(L) &
-					.findall(pos(D, ID), ennemi(ID) & not dead(ID) & dernierePositionM(ID, POSX, POSY) &  distance(BX, BY, POSX, POSY, D) & D <= L, ListeMenace) &
-					len(ListeMenace) > 0 & .min(ListeMenace, pos(D, ID))
-					 <- 
-					!tirer(ID).
+					.findall(pos(D, ID), ennemi(ID) & not dead(ID) & dernierePositionM(ID, POSX, POSY) &  distance(BX, BY, POSX, POSY, D) & D <= L, ListeMenace)& .print(ListeMenace)  &
+					len(ListeMenace) > 0 & .min(ListeMenace, pos(D, ID)) <-
+					 !prevenirLeader(len(ListeMenace));
+					 !tirer(ID).
 +!verifierMenace.
+
++!prevenirLeader(T) :  ingerable(I) & T < I.
+
++!prevenirLeader(T) : ingerable(I) & leader(LD) & T >= I & .my_name(D) & mission(D, devant) <-
+			.print("ATTEND");
+			.send(LD, tell, attend).
+			
++!prevenirLeader(T) : ingerable(I) & leader(LD) & T >= I & .my_name(D) & mission(D, leader) <-
+			.send(LD, achieve, scinder). 
 
 //allie, civil, militaire, ... tous identifié par un ID pas des positions car ils peuvent se déplacer
 //si je suis bas et que je vois un militaire n'étant pas allié, je demande son identification
@@ -230,7 +240,7 @@ goHome.
 	
 +!rentrer : leader(_).
 	
-+!rentrer : .my_name(D) & not leader(_)
++!rentrer : not leader(_)
 	<- .send(t, tell, terminer); 
 	+goHome. 
 	

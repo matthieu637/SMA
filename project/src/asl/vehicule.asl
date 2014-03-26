@@ -16,8 +16,7 @@
 			!follow.
 
 +!to_goal : .my_name(L) & goal(GX, GY) & location(L, X, Y) & heightmap(A, B, C, D) & 
-			ia.choose_direction(Dir, X, Y, GX, GY, A, B, C, D) <-
-			.findall(DX, drone(DX), LD);
+			ia.choose_direction(Dir, X, Y, GX, GY, A, B, C, D) & not attend<-
 			deplacer(Dir);
 			!to_goal.
 	
@@ -37,4 +36,6 @@
 	
 +!follow : leader(L) & .my_name(L) <-
 			!start.
-	
+
++!scinder : true <-
+		scinder(3).

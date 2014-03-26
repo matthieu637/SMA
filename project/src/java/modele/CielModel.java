@@ -34,7 +34,7 @@ public class CielModel extends Grille {
 	private AllPercepts interpreteur;
 
 	protected CielModel(int nbAgent, AllPercepts interpreteur, List<EntiteComportement> agentsSupplementaires, Convoi convoi) {
-		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent, interpreteur);
+		super(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y, nbAgent, interpreteur, false);
 		this.agentsSupplementaires = agentsSupplementaires;
 		this.convoi = convoi;
 
