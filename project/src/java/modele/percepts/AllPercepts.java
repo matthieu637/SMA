@@ -16,10 +16,15 @@ public class AllPercepts extends InterpreteurSpl {
 	private final static String goal = "goal(%s, %s)";
 	private final static String heightmap = "heightmap(%s, %s, %s, %s)";
 	private final static String follow = "follow(%s)";
-	private final static String vehicule = "vehicule(%s, %s)";
-	private final static String militaire = "militaire(%s, %s)";
-	private final static String civil = "civil(%s, %s)";
-	private final static String allie = "allie(%s, %s)";
+	
+	//id x y time
+	private final static String vehicule = "vehicule(%s, %s, %s, %s)";
+	private final static String militaire = "militaire(%s, %s, %s, %s)";
+	private final static String civil = "civil(%s, %s, %s, %s)";
+	
+	//pour tour
+	private final static String allie = "allie(%s)";
+	
 	private final static String fuel = "fuel(%s)";
 	private final static String droneAuSol = "droneAuSol(%s)";
 	private final static String drone = "drone(%s)";
@@ -79,21 +84,16 @@ public class AllPercepts extends InterpreteurSpl {
 		retirerDroneUnif(agent, position, "_", "_", "_");
 	}
 
-	public void ajouterDroneVoitVehicule(int d, int x, int y) {
-		ajouterDrone(d, vehicule, x, y);
+	public void ajouterDroneVoitVehicule(int d, int id, int x, int y, long time) {
+		ajouterDrone(d, vehicule, id, x, y, time);
 	}
 
-	public void ajouterDroneVoitMilitaire(int d, int x, int y) {
-		ajouterDrone(d, militaire, x, y);
+	public void ajouterDroneVoitMilitaire(int d, int id, int x, int y, long time) {
+		ajouterDrone(d, militaire, id, x, y, time);
 	}
 
-	public void ajouterDroneVoitCivil(int d, int x, int y) {
-		ajouterDrone(d, civil, x, y);
-	}
-
-	public void ajouterDroneVoitAllie(int d, int x, int y) {
-		ajouterDrone(d, allie, x, y);
-
+	public void ajouterDroneVoitCivil(int d, int id, int x, int y, long time) {
+		ajouterDrone(d, civil, id, x, y, time);
 	}
 
 	public void ajouterFieldOfView(int d, int fov) {
@@ -105,9 +105,9 @@ public class AllPercepts extends InterpreteurSpl {
 	}
 
 	public void retirerVisionDrone(int d) {
-		retirerDroneUnif(d, vehicule, "_", "_");
-		retirerDroneUnif(d, militaire, "_", "_");
-		retirerDroneUnif(d, civil, "_", "_");
+		retirerDroneUnif(d, vehicule, "_", "_", "_", "_");
+		retirerDroneUnif(d, militaire, "_", "_", "_", "_");
+		retirerDroneUnif(d, civil, "_", "_", "_", "_");
 	}
 
 	public void ajouterDroneFuel(int d, int f) {
@@ -148,12 +148,12 @@ public class AllPercepts extends InterpreteurSpl {
 		retirerTour(droneAuSol, "d" + id);
 	}
 
-	public void ajouterTourAllie(int x, int y) {
-		ajouterTour(allie, x, y);
+	public void ajouterTourAllie(int id) {
+		ajouterTour(allie, id);
 	}
 
 	public void retirerTourAllies() {
-		retirerTourUnif(allie, "_", "_");
+		retirerTourUnif(allie, "_");
 	}
 
 	public void retirerLeader(int numero) {

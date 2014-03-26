@@ -3,6 +3,7 @@ package modele.entite;
 import jason.environment.grid.Location;
 import modele.CarteModel;
 import modele.Grille;
+import modele.percepts.AllPercepts;
 
 public class Ennemie extends Militaire {
 
@@ -39,6 +40,15 @@ public class Ennemie extends Militaire {
 	public double imprecision() {
 		return this.imprecision;
 	}
+	
+	/**
+	 * Je ne suis pas allie, redéfinition forcée
+	 */
+	@Override
+	public void majPercept(AllPercepts interpreteur) {
+		
+	}
+
 
 	@Override
 	public void definirBut(CarteModel carteModel) {

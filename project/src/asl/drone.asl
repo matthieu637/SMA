@@ -22,24 +22,21 @@ goHome.
 +!doMission : .my_name(D) & mission(D,M) <- !posSurveillance(M); !detecterAdversaire; !randMove(5); !goHome; !doMission.	
 +!doMission.
 
-+!detecterAdversaire : altitude(0) & militaire(POSX,POSY) &  allie(POSX,POSY).
-+!detecterAdversaire : altitude(0) & militaire(POSX,POSY) & not allie(POSX,POSY)
-	<- !suspect(POSX,POSY);
-		!detecterAdversaire.
-
-+!detecterAdversaire : altitude(1) & vehicule(POSX,POSY) 
+//allie, civil, militaire, ... tous identifié par un ID pas des positions car ils peuvent se déplacer
+//si je suis bas et que je vois un militaire n'étant pas allié, je demande son identification
++!detecterAdversaire : altitude(0) & 
+					   .findall( ID, militaire(ID, _,_,_) & not allie(ID, _ , _, _), Suspects) & 
+					   len(Suspects) > 0 <-  
+		!suspect(Suspects).
+		
+//si je suis haut et que je vois un vehicule que je n'ai pas déjà vu, je change d'altitude et l'identifie
++!detecterAdversaire : altitude(1) & vehicule(ID, _,_,_) & not civil(ID, _,_ ,_) & not militaire(ID, _,_ ,_)
 	<- changerAltitude;
 	!detecterAdversaire.
-	
-+!detecterAdversaire : altitude(0) & civil(POSX,POSY)
-	<- changerAltitude.
-+!detecterAdversaire : altitude(0) 
-	<- changerAltitude.
-	
-+!detecterAdversaire : altitude(1).
 
--!detecterAdversaire : true
-	<- !detecterAdversaire.
+//sinon ok
++!detecterAdversaire.
+
 
 +!informerAllouer : .my_name(D)<-
 		.findall(X,drone(X) & X \== D, L); 
@@ -127,7 +124,10 @@ goHome.
 
 /* */
 
-+!suspect(POSX, POSY) : true <- .send(t, achieve, identification(POSX, POSY)).
++!suspect([]).
++!suspect([S|Suspects]) : true <- 
+	.send(t, achieve, identification(S));
+	!suspect(Suspects).
 
 +!tirer(POSX, POSY) : true <- tirerAdversaire(POSX, POSY).
 

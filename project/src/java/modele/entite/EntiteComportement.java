@@ -6,6 +6,13 @@ import modele.percepts.AllPercepts;
 
 public abstract class EntiteComportement extends EntiteDeplacable {
 
+	private static int id_compteur = 0;
+
+	/**
+	 * Identifie de maniere unique chaque entite
+	 */
+	private int id = id_compteur++;
+
 	public EntiteComportement(Location l, Comportement c, int code) {
 		super(l, c, code);
 	}
@@ -17,11 +24,14 @@ public abstract class EntiteComportement extends EntiteDeplacable {
 	public abstract void majPercept(AllPercepts interpreteur);
 
 	protected abstract void _agir(CarteModel carteModel);
-	
+
 	public void agir(CarteModel carteModel) {
 		_agir(carteModel);
 		if (c == Comportement.But && but != null && getLocation().equals(but))
 			carteModel.detruireAgentSupplementaire(this);
 	}
 
+	public int getID() {
+		return id;
+	}
 }

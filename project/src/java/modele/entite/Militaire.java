@@ -32,7 +32,7 @@ public class Militaire extends EntiteComportement {
 
 	@Override
 	public void majPercept(AllPercepts interpreteur) {
-		interpreteur.ajouterTourAllie(getLocation().x, getLocation().y);
+		interpreteur.ajouterTourAllie(getID());
 	}
 
 	@Override

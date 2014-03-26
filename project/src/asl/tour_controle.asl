@@ -16,5 +16,5 @@
 +droneAuSol(X) : true <- remplirFuel(X);
 				.send(X, achieve, decoller).
 				
-+!identification(POSX, POSY)[source(X)] : allie(POSX, POSY) <- .send(X, tell, allie(POSX, POSY)).
-+!identification(POSX, POSY)[source(X)] : not allie(POSX, POSY) <- .send(X, achieve, tirer(POSX, POSY)).
++!identification(ID)[source(X)] : allie(ID) <- .send(X, tell, allie(ID)).
++!identification(ID)[source(X)] : not allie(ID) <- .send(X, achieve, tirer(ID)).

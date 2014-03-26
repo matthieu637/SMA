@@ -2,9 +2,13 @@ package modele.entite;
 
 import jason.environment.grid.Location;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import modele.percepts.AllPercepts;
+
 import java.util.Random;
 
 public class Drone {
@@ -19,6 +23,11 @@ public class Drone {
 	private Location l;
 	private Random generateur;
 
+	/**
+	 * Les civils et militaire que j'ai déjà perçu dans le passé
+	 */
+	private Map<Integer, EntitePercu> entites;
+
 	public Drone(int id, boolean haute_altitude, Location l, int maxFuel, int champ_vision_basse_altitude, int champ_vision_haute_altitude) {
 		this.setId(id);
 		this.setPos(l);
@@ -28,6 +37,7 @@ public class Drone {
 		this.auSol = true;
 		this.champ_vision_basse_altitude = champ_vision_basse_altitude;
 		this.champ_vision_haute_altitude = champ_vision_haute_altitude;
+		entites = new HashMap<>();
 	}
 
 	public boolean isHaute_altitude() {
@@ -147,34 +157,115 @@ public class Drone {
 		// position
 		interpreteur.retirerPositionDrone(id);
 		interpreteur.ajouterPositionDrone(id, id, this.l.x, this.l.y);
-		
+
 		// leader
 		interpreteur.retirerLeaderDrone(id);
-		for(Vehicule v : c.getLeaders())
+		for (Vehicule v : c.getLeaders())
 			interpreteur.ajouterLeaderDrone(id, v.getNumero());
 
 		// vision
-		interpreteur.retirerVisionDrone(id);
+		// interpreteur.retirerVisionDrone(id); //ne pas retirer la mémoire
 
-		if (this.isHaute_altitude()) {
-			for (EntiteComportement a : agentsSupplementaires) {
-				Location la = a.getLocation();
-				if (this.l.distanceEuclidean(la) < this.champ_vision_haute_altitude)
-					interpreteur.ajouterDroneVoitVehicule(id, la.x, la.y);
-			}
-		} else {
-			for (EntiteComportement a : agentsSupplementaires) {
-				Location la = a.getLocation();
-				if (this.l.distanceEuclidean(la) < this.champ_vision_haute_altitude)
-					//TODO:check if it really works 
-					if (a instanceof Militaire)
-						interpreteur.ajouterDroneVoitMilitaire(id, la.x, la.y);
-					else if (a instanceof Civil)
-						interpreteur.ajouterDroneVoitCivil(id, la.x, la.y);
-			}
+		for (EntiteComportement a : agentsSupplementaires) {
+			Location la = a.getLocation();
+			EntitePercu ep = new EntitePercu(a);
+			EntitePercu actuelConnaissance = entites.get(ep.getId());
 
+			if (this.isHaute_altitude()) {
+				if (this.l.distanceEuclidean(la) < this.champ_vision_haute_altitude) {
+					// si je ne l'ai jamais vu
+					// ou que je l'ai vu, mais pas encore identifié et qu'il a
+					// bougé
+					if (actuelConnaissance == null || (!actuelConnaissance.isIdentifie() && !ep.positionEgale(actuelConnaissance))) {
+						interpreteur.ajouterDroneVoitVehicule(id, a.getID(), la.x, la.y, System.currentTimeMillis());
+						entites.put(ep.getId(), ep);
+					}
+				}
+			} else {// basse altitude
+				if (this.l.distanceEuclidean(la) < this.champ_vision_basse_altitude) {
+					// si je ne l'ai jamais vu
+					// ou qu'il a bougé
+					if (actuelConnaissance == null || !ep.positionEgale(actuelConnaissance))
+						if (a instanceof Militaire) {
+							interpreteur.ajouterDroneVoitMilitaire(id, a.getID(), la.x, la.y, System.currentTimeMillis());
+							ep.setIdentifie(true);
+							entites.put(ep.getId(), ep);
+						} else if (a instanceof Civil) {
+							interpreteur.ajouterDroneVoitCivil(id, a.getID(), la.x, la.y, System.currentTimeMillis());
+							ep.setIdentifie(true);
+							entites.put(ep.getId(), ep);
+						}
+				}
+			}
 		}
+	}
 
+}
+
+class EntitePercu {
+	private int id, x, y;
+	private long temps;
+	private boolean identifie;
+
+	public EntitePercu(EntiteComportement e) {
+		this.x = e.getLocation().x;
+		this.y = e.getLocation().y;
+		this.id = e.getID();
+		this.temps = System.currentTimeMillis();
+		this.identifie = false;
+	}
+
+	public EntitePercu(int id, int x, int y, long temps, boolean identifie) {
+		super();
+		this.id = id;
+		this.x = x;
+		this.y = y;
+		this.temps = temps;
+		this.identifie = identifie;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public long getTemps() {
+		return temps;
+	}
+
+	public void setTemps(long temps) {
+		this.temps = temps;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public boolean isIdentifie() {
+		return identifie;
+	}
+
+	public void setIdentifie(boolean identifie) {
+		this.identifie = identifie;
+	}
+
+	public boolean positionEgale(EntitePercu e) {
+		return e.x == x && e.y == y;
 	}
 
 }
