@@ -92,6 +92,14 @@ public class GridWorldViewPanel extends JPanel {
 		int height = metrics.getHeight();
 		g.drawString(s, x * cellSizeW + (cellSizeW / 2 - width / 2), y * cellSizeH + (cellSizeH / 2 + height / 2));
 	}
+	
+	public void drawStringOffset(Graphics g, int x, int y, Font f, String s) {
+		g.setFont(f);
+		FontMetrics metrics = g.getFontMetrics();
+		int width = metrics.stringWidth(s);
+		int height = metrics.getHeight();
+		g.drawString(s, x * cellSizeW + (cellSizeW / 2 - width / 2) - 1, y * cellSizeH + (cellSizeH / 2 + height / 2) - 2);
+	}
 
 	public void drawEmpty(Graphics g, int x, int y) {
 		g.setColor(Color.white);

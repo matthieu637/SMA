@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import modele.Grille;
 import modele.TerrainModel;
 import ext.GridWorldModelP;
 import ext.GridWorldViewPanel;
@@ -48,15 +49,26 @@ public class TerrainView extends GridWorldViewPanel{
 		} else {
 			g.setColor(Color.black);
 		}
-
+		
 		g.fillRect(x * cellSizeW + 1, y * cellSizeH + 1, cellSizeW - 1, cellSizeH - 1);
 		g.setColor(c);
+		
+		if(x < 3 && y == 0){
+			g.setColor(Color.white);
+			super.drawStringOffset(g, x, y, defaultFont, "P");
+			g.setColor(c);
+		}
 	}
 
 	@Override
 	public void draw(Graphics g, int x, int y, int object) {
 		Color c = g.getColor();
-		g.setColor(Color.red);
+		if((object & Grille.ADVERSAIRE_CODE) != 0)
+			g.setColor(Color.red);
+		else if((object & Grille.ALLIE_CODE) != 0)
+			g.setColor(Color.green);
+		else if((object & Grille.CIVIL_CODE) != 0)
+			g.setColor(Color.PINK);
 		g.fillOval(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
 		g.setColor(c);
 	}

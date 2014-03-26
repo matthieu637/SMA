@@ -22,7 +22,7 @@ goHome.
 
 /* Mission */
 	
-+!doMission : .my_name(D) & mission(D,M) <- !posSurveillance(M); !detecterAdversaire; !randMove(5); !goHome; !doMission.	
++!doMission : .my_name(D) & mission(D,M) <- !posSurveillance(M); !detecterAdversaire; !goHome; !doMission.	
 +!doMission.
 
 //allie, civil, militaire, ... tous identifié par un ID pas des positions car ils peuvent se déplacer
