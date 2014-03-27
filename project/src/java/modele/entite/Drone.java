@@ -143,6 +143,10 @@ public class Drone {
 
 	public void majPercepts(AllPercepts interpreteur, List<EntiteComportement> agentsSupplementaires, Convoi c) {
 
+		// Time
+		interpreteur.retirerDroneTime(id);
+		interpreteur.ajouterDroneTime(id, System.currentTimeMillis());
+		
 		// altitude
 		interpreteur.retirerAltitude(id);
 		interpreteur.ajouterAltitude(id, this.getAltitude());

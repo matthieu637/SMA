@@ -102,6 +102,7 @@ public class Convoi {
 			if (devant != null)
 				devant.setFollower(null);
 			nouveau_leader.setLeader();
+			nouveau_leader.setBut(but);
 
 			if (devant != null)
 				devant.majPercept(interpreteur, hauteur);
