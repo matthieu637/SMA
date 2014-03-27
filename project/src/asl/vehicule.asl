@@ -35,8 +35,6 @@ failLimit(2).
 			.abolish(attend(_));
 			!to_goal.
 	
-
-	
 -!to_goal : fail(N) & N2 = N + 1 <-
 			.wait(5);
 			-+fail(N2) ;

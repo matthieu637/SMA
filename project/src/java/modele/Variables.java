@@ -77,7 +77,7 @@ public class Variables {
 
 	public static final float DIRECTION_IMPORTANCE_HAUTEUR = 0.045f;
 	
-	public static final float DIRECTION_IMPORTANCE_VARIATION = 0.015f;
+	public static final float DIRECTION_IMPORTANCE_VARIATION = 0.01f;
 	
 	/**
 	 * Valeur de hauteur en dehors de la carte (utile smooth)
