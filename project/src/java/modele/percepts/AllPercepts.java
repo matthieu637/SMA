@@ -20,8 +20,8 @@ public class AllPercepts extends InterpreteurSpl {
 
 	// id x y time
 	private final static String vehicule = "vehicule(%s, %s, %s, %s)";
-	private final static String militaire = "militaire(%s, %s, %s, %s)";
-	private final static String civil = "civil(%s, %s, %s, %s)";
+	private final static String militaire = "militaire(%s)";
+	private final static String civil = "civil(%s)";
 
 	// pour tour
 	private final static String allie = "allie(%s)";
@@ -89,12 +89,12 @@ public class AllPercepts extends InterpreteurSpl {
 		ajouterDrone(d, vehicule, id, x, y, time);
 	}
 
-	public void ajouterDroneVoitMilitaire(int d, int id, int x, int y, long time) {
-		ajouterDrone(d, militaire, id, x, y, time);
+	public void ajouterDroneVoitMilitaire(int d, int id) {
+		ajouterDrone(d, militaire, id);
 	}
 
-	public void ajouterDroneVoitCivil(int d, int id, int x, int y, long time) {
-		ajouterDrone(d, civil, id, x, y, time);
+	public void ajouterDroneVoitCivil(int d, int id) {
+		ajouterDrone(d, civil, id);
 	}
 
 	public void ajouterFieldOfView(int d, int fov) {
