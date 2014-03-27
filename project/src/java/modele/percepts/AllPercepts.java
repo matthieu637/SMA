@@ -117,16 +117,14 @@ public class AllPercepts extends InterpreteurSpl {
 		ajouterDrone(d, fuel, f);
 	}
 
-
 	public void ajouterDroneTime(int d, long currentTimeMillis) {
-		ajouterDrone(d, time, currentTimeMillis);		
+		ajouterDrone(d, time, currentTimeMillis);
 	}
-	
 
 	public void retirerDroneTime(int d) {
 		retirerDroneUnif(d, time, "_");
 	}
-	
+
 	public void ajouterAltitude(int d, int f) {
 		ajouterDrone(d, altitude, f);
 	}
@@ -183,16 +181,15 @@ public class AllPercepts extends InterpreteurSpl {
 
 	public void ajouterLeaderDrone(int id, int numero) {
 		ajouterDrone(id, leader, "v" + numero);
-	}	
+	}
 
 	public void ajouterLeaderTour(int numero) {
 		ajouterTour(leader, "v" + numero);
 	}
-	
+
 	public void retirerLeaderTour(int numero) {
 		retirerTour(leader, "v" + numero);
 	}
-
 
 	public void ajouterVehicule(int i, int j) {
 		ajouterVehicule(i, convoi, "v" + j);
@@ -202,5 +199,8 @@ public class AllPercepts extends InterpreteurSpl {
 		ajouterVehicule(id, comportement, d);
 	}
 
+	public void retirerMort(int leader) {
+		retirerVehiculeUnif(leader, dead, "_");
+	}
 
 }

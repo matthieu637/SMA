@@ -1,6 +1,9 @@
 package modele.entite;
 
 import jason.environment.grid.Location;
+
+import java.util.List;
+
 import modele.Act;
 import modele.Grille;
 import modele.TimeLimit;
@@ -69,7 +72,7 @@ public class Vehicule extends EntiteLocalisable implements Comparable<Integer> {
 		return false;
 	}
 
-	public void majPercept(AllPercepts interpreteur, int[][] hauteur) {
+	public void majPercept(AllPercepts interpreteur, int[][] hauteur, List<Vehicule> morts) {
 		interpreteur.retirerPositionVehicule(numero, numero);
 		interpreteur.ajouterPositionVehicule(numero, numero, l.x, l.y);
 
@@ -89,6 +92,10 @@ public class Vehicule extends EntiteLocalisable implements Comparable<Integer> {
 			interpreteur.ajouterHeightmap(numero, l.x - 1 >= 0 ? hauteur[l.x - 1][l.y] : OUT, l.y - 1 >= 0 ? hauteur[l.x][l.y - 1] : OUT,
 					l.x + 1 < Variables.TAILLE_CARTE_X ? hauteur[l.x + 1][l.y] : OUT,
 					l.y + 1 < Variables.TAILLE_CARTE_Y ? hauteur[l.x][l.y + 1] : OUT);
+			
+			interpreteur.retirerMort(getNumero());
+			for (Vehicule mort : morts)
+				interpreteur.ajouterMort(getNumero(), mort.getNumero());
 		}
 		
 		if(but != null){

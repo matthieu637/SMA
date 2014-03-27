@@ -14,6 +14,8 @@ public class Convoi {
 
 	private List<Vehicule> file;
 
+	private List<Vehicule> morts;
+
 	/**
 	 * Pointeurs uniquement pour ne pas avoir à le mettre dans chaque paramètre
 	 * de méthode
@@ -25,18 +27,18 @@ public class Convoi {
 	private Random generateur = new Random();
 
 	public Convoi(int nbAgent, Location location, AllPercepts interpreteur, Location but, int[][] hauteur) {
-
+		morts = new LinkedList<>();
 		file = new LinkedList<Vehicule>();
 		int a = 1;
 		for (; a < nbAgent; a++) {
 			Vehicule v = new Vehicule(a, new Location(a - 1, 0), false, a == 1 ? null : file.get(a - 2));
-			v.majPercept(interpreteur, hauteur);
+			v.majPercept(interpreteur, hauteur, morts);
 			file.add(v);
 		}
 
 		Vehicule leader = new Vehicule(nbAgent, location, true, file.get(file.size() - 1));
 		leader.setBut(but);
-		leader.majPercept(interpreteur, hauteur);
+		leader.majPercept(interpreteur, hauteur, morts);
 		file.add(leader);
 
 		for (Vehicule v : file)
@@ -52,7 +54,7 @@ public class Convoi {
 		Vehicule v = getVehicule(agent);
 
 		v.deplacer(l);
-		v.majPercept(interpreteur, hauteur);
+		v.majPercept(interpreteur, hauteur, morts);
 	}
 
 	public Vehicule getVehicule(int agent) {
@@ -82,19 +84,21 @@ public class Convoi {
 
 		if (mort.getFollower() != null && devant != null) {
 			devant.setFollower(mort.getFollower());
-			devant.majPercept(interpreteur, hauteur);
+			devant.majPercept(interpreteur, hauteur, morts);
 		}
 
 		if (mort.estLeader() && mort.getFollower() != null) {
 			Vehicule nouveau_leader = mort.getFollower();
 			nouveau_leader.setLeader();
 			nouveau_leader.setBut(but);
-			nouveau_leader.majPercept(interpreteur, hauteur);
+			nouveau_leader.majPercept(interpreteur, hauteur, morts);
 		}
 
-		if (killed)
+		if (killed) {
+			morts.add(mort);
 			for (Vehicule leader : getLeaders())
-				interpreteur.ajouterMort(leader.getNumero(), mort.getNumero());
+				leader.majPercept(interpreteur, hauteur, morts);
+		}
 
 		synchronized (lock) {
 			file.remove(mort);
@@ -112,8 +116,8 @@ public class Convoi {
 			nouveau_leader.setBut(but);
 
 			if (devant != null)
-				devant.majPercept(interpreteur, hauteur);
-			nouveau_leader.majPercept(interpreteur, hauteur);
+				devant.majPercept(interpreteur, hauteur, morts);
+			nouveau_leader.majPercept(interpreteur, hauteur, morts);
 			return true;
 		}
 	}
