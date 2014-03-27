@@ -29,9 +29,9 @@ goHome.
 
 /* Initial goals */
 /* Plans */
-
 	
-+!doMission : .my_name(D) & mission(D,M,L) & leader(L)<- 
+
++!doMission : .my_name(D) & mission(D,M,L) &  leader(L)<- 
 			!posSurveillance; 
 			!detecterAdversaire; 
 			!verifierMenace;
@@ -41,6 +41,12 @@ goHome.
 			!doMission.	
 
 
+
++!doMission : .my_name(D) & mission(D,M,L) &  not leader(L)
+	<- !informerAllouer;
+		!choisirMission;
+		!doMission.
+
 +!decoller : .my_name(X) & location(X, POSX, POSY) <- 
 			+positionInitiale(POSX, POSY);
 			decoller;
@@ -48,6 +54,7 @@ goHome.
 			-goHome;
 			!choisirMission; 
 			!doMission.		
+
 
 /* Mission */
 
