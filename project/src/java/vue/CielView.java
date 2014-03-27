@@ -47,7 +47,7 @@ public class CielView extends GridWorldViewPanel {
 
 		int color = getModele().getZone(x, y);
 		if (color > 0) {
-			float alpha = 0.05f;
+			float alpha = 0.10f;
 			int type = AlphaComposite.SRC_OVER;
 			AlphaComposite composite = AlphaComposite.getInstance(type, alpha);
 			Graphics2D g2d = (Graphics2D) g;

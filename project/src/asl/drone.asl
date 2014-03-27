@@ -128,8 +128,13 @@ goHome.
 					.length(ListeMenace) > 0 & .min(ListeMenace, pos(D, ID)) <-
 					 !prevenirLeader(.length(ListeMenace));
 					 !tirer(ID).
-					 				
-+!verifierMenace.				
+					 	
+//si pas de menace et pas de suspect, je remonte			
++!verifierMenace : .findall( ID, militaire(ID) & not allie(ID) & not dead(ID), Suspects) & 
+					   .length(Suspects) == 0 & altitude(0)<-
+					changerAltitude.
+
++!verifierMenace.
 
 +!prevenirLeader(T) :  ingerable_milieu(I) & T < I & .my_name(D) & mission(D, leader, L).
 +!prevenirLeader(T) :  ingerable_devant(I) & T < I & .my_name(D) & mission(D, devant, L).
@@ -149,12 +154,12 @@ goHome.
 //allie, civil, militaire, ... tous identifié par un ID pas des positions car ils peuvent se déplacer
 //si je suis bas et que je vois un  n'étant pas allié, je demande son identification
 +!detecterAdversaire : altitude(0) & 
-					   .findall( ID, militaire(ID) & not allie(ID), Suspects) & 
+					   .findall( ID, militaire(ID) & not allie(ID) & not dead(ID), Suspects) & 
 					   .length(Suspects) > 0 <-  
 			!suspect(Suspects).
 		
 //si je suis haut et que je vois un vehicule que je n'ai pas déjà vu, je change d'altitude et l'identifie
-+!detecterAdversaire : altitude(1) & .findall( pos(T, POSX, POSY), vehicule(ID, POSX, POSY, T)  & not civil(ID) & not militaire(ID) , ListePosition)  
++!detecterAdversaire : altitude(1) & .findall( pos(T, POSX, POSY), vehicule(ID, POSX, POSY, T)[source(percept)]  & not civil(ID) & not militaire(ID) , ListePosition)  
 			& .length(ListePosition) > 0 & .max(ListePosition, pos(T, POSX, POSY)) <- 
 			changerAltitude;
 			!goto(POSX, POSY);
@@ -235,14 +240,17 @@ goHome.
 			.send(t, achieve, identification(S));
 			!suspect(Suspects).
 
-+allie(_) : altitude(0) <-
-			 changerAltitude.
+//-------------------------------------------------
+//-------------- Partage d'information ------------
+//-------------------------------------------------
+
++allie(ID)[source(t)] : .my_name(N) <-
+ 			.findall(X,drone(X) & X \== N, L); 
+			.send(L, tell, allie(ID)).
 			 
-+civil(_) : altitude(0) <-
-			 changerAltitude.
-			 
-+dead(_) :  altitude(0) <-
-			 changerAltitude.
++civil(ID)[source(percept)] : .my_name(N) <-
+ 			.findall(X,drone(X) & X \== N, L); 
+			.send(L, tell, civil(ID)).
 
 //si la tour me préviens du type d'un ennemi j'en informe mes collègues
 +ennemi(ID)[source(t)] : .my_name(N) <- 
@@ -252,10 +260,7 @@ goHome.
 +militaire(ID)[source(percept)] : .my_name(N) <-
 			.findall(X,drone(X) & X \== N, L); 
 			.send(L, tell, militaire(ID)).
-			
-+civil(ID)[source(percept)] : .my_name(N) <-
-			.findall(X,drone(X) & X \== N, L); 
-			.send(L, tell, civil(ID)).
+
 			
 +vehicule(ID, POSX, POSY, T)[source(percept)] : .my_name(N) <-
 			.findall(X,drone(X) & X \== N, L);
