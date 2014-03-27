@@ -149,7 +149,7 @@ goHome.
 			.print("ATTEND");
 			.send(L, tell, attend(T)).
 			
-+!prevenirLeader(T) : ingerable_milieu(I) & leader(LD) & T >= I & .my_name(D) & mission(D, leader, L) <-
++!prevenirLeader(T) : ingerable_milieu(I) & leader(L) & T >= I & .my_name(D) & mission(D, leader, L) <-
 			.send(L, tell, probleme). 
 
 +!prevenirLeader(T).
@@ -306,7 +306,7 @@ goHome.
 +!tirer(ID) : dead(ID).
 		
 -!tirer(ID) : not dead(ID) & .findall( pos(T, POSX, POSY), vehicule(ID, POSX, POSY, T) & militaire(ID), ListePosition) & 
-					.max(ListePosition, pos(T, X, Y)) & time(TNOW) & T >= TNOW - 2000 
+					.max(ListePosition, pos(T, X, Y)) & time(TNOW) & T >= TNOW - 500 
 		<- .print("je retire", TNOW-T);
 			!tirer(ID).
 		
