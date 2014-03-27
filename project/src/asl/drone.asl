@@ -29,6 +29,14 @@ goHome.
 
 /* Initial goals */
 /* Plans */
+
++!decoller : .my_name(X) & location(X, POSX, POSY) <- 
+			+positionInitiale(POSX, POSY);
+			decoller;
+			.print("I am flying");
+			-goHome;
+			!choisirMission; 
+			!doMission.	
 	
 
 +!doMission : .my_name(D) & mission(D,M,L) &  leader(L)<- 
@@ -40,26 +48,20 @@ goHome.
 			!changeMission;
 			!doMission.	
 
-//si plus aucun leader, je rentre
-+!doMission : .my_name(D) & mission(D,M,L) &  not leader(_) <-
-			+goHome;
-			!goHome.
 
-//si plus aucun leader et je suis à home : fin
-+!doMission : .my_name(D) & not leader(_) & positionInitiale(IX, IY) & location(D, IX, IY).
-
-+!doMission : .my_name(D) & mission(D,M,L) &  not leader(L)
+//si le leader que je surveillais n'existe plus ou si je n'ai pas de mission, je change de mission
++!doMission : .my_name(D) & ((mission(D,M,L) &  not leader(L)) | not mission(D,_,_)) & leader(_)
 	<- !informerAllouer;
 		!choisirMission;
 		!doMission.
 
-+!decoller : .my_name(X) & location(X, POSX, POSY) <- 
-			+positionInitiale(POSX, POSY);
-			decoller;
-			.print("I am flying");
-			-goHome;
-			!choisirMission; 
-			!doMission.	
+//si plus aucun leader, je rentre
++!doMission : not leader(_) <-
+			.send(t, tell, terminer); 
+			+goHome;
+			!goHome.
+
+
 
 
 /* Mission */
@@ -243,7 +245,7 @@ goHome.
 			!posSurveillance.
 
 
-/* */
+/* Demande identification */
 
 +!suspect([]).
 +!suspect([S|Suspects]) : true <- 
@@ -310,21 +312,5 @@ goHome.
 		<- .print("je retire", TNOW-T);
 			!tirer(ID).
 		
--!tirer(ID) : not dead(ID).
-
-
-
-
-
-/* Fin : on rentre */
-
--leader(_) : true
-	<- !rentrer.
-	
-+!rentrer : leader(_).
-	
-+!rentrer : not leader(_)
-	<- .send(t, tell, terminer); 
-	+goHome. 
-	
+-!tirer(ID).
 
