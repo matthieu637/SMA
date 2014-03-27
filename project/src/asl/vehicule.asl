@@ -21,6 +21,7 @@
 			
 +!to_goal : attend <-
 			.wait(250);
+			.abolish(attend);
 			!to_goal.
 	
 

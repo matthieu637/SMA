@@ -103,20 +103,21 @@ goHome.
 					 !prevenirLeader(.length(ListeMenace));
 					 !tirer(ID).
 					 
-+!verifierMenace : leader(L) & .my_name(D) & mission(D, devant)  <-
-				.send(L, untell, attend).
+//+!verifierMenace : .my_name(D) & mission(D, devant, L)  <-
+//				.send(L, untell, attend).
 				
 +!verifierMenace.				
 
-+!prevenirLeader(T) :  ingerable_milieu(I) & T < I & .my_name(D) & mission(D, leader).
-+!prevenirLeader(T) :  ingerable_devant(I) & T < I & .my_name(D) & mission(D, devant).
++!prevenirLeader(T) :  ingerable_milieu(I) & T < I & .my_name(D) & mission(D, leader, L).
++!prevenirLeader(T) :  ingerable_devant(I) & T < I & .my_name(D) & mission(D, devant, L).
 
-+!prevenirLeader(T) : ingerable_devant(I) & leader(LD) & T >= I & .my_name(D) & mission(D, devant) <-
++!prevenirLeader(T) : ingerable_devant(I) & T >= I & .my_name(D) & mission(D, devant, LD) <-
 			.print("ATTEND");
 			.send(LD, tell, attend).
 			
-+!prevenirLeader(T) : ingerable_milieu(I) & leader(LD) & T >= I & .my_name(D) & mission(D, leader) <-
++!prevenirLeader(T) : ingerable_milieu(I) & leader(LD) & T >= I & .my_name(D) & mission(D, leader, L) <-
 			.send(LD, tell, probleme). 
+
 			
 //si le leader est mort entre temps, préviens le nouveau
 -!prevenirLeader(T) : true <-
@@ -176,6 +177,10 @@ goHome.
 		
 +!goto(GX, GY) : not enoughFuel(GX,GY) <- 
 			+goHome.
+
++!goto(GX, GY) : not mission(GX,GY) <- 
+			+goHome.
+
 	
 -!goto(GX,GY) : true <- 
 			!randMove(2); 
@@ -237,7 +242,8 @@ goHome.
 /* Tirer */			 
 			 
 +!tirer(ID) :  not dead(ID) & dernierePositionM(ID, POSX, POSY) & porte(P) & .my_name(N) & 
-					location(N, MYX, MYY) & distanceInf(MYX, MYY, POSX, POSY, P) & altitude(0)
+			.findall(X,drone(X) & X \== N, L) &
+			location(N, MYX, MYY) & distanceInf(MYX, MYY, POSX, POSY, P) & altitude(0)
 					 <-
 			tirer(POSX, POSY);
 			+dead(ID);
@@ -245,6 +251,7 @@ goHome.
 			.print("tirer1").
 			
 +!tirer(ID) : not dead(ID) & dernierePositionM(ID, POSX, POSY) & .my_name(N) & 
+			.findall(X,drone(X) & X \== N, L) &
 					location(N, MYX, MYY) & distanceInf(MYX, MYY, POSX, POSY, P) & altitude(1)
 					 <-
 			changerAltitude;

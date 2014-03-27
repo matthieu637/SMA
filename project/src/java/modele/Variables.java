@@ -81,7 +81,7 @@ public class Variables {
 	public static final int HAUTEUR_HORS_CARTE = 150;
 	
 	
-	public static int TAILLE_GRILLE = 600;
+	public static int TAILLE_GRILLE;
 
 	public static final float PROBA_DEPLACEMENT_ALEATOIRE = 0.01f;
 	
@@ -98,9 +98,10 @@ public class Variables {
 	private Variables() {
 		GraphicsEnvironment graphicsEnvironment=GraphicsEnvironment.getLocalGraphicsEnvironment();
 		Rectangle maximumWindowBounds=graphicsEnvironment.getMaximumWindowBounds();
-		
+		//System.out.println(maximumWindowBounds.getHeight());
 		if(maximumWindowBounds.getHeight() < 800)
-			TAILLE_GRILLE = 450;
+			TAILLE_GRILLE = 500;
+		else TAILLE_GRILLE = 600;
 		
 		synchronized (lock) {
 			vitesse = 500;
