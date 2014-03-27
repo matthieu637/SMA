@@ -52,8 +52,12 @@ public abstract class EntiteDeplacable extends EntiteLocalisable {
 		return c;
 	}
 
+	public boolean canAct() {
+		return bouger.canAct();
+	}
+	
 	public boolean seDeplace() {
-		return  bouger.canAct() && (c == Comportement.But || c == Comportement.DeplaceAleatoire);
+		return (c == Comportement.But || c == Comportement.DeplaceAleatoire);
 	}
 
 	public void deplacer(TerrainModel terrain) {

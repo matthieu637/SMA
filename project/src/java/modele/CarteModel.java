@@ -259,18 +259,21 @@ public class CarteModel {
 			List<EntiteComportement> mort = new LinkedList<>();
 
 			for (EntiteComportement e : agentsSupplementaires) {
-				e.definirBut(this);
-				if (e.seDeplace()) {
-					for (Grille g : lesGrilles)
-						g.remove(e.getCode(), e.getLocation());
+				if (e.canAct()) {
+					e.definirBut(this);
+					if (e.seDeplace()) {
+						for (Grille g : lesGrilles)
+							g.remove(e.getCode(), e.getLocation());
 
-					e.deplacer(terrain);
+						e.deplacer(terrain);
 
-					for (Grille g : lesGrilles)
-						g.add(e.getCode(), e.getLocation());
+						for (Grille g : lesGrilles)
+							g.add(e.getCode(), e.getLocation());
+					}
+					if (e.agir(this))
+						mort.add(e);
 				}
-				if (e.agir(this))
-					mort.add(e);
+
 			}
 
 			for (EntiteComportement m : mort)
