@@ -24,9 +24,9 @@ public class CielView extends GridWorldViewPanel {
 	private static final long serialVersionUID = 1L;
 	private static final Color azurin = new Color(169, 234, 254);
 
-	private static final Color lawn_green = new Color(124, 252, 0);
+	public static final Color lawn_green = new Color(124, 252, 0);
 
-	private static final Color dark_green = new Color(0, 100, 0);
+	public static final Color dark_green = new Color(0, 100, 0);
 
 	public CielView(GridWorldModelP model, int windowSize,  final FenetrePpale ppale) {
 		super(model, windowSize);
@@ -91,7 +91,7 @@ public class CielView extends GridWorldViewPanel {
 		if ((object & Grille.ADVERSAIRE_CODE) != 0)
 			g.setColor(Color.red);
 		else if ((object & Grille.ALLIE_CODE) != 0)
-			g.setColor(Color.green);
+			g.setColor(Color.MAGENTA);
 		else if ((object & Grille.CIVIL_CODE) != 0)
 			g.setColor(Color.PINK);
 		g.fillOval(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);

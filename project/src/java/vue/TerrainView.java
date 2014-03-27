@@ -66,7 +66,7 @@ public class TerrainView extends GridWorldViewPanel{
 		if((object & Grille.ADVERSAIRE_CODE) != 0)
 			g.setColor(Color.red);
 		else if((object & Grille.ALLIE_CODE) != 0)
-			g.setColor(Color.green);
+			g.setColor(Color.MAGENTA);
 		else if((object & Grille.CIVIL_CODE) != 0)
 			g.setColor(Color.PINK);
 		g.fillOval(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);

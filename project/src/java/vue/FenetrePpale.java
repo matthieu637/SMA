@@ -2,6 +2,7 @@ package vue;
 
 import jason.environment.grid.Location;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 
@@ -117,6 +118,86 @@ public class FenetrePpale extends JFrame {
 		comportements.add(aleatoire);
 		comportements.add(but);
 		comportements.setSelected(aleatoire.getModel(), true);
+		
+		JLabel convoi = new JLabel("");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20, Variables.TAILLE_GRILLE + 20 + 20 + 5, 8, 8);
+		convoi.setBackground(Color.BLUE);
+		convoi.setOpaque(true);
+		c.add(convoi);
+		
+		convoi = new JLabel("convoi");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20 + 12, Variables.TAILLE_GRILLE + 20 + 20, 65, 16);
+		c.add(convoi);
+		
+		convoi = new JLabel("");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20 + 65, Variables.TAILLE_GRILLE + 20 + 20 + 5, 8, 8);
+		convoi.setBackground(CielView.lawn_green);
+		convoi.setOpaque(true);
+		c.add(convoi);
+		
+		convoi = new JLabel("drone basse altitude");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20 + 12 + 65, Variables.TAILLE_GRILLE + 20 + 20, 155, 16);
+		c.add(convoi);
+		
+		convoi = new JLabel("");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20 + 65 + 155 + 15, Variables.TAILLE_GRILLE + 20 + 20 + 5, 8, 8);
+		convoi.setBackground(CielView.dark_green);
+		convoi.setOpaque(true);
+		c.add(convoi);
+		
+		convoi = new JLabel("drone haute altitude");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20 + 12 + 65 + 155 + 15, Variables.TAILLE_GRILLE + 20 + 20, 155, 16);
+		c.add(convoi);
+		
+		convoi = new JLabel("");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20, Variables.TAILLE_GRILLE + 20 + 20 + 5 + 20, 8, 8);
+		convoi.setBackground(Color.red);
+		convoi.setOpaque(true);
+		c.add(convoi);
+		
+		convoi = new JLabel("militaire ennemi");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20 + 12, Variables.TAILLE_GRILLE + 20 + 20 + 20, 140, 16);
+		c.add(convoi);
+		
+		convoi = new JLabel("");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20 + 140, Variables.TAILLE_GRILLE + 20 + 20 + 5 + 20, 8, 8);
+		convoi.setBackground(Color.PINK);
+		convoi.setOpaque(true);
+		c.add(convoi);
+		
+		convoi = new JLabel("civil");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20 + 12 + 140, Variables.TAILLE_GRILLE + 20 + 20 + 20, 55, 16);
+		c.add(convoi);
+		
+		convoi = new JLabel("");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20 + 140 + 55, Variables.TAILLE_GRILLE + 20 + 20 + 5 + 20, 8, 8);
+		convoi.setBackground(Color.MAGENTA);
+		convoi.setOpaque(true);
+		c.add(convoi);
+		
+		convoi = new JLabel("militaire allié");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20 + 12 + 140 + 55, Variables.TAILLE_GRILLE + 20 + 20 + 20, 150, 16);
+		c.add(convoi);
+		
+		convoi = new JLabel("");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20, Variables.TAILLE_GRILLE + 20 + 20 + 5 + 40, 8, 8);
+		convoi.setBackground(Color.YELLOW);
+		convoi.setOpaque(true);
+		c.add(convoi);
+		
+		convoi = new JLabel("but");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20 + 12, Variables.TAILLE_GRILLE + 20 + 20 + 40, 65, 16);
+		c.add(convoi);
+		
+		convoi = new JLabel("");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20 + 65, Variables.TAILLE_GRILLE + 20 + 20 + 5 + 40 + 2, 4, 4);
+		convoi.setBackground(Color.BLACK);
+		convoi.setOpaque(true);
+		c.add(convoi);
+		
+		convoi = new JLabel("missile");
+		convoi.setBounds(20 + Variables.TAILLE_GRILLE + 20 + 12 + 60, Variables.TAILLE_GRILLE + 20 + 20 + 40, 65, 16);
+		c.add(convoi);
 
 		setVisible(true);
 		this.modele = modele;
