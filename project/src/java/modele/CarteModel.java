@@ -161,12 +161,11 @@ public class CarteModel {
 		return true;
 	}
 
-
 	public boolean tirer(String agName, int x, int y) {
 		Couple<Integer, Grille> c = dispatch(agName);
 		Drone d = ciel.getDrone(c.first);
 		d.majPercepts(interpreteur, agentsSupplementaires, terrain.getConvoi());
-		
+
 		EntiteComportement killed = null;
 		for (EntiteComportement a : agentsSupplementaires)
 			if (a.getLocation().x == x && a.getLocation().y == y) {
@@ -180,7 +179,7 @@ public class CarteModel {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Permet de récuperer la grille sur laquelle est l'agent à partir de son
 	 * nom et son index dans cette grille
@@ -251,9 +250,10 @@ public class CarteModel {
 	public void destruction(Location t) {
 		if (terrain.getAgAtPos(t) != -1) {
 			int ag = terrain.getAgAtPos(t);
-			terrain.retirerAgent(t, true);
+			if (terrain.retirerAgent(t, true))
+				interpreteur.killVehicule(ag + 1);
+
 			ciel.majPercepts();
-			interpreteur.killVehicule(ag + 1);
 		}
 	}
 
@@ -317,7 +317,6 @@ public class CarteModel {
 		for (Grille g : lesGrilles)
 			g.remove(e.getCode(), e.getLocation());
 	}
-
 
 	public boolean termine() {
 		return terrain.convoiArrive() && ciel.droneTermine();

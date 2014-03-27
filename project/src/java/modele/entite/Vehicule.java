@@ -125,4 +125,12 @@ public class Vehicule extends EntiteLocalisable implements Comparable<Integer> {
 		estLeader = true; 
 	}
 
+	public Location getBut() {
+		return but;
+	}
+
+	public boolean butAtteint() {
+		return estLeader && but.equals(l);
+	}
+
 }
