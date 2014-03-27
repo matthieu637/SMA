@@ -143,20 +143,20 @@ goHome.
 
 +!verifierMenace.
 
-+!prevenirLeader(T) :  ingerable_milieu(I) & T < I & .my_name(D) & mission(D, leader, L).
-+!prevenirLeader(T) :  ingerable_devant(I) & T < I & .my_name(D) & mission(D, devant, L).
++!prevenirLeader(T) :  ingerable_milieu(I) & T < I & .my_name(D) & mission(D, M, L).
 
-+!prevenirLeader(T) : ingerable_devant(I) & T >= I & .my_name(D) & mission(D, devant, LD) <-
++!prevenirLeader(T) : ingerable_devant(I) & T >= I & .my_name(D) & mission(D, devant, L) <-
 			.print("ATTEND");
-			.send(LD, tell, attend(T)).
+			.send(L, tell, attend(T)).
 			
 +!prevenirLeader(T) : ingerable_milieu(I) & leader(LD) & T >= I & .my_name(D) & mission(D, leader, L) <-
-			.send(LD, tell, probleme). 
+			.send(L, tell, probleme). 
 
-			
++!prevenirLeader(T).
+
 //si le leader est mort entre temps, préviens le nouveau
--!prevenirLeader(T) : true <-
-			!prevenirLeader(T).
+//-!prevenirLeader(T) : true <-
+//!prevenirLeader(T).
 
 //allie, civil, militaire, ... tous identifié par un ID pas des positions car ils peuvent se déplacer
 //si je suis bas et que je vois un  n'étant pas allié, je demande son identification
@@ -306,7 +306,7 @@ goHome.
 +!tirer(ID) : dead(ID).
 		
 -!tirer(ID) : not dead(ID) & .findall( pos(T, POSX, POSY), vehicule(ID, POSX, POSY, T) & militaire(ID), ListePosition) & 
-					.max(ListePosition, pos(T, X, Y)) & time(TNOW) & T >= TNOW - 3000 
+					.max(ListePosition, pos(T, X, Y)) & time(TNOW) & T >= TNOW - 2000 
 		<- .print("je retire", TNOW-T);
 			!tirer(ID).
 		
