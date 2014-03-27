@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import modele.CielModel;
 import modele.Grille;
@@ -26,8 +28,17 @@ public class CielView extends GridWorldViewPanel {
 
 	private static final Color dark_green = new Color(0, 100, 0);
 
-	public CielView(GridWorldModelP model, int windowSize) {
+	public CielView(GridWorldModelP model, int windowSize,  final FenetrePpale ppale) {
 		super(model, windowSize);
+		
+		drawArea.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				int x = e.getX() / cellSizeW;
+				int y = e.getY() / cellSizeH;
+				ppale.ajouterAgent(x, y);
+			}
+		});
 	}
 
 	@Override

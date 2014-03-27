@@ -43,7 +43,7 @@ public class FenetrePpale extends JFrame {
 		terrain.setLocation(0, 30);
 		c.add(terrain);
 
-		ciel = new CielView(modele.getBasseAltitude(), Variables.TAILLE_GRILLE);
+		ciel = new CielView(modele.getBasseAltitude(), Variables.TAILLE_GRILLE, this);
 		ciel.setLocation(Variables.TAILLE_GRILLE + 25, 30);
 		c.add(ciel);
 
