@@ -116,7 +116,7 @@ goHome.
 			.send(LD, tell, attend).
 			
 +!prevenirLeader(T) : ingerable_milieu(I) & leader(LD) & T >= I & .my_name(D) & mission(D, leader) <-
-			.send(LD, achieve, probleme). 
+			.send(LD, tell, probleme). 
 			
 //si le leader est mort entre temps, préviens le nouveau
 -!prevenirLeader(T) : true <-

@@ -42,7 +42,7 @@
 +!follow : leader(L) & .my_name(L) <-
 			!start.
 
-+!sciender : probleme
++!scinder : probleme
 	<- !scinder.
 	
 +!scinder : .findall(X, convoi(X) & not dead(X) , ConvoiRestant) & .length(ConvoiRestant) > 1 & 
