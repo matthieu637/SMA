@@ -173,43 +173,39 @@ public class Drone {
 			Location la = a.getLocation();
 			EntitePercu ep = new EntitePercu(a);
 			EntitePercu actuelConnaissance = entites.get(ep.getId());
-			boolean chercheIdentite = false;
 
 			if (this.isHaute_altitude()) {
 				if (this.l.distanceEuclidean(la) < this.champ_vision_haute_altitude) {
-					// si je ne l'ai jamais vu
-					// ou que je l'ai vu, mais pas encore identifié et qu'il a
-					// bougé
-					if (actuelConnaissance == null || (!actuelConnaissance.isIdentifie() && !ep.positionEgale(actuelConnaissance))) {
+					// si je ne l'ai jamais vu ou qu'il a bougé
+					if (actuelConnaissance == null || (!ep.positionEgale(actuelConnaissance))) {
 						interpreteur.ajouterDroneVoitVehicule(id, a.getID(), la.x, la.y, System.currentTimeMillis());
+						if (actuelConnaissance != null)
+							ep.setIdentifie(actuelConnaissance.isIdentifie());
 						entites.put(ep.getId(), ep);
-					} // s'il est déjà identifié mais que je suis en haute
-						// altitude, je mets juste à jour sa position
-					else if (actuelConnaissance != null && actuelConnaissance.isIdentifie())
-						chercheIdentite = true;
-
+					}
 				}
 			} else {// basse altitude
 				if (this.l.distanceEuclidean(la) < this.champ_vision_basse_altitude) {
-					chercheIdentite = true;
+					if (actuelConnaissance == null || !actuelConnaissance.isIdentifie()) {
+						if (a instanceof Militaire) {
+							interpreteur.ajouterDroneVoitMilitaire(id, a.getID());
+							ep.setIdentifie(true);
+							entites.put(ep.getId(), ep);
+						} else if (a instanceof Civil) {
+							interpreteur.ajouterDroneVoitCivil(id, a.getID());
+							ep.setIdentifie(true);
+							entites.put(ep.getId(), ep);
+						}
+					}
+					if (actuelConnaissance == null || !actuelConnaissance.positionEgale(ep)) {
+						interpreteur.ajouterDroneVoitVehicule(id, a.getID(), la.x, la.y, System.currentTimeMillis());
+						if (actuelConnaissance != null)
+							ep.setIdentifie(actuelConnaissance.isIdentifie());
+						entites.put(ep.getId(), ep);
+					}
 				}
 			}
 
-			if (chercheIdentite) {
-				// si je ne l'ai jamais vu
-				// ou qu'il a bougé
-				// ou que la position n'a pas changé mais je ne l'ai pas encore identifié
-				if (actuelConnaissance == null || !ep.positionEgale(actuelConnaissance) || (ep.positionEgale(actuelConnaissance) && !actuelConnaissance.isIdentifie() ))
-					if (a instanceof Militaire) {
-						interpreteur.ajouterDroneVoitMilitaire(id, a.getID(), la.x, la.y, System.currentTimeMillis());
-						ep.setIdentifie(true);
-						entites.put(ep.getId(), ep);
-					} else if (a instanceof Civil) {
-						interpreteur.ajouterDroneVoitCivil(id, a.getID(), la.x, la.y, System.currentTimeMillis());
-						ep.setIdentifie(true);
-						entites.put(ep.getId(), ep);
-					}
-			}
 		}
 	}
 

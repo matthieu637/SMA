@@ -4,7 +4,7 @@ distance(X1, Y1, X2, Y2, D) :- D = math.abs(X1 - X2) + math.abs(Y1 - Y2).
  
 distanceInf(X1, Y1, X2, Y2, L) :- distance(X1, Y1, X2, Y2, D) & D <= L.
 
-dernierePositionM(ID, X, Y) :- .findall( pos(T, POSX, POSY), militaire(ID, POSX, POSY, T), ListePosition) & 
+dernierePositionM(ID, X, Y) :- .findall( pos(T, POSX, POSY), vehicule(ID, POSX, POSY, T) & militaire(ID), ListePosition) & 
 					.max(ListePosition, pos(T, X, Y)).
 
 enoughFuel(BX, BY) :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionInitiale(IX, IY) 
@@ -123,14 +123,14 @@ goHome.
 			!prevenirLeader(T).
 
 //allie, civil, militaire, ... tous identifié par un ID pas des positions car ils peuvent se déplacer
-//si je suis bas et que je vois un militaire n'étant pas allié, je demande son identification
+//si je suis bas et que je vois un  n'étant pas allié, je demande son identification
 +!detecterAdversaire : altitude(0) & 
-					   .findall( ID, militaire(ID, _,_,_) & not allie(ID), Suspects) & 
+					   .findall( ID, militaire(ID) & not allie(ID), Suspects) & 
 					   .length(Suspects) > 0 <-  
 			!suspect(Suspects).
 		
 //si je suis haut et que je vois un vehicule que je n'ai pas déjà vu, je change d'altitude et l'identifie
-+!detecterAdversaire : altitude(1) & .findall( pos(T, POSX, POSY), vehicule(ID, POSX, POSY, T)  & not civil(ID, _,_ ,_) & not militaire(ID, _,_ ,_) , ListePosition)  
++!detecterAdversaire : altitude(1) & .findall( pos(T, POSX, POSY), vehicule(ID, POSX, POSY, T)  & not civil(ID) & not militaire(ID) , ListePosition)  
 			& .length(ListePosition) > 0 & .max(ListePosition, pos(T, POSX, POSY)) <- 
 			changerAltitude;
 			!goto(POSX, POSY);
@@ -221,7 +221,19 @@ goHome.
 //si la tour me préviens du type d'un ennemi j'en informe mes collègues
 +ennemi(ID)[source(t)] : .my_name(N) <- 
 			.findall(X,drone(X) & X \== N, L); 
-			.send(L, tell, ennemi(ID)). 
+			.send(L, tell, ennemi(ID)).
+			
++militaire(ID)[source(percept)] : .my_name(N) <-
+			.findall(X,drone(X) & X \== N, L); 
+			.send(L, tell, militaire(ID)).
+			
++civil(ID)[source(percept)] : .my_name(N) <-
+			.findall(X,drone(X) & X \== N, L); 
+			.send(L, tell, civil(ID)).
+			
++vehicule(ID, POSX, POSY, T)[source(percept)] : .my_name(N) <-
+			.findall(X,drone(X) & X \== N, L);
+			.send(L, tell, vehicule(ID, POSX, POSY, T)).
 			 
 			 
 /* Tirer */			 

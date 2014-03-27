@@ -34,16 +34,16 @@ public class FenetrePpale extends JFrame {
 	private Location entite;
 
 	public FenetrePpale(CarteModel modele) {
-		setSize(1250, 780);
+		setSize(1250, Variables.TAILLE_GRILLE + 180);
 
 		Container c = getContentPane();
 		c.setLayout(null);
-		terrain = new TerrainView(modele.getTerrain(), 600, this);
+		terrain = new TerrainView(modele.getTerrain(), Variables.TAILLE_GRILLE, this);
 		terrain.setLocation(0, 30);
 		c.add(terrain);
 
-		ciel = new CielView(modele.getBasseAltitude(), 600);
-		ciel.setLocation(625, 30);
+		ciel = new CielView(modele.getBasseAltitude(), Variables.TAILLE_GRILLE);
+		ciel.setLocation(Variables.TAILLE_GRILLE + 25, 30);
 		c.add(ciel);
 
 		JLabel l = new JLabel("Vue Au Sol");
@@ -53,7 +53,7 @@ public class FenetrePpale extends JFrame {
 
 		l = new JLabel("Vue du Ciel");
 		l.setFont(defaultFont);
-		l.setBounds(870, 5, 150, 20);
+		l.setBounds(Variables.TAILLE_GRILLE + 270, 5, 150, 20);
 		c.add(l);
 
 //		JCheckBox j = new JCheckBox("Cacher zones non découverte");
@@ -66,11 +66,11 @@ public class FenetrePpale extends JFrame {
 //		});
 //		c.add(j);
 		JLabel j = new JLabel("Vitesse :");
-		j.setBounds(20, 600 + 20 + 20, 270, 20);
+		j.setBounds(20, Variables.TAILLE_GRILLE + 20 + 20, 270, 20);
 		c.add(j);
 
 		JSlider v = new JSlider(1, 500);
-		v.setBounds(20, 600 + 20 + 20 + 30, 250, 20);
+		v.setBounds(20, Variables.TAILLE_GRILLE + 20 + 20 + 30, 250, 20);
 		v.addChangeListener(new ChangeListener() {
 
 			@Override
@@ -82,15 +82,15 @@ public class FenetrePpale extends JFrame {
 		c.add(v);
 
 		type1 = new JRadioButton("Militaire Ennemi");
-		type1.setBounds(20, 600 + 20 + 30 + 40, 150, 25);
+		type1.setBounds(20, Variables.TAILLE_GRILLE + 20 + 30 + 40, 150, 25);
 		c.add(type1);
 
 		type2 = new JRadioButton("Militaire Allié");
-		type2.setBounds(20 + 150, 600 + 20 + 30 + 40, 130, 25);
+		type2.setBounds(20 + 150, Variables.TAILLE_GRILLE + 20 + 30 + 40, 130, 25);
 		c.add(type2);
 
 		type3 = new JRadioButton("Civil");
-		type3.setBounds(20 + 150 + 130, 600 + 20 + 30 + 40, 150, 25);
+		type3.setBounds(20 + 150 + 130, Variables.TAILLE_GRILLE + 20 + 30 + 40, 150, 25);
 		c.add(type3);
 
 		ButtonGroup types = new ButtonGroup();
@@ -100,15 +100,15 @@ public class FenetrePpale extends JFrame {
 		types.setSelected(type3.getModel(), true);
 
 		fixe = new JRadioButton("Fixe");
-		fixe.setBounds(20, 600 + 20 + 30 + 40 + 25, 60, 25);
+		fixe.setBounds(20, Variables.TAILLE_GRILLE + 20 + 30 + 40 + 25, 60, 25);
 		c.add(fixe);
 
 		aleatoire = new JRadioButton("Aleatoire");
-		aleatoire.setBounds(20 + 60, 600 + 20 + 30 + 40 + 25, 100, 25);
+		aleatoire.setBounds(20 + 60, Variables.TAILLE_GRILLE + 20 + 30 + 40 + 25, 100, 25);
 		c.add(aleatoire);
 
 		but = new JRadioButton("But");
-		but.setBounds(20 + 60 + 100, 600 + 20 + 30 + 40 + 25, 80, 25);
+		but.setBounds(20 + 60 + 100, Variables.TAILLE_GRILLE + 20 + 30 + 40 + 25, 80, 25);
 		c.add(but);
 
 		ButtonGroup comportements = new ButtonGroup();
