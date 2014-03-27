@@ -169,12 +169,13 @@ public class CarteModel {
 		EntiteComportement killed = null;
 		for (EntiteComportement a : agentsSupplementaires)
 			if (a.getLocation().x == x && a.getLocation().y == y) {
+				ciel.anime(d.getPos(), a.getLocation(), a, lesGrilles);
 				killed = a;
 				break;
 			}
 		if (killed != null) {
 			System.out.println("target killed");
-			detruireAgentSupplementaire(killed);
+			detruireAgentSupplementaire(killed, false);
 			return true;
 		}
 		return false;
@@ -299,7 +300,7 @@ public class CarteModel {
 			}
 
 			for (EntiteComportement m : mort)
-				detruireAgentSupplementaire(m);
+				detruireAgentSupplementaire(m, true);
 		}
 
 		interpreteur.retirerTourAllies();
@@ -312,10 +313,11 @@ public class CarteModel {
 		return terrain.scinder(c.first);
 	}
 
-	private void detruireAgentSupplementaire(EntiteComportement e) {
+	private void detruireAgentSupplementaire(EntiteComportement e, boolean removeGrid) {
 		agentsSupplementaires.remove(e);
-		for (Grille g : lesGrilles)
-			g.remove(e.getCode(), e.getLocation());
+		if (removeGrid)
+			for (Grille g : lesGrilles)
+				g.remove(e.getCode(), e.getLocation());
 	}
 
 	public boolean termine() {

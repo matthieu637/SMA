@@ -301,8 +301,8 @@ goHome.
 					 <-
 		ia.choose_direction(Dir, MYX, MYY, POSX, POSY);
 		.print("ici1 ", MYX," ", MYY," ", POSX," ", POSY," ",Dir);
-		//deplacer(Dir);
-		!goto(POSX,POSY);
+		deplacer(Dir);//on se rapproche seulement
+		//!goto(POSX,POSY);
 		!tirer(ID).
 
 +!tirer(ID) : dead(ID).

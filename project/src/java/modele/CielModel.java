@@ -12,6 +12,7 @@ import modele.entite.Drone;
 import modele.entite.EntiteComportement;
 import modele.percepts.AllPercepts;
 import utils.Couple;
+import utils.PathBuilder;
 import ext.GridWorldModelP;
 
 /**
@@ -144,7 +145,36 @@ public class CielModel extends Grille {
 	}
 
 	public void updatePosition(Drone d) {
-		view.update(d.getPos().x , d.getPos().y );
+		view.update(d.getPos().x, d.getPos().y);
+	}
+
+	public void anime(final Location i, final Location but, final EntiteComportement a, final List<Grille> lesGrilles) {
+
+		new Thread() {
+			public void run() {
+				try {
+					PathBuilder pb = new PathBuilder(i, but);
+					for (Location l : pb.getPath()) {
+						view.update(l.x, l.y, true);
+						Thread.sleep(150);
+						view.update(l.x, l.y, false);
+						Thread.sleep(150);
+					}
+					for (int i = 0; i < 4; i++) {
+						for (Grille g : lesGrilles)
+							g.remove(a.getCode(), a.getLocation());
+						Thread.sleep(150);
+						for (Grille g : lesGrilles)
+							g.add(a.getCode(), a.getLocation());
+						Thread.sleep(150);
+					}
+					for (Grille g : lesGrilles)
+						g.remove(a.getCode(), a.getLocation());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			};
+		}.start();
 	}
 }
 
