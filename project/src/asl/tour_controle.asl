@@ -8,10 +8,10 @@
 /* Plans */
 
 
-+!attribuer_mission : .findall(X, drone(X), L)
-	<- 	.send(L, tell, mission(d1,derriere));
-		.send(L, tell, mission(d2,leader));
-		.send(L, tell, mission(d3,devant)).
++!attribuer_mission : .findall(X, drone(X), L) & leader(V)
+	<- 	.send(L, tell, mission(d1,derriere,V));
+		.send(L, tell, mission(d2,leader,V));
+		.send(L, tell, mission(d3,devant,V)).
 
 +droneAuSol(X) : not terminer <- 
 			remplirFuel(X);
