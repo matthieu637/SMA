@@ -1,16 +1,10 @@
 package vue;
 
-import jason.environment.grid.Location;
-
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import modele.CielModel;
 import modele.Grille;
@@ -53,7 +47,7 @@ public class CielView extends GridWorldViewPanel {
 
 		int color = getModele().getZone(x, y);
 		if (color > 0) {
-			float alpha = 0.10f;
+			float alpha = 0.05f;
 			int type = AlphaComposite.SRC_OVER;
 			AlphaComposite composite = AlphaComposite.getInstance(type, alpha);
 			Graphics2D g2d = (Graphics2D) g;
@@ -68,7 +62,7 @@ public class CielView extends GridWorldViewPanel {
 
 	@Override
 	public void drawAgent(Graphics g, int x, int y, Color c, int id) {
-		super.drawEmpty(g, x, y);
+//		super.drawEmpty(g, x, y);
 
 		Drone d = getModele().getDrone(id + 1);
 

@@ -25,10 +25,11 @@ public abstract class EntiteComportement extends EntiteDeplacable {
 
 	protected abstract void _agir(CarteModel carteModel);
 
-	public void agir(CarteModel carteModel) {
+	public boolean agir(CarteModel carteModel) {
 		_agir(carteModel);
 		if (c == Comportement.But && but != null && getLocation().equals(but))
-			carteModel.detruireAgentSupplementaire(this);
+			return true;
+		return false;
 	}
 
 	public int getID() {

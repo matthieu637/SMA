@@ -56,6 +56,9 @@ public class CarteModel {
 	 * @param nombreDrone
 	 *            nombre de drone
 	 */
+
+	private Object lock = new Object();
+
 	public CarteModel(AllPercepts interpreteur, int nombreVehicule, int nombreDrone) {
 		agentsSupplementaires = new LinkedList<>();
 
@@ -252,18 +255,26 @@ public class CarteModel {
 	 */
 	public void runEnv() {
 
-		for (EntiteComportement e : agentsSupplementaires) {
-			e.definirBut(this);
-			if (e.seDeplace()) {
-				for (Grille g : lesGrilles)
-					g.remove(e.getCode(), e.getLocation());
+		synchronized (lock) {
+			List<EntiteComportement> mort = new LinkedList<>();
 
-				e.deplacer(terrain);
+			for (EntiteComportement e : agentsSupplementaires) {
+				e.definirBut(this);
+				if (e.seDeplace()) {
+					for (Grille g : lesGrilles)
+						g.remove(e.getCode(), e.getLocation());
 
-				for (Grille g : lesGrilles)
-					g.add(e.getCode(), e.getLocation());
+					e.deplacer(terrain);
+
+					for (Grille g : lesGrilles)
+						g.add(e.getCode(), e.getLocation());
+				}
+				if (e.agir(this))
+					mort.add(e);
 			}
-			e.agir(this);
+
+			for (EntiteComportement m : mort)
+				detruireAgentSupplementaire(m);
 		}
 
 		interpreteur.retirerTourAllies();
@@ -276,7 +287,7 @@ public class CarteModel {
 		return terrain.scinder(c.first);
 	}
 
-	public void detruireAgentSupplementaire(EntiteComportement e) {
+	private void detruireAgentSupplementaire(EntiteComportement e) {
 		agentsSupplementaires.remove(e);
 		for (Grille g : lesGrilles)
 			g.remove(e.getCode(), e.getLocation());

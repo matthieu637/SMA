@@ -4,9 +4,11 @@ import jason.environment.grid.Location;
 
 import java.util.Random;
 
+import modele.Act;
 import modele.CarteModel;
 import modele.Grille;
 import modele.TerrainModel;
+import modele.TimeLimit;
 import modele.Variables;
 
 public abstract class EntiteDeplacable extends EntiteLocalisable {
@@ -17,9 +19,19 @@ public abstract class EntiteDeplacable extends EntiteLocalisable {
 
 	protected Random generateur = new Random();
 
+	private Act bouger;
+
 	public EntiteDeplacable(Location l, Comportement c, int code) {
 		super(l, code);
 		this.c = c;
+
+		this.bouger = new Act(new TimeLimit() {
+
+			@Override
+			public long getMax() {
+				return (long) (Variables.getInstance().getVitesse() * Variables.VITESSE_DEPLACEMENT_ADVERSAIRE);
+			}
+		});
 	}
 
 	public EntiteDeplacable(Location l, Location but, int code) {
@@ -41,7 +53,7 @@ public abstract class EntiteDeplacable extends EntiteLocalisable {
 	}
 
 	public boolean seDeplace() {
-		return c == Comportement.But || c == Comportement.DeplaceAleatoire;
+		return  bouger.canAct() && (c == Comportement.But || c == Comportement.DeplaceAleatoire);
 	}
 
 	public void deplacer(TerrainModel terrain) {
@@ -95,8 +107,9 @@ public abstract class EntiteDeplacable extends EntiteLocalisable {
 			}
 
 			Location nl = Grille.deplacer(getLocation(), direction);
-			if (terrain.isFree(nl))
+			if (terrain.isFree(nl)) {
 				setLocation(nl);
+			}
 		}
 	}
 

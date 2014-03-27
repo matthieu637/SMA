@@ -115,7 +115,7 @@ public class Env extends Environment implements Runnable {
 	public void run() {
 		while (this.isRunning() && !modele.termine()) {
 			try {
-				Thread.sleep((long) (Variables.VITESSE_ACTION_ADVERSAIRE * Variables.getInstance().getVitesse()));
+				Thread.sleep((long) (Variables.TEMPS_REFLEXION_ADVERSAIRE * Variables.getInstance().getVitesse()));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

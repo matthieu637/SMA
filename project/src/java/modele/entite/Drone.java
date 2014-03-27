@@ -175,7 +175,7 @@ public class Drone {
 			EntitePercu actuelConnaissance = entites.get(ep.getId());
 
 			if (this.isHaute_altitude()) {
-				if (this.l.distanceEuclidean(la) < this.champ_vision_haute_altitude) {
+				if (this.l.distanceEuclidean(la) <= this.champ_vision_haute_altitude) {
 					// si je ne l'ai jamais vu ou qu'il a bougé
 					if (actuelConnaissance == null || (!ep.positionEgale(actuelConnaissance))) {
 						interpreteur.ajouterDroneVoitVehicule(id, a.getID(), la.x, la.y, System.currentTimeMillis());
@@ -185,7 +185,7 @@ public class Drone {
 					}
 				}
 			} else {// basse altitude
-				if (this.l.distanceEuclidean(la) < this.champ_vision_basse_altitude) {
+				if (this.l.distanceEuclidean(la) <= this.champ_vision_basse_altitude) {
 					if (actuelConnaissance == null || !actuelConnaissance.isIdentifie()) {
 						if (a instanceof Militaire) {
 							interpreteur.ajouterDroneVoitMilitaire(id, a.getID());

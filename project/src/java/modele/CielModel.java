@@ -86,35 +86,41 @@ public class CielModel extends Grille {
 		return c;
 	}
 
-//	private Object lock = new Object();
+	// private Object lock = new Object();
 
 	private void updateZone(Drone d) {
-//		synchronized (lock) {
+		// synchronized (lock) {
 
-			int champ = d.isHaute_altitude() ? d.getChamp_vision_haute_altitude() : d.getChamp_vision_basse_altitude();
+		int champ = d.isHaute_altitude() ? d.getChamp_vision_haute_altitude() : d.getChamp_vision_basse_altitude();
 
-			int xstart = d.getPos().x - champ - 3;
-			int xfin = d.getPos().x + champ + 3;
+		int xstart = d.getPos().x - champ - 4;
+		int xfin = d.getPos().x + champ + 4;
 
-			int ystart = d.getPos().y - champ - 3;
-			int yfin = d.getPos().y + champ + 3;
+		int ystart = d.getPos().y - champ - 4;
+		int yfin = d.getPos().y + champ + 4;
 
-			for (int i = xstart; i <= xfin; i++)
-				for (int j = ystart; j <= yfin; j++) {
-					Location candidat = new Location(i, j);
-					if (inGrid(i, j)) {
-						List<Integer> actives = zones.get(candidat);
-						if (d.getPos().distanceEuclidean(candidat) < champ) {
-							if (!actives.contains(d.getId()))
-								actives.add(d.getId());
-						} else {
-							if (actives.contains(d.getId()))
-								actives.remove((Integer) d.getId());
+		for (int i = xstart; i <= xfin; i++)
+			for (int j = ystart; j <= yfin; j++) {
+				Location candidat = new Location(i, j);
+				if (inGrid(i, j)) {
+					List<Integer> actives = zones.get(candidat);
+					boolean changed = false;
+					if (d.getPos().distanceEuclidean(candidat) <= champ) {
+						if (!actives.contains(d.getId())) {
+							actives.add(d.getId());
+							changed = true;
 						}
-						view.update(i, j);
+					} else {
+						if (actives.contains(d.getId())) {
+							actives.remove((Integer) d.getId());
+							changed = true;
+						}
 					}
+					if (changed)
+						view.update(i, j);
 				}
-//		}
+			}
+		// }
 	}
 
 	public Integer getZone(int x, int y) {
