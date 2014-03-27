@@ -15,13 +15,14 @@
 			!follow.
 
 +!to_goal : .my_name(L) & goal(GX, GY) & location(L, X, Y) & heightmap(A, B, C, D) & 
-			ia.choose_direction(Dir, X, Y, GX, GY, A, B, C, D, true) & not attend<-
+			ia.choose_direction(Dir, X, Y, GX, GY, A, B, C, D, true) & not attend(_) <-
 			deplacer(Dir);
 			!to_goal.
 			
-+!to_goal : attend <-
-			.wait(250);
-			.abolish(attend);
++!to_goal : attend(T) & Att = T * 500 <-
+			.print("J'attends ", Att);
+			.wait(Att);
+			.abolish(attend(_));
 			!to_goal.
 	
 
@@ -43,7 +44,7 @@
 +!follow : leader(L) & .my_name(L) <-
 			!start.
 
-+!scinder : probleme
++probleme : true
 	<- !scinder.
 	
 +!scinder : .findall(X, convoi(X) & not dead(X) , ConvoiRestant) & .length(ConvoiRestant) > 1 & 

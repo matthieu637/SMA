@@ -21,7 +21,7 @@ priorite(devant, 1).
 priorite(derriere, 1).
 
 porte(3).
-menace(10).
+menace(8).
 ingerable_milieu(2).
 ingerable_devant(3).
 
@@ -136,8 +136,9 @@ goHome.
 					 !tirer(ID).
 					 	
 //si pas de menace et pas de suspect, je remonte			
-+!verifierMenace : .findall( ID, militaire(ID) & not allie(ID) & not dead(ID), Suspects) & 
-					   .length(Suspects) == 0 & altitude(0)<-
++!verifierMenace : altitude(0) & positionSurveillance(BX, BY) & menace(L) & 
+						.findall( ID, dernierePositionM(ID, POSX, POSY) & not allie(ID) & not dead(ID) & distanceInf(BX, BY, POSX, POSY, L), Suspects) & 
+					   .length(Suspects) == 0 <-
 					changerAltitude.
 
 +!verifierMenace.
@@ -147,7 +148,7 @@ goHome.
 
 +!prevenirLeader(T) : ingerable_devant(I) & T >= I & .my_name(D) & mission(D, devant, LD) <-
 			.print("ATTEND");
-			.send(LD, tell, attend).
+			.send(LD, tell, attend(T)).
 			
 +!prevenirLeader(T) : ingerable_milieu(I) & leader(LD) & T >= I & .my_name(D) & mission(D, leader, L) <-
 			.send(LD, tell, probleme). 

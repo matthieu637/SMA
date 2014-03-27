@@ -149,6 +149,7 @@ public class CarteModel {
 		Drone d = ciel.getDrone(c.first);
 		d.changerAltitude();
 		d.majPercepts(interpreteur, agentsSupplementaires, terrain.getConvoi());
+		ciel.updatePosition(d);
 		// interpreteur.retirerAltitude(c.first);
 		// interpreteur.retirerFieldOfView(c.first);
 		// int altitude = ciel.getDrone(c.first).changerAltitude();

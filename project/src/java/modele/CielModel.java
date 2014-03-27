@@ -142,6 +142,10 @@ public class CielModel extends Grille {
 	public List<Drone> getDrones() {
 		return drones;
 	}
+
+	public void updatePosition(Drone d) {
+		view.update(d.getPos().x , d.getPos().y );
+	}
 }
 
 class ColorPoint {
