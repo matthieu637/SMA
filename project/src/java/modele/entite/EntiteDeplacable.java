@@ -25,6 +25,18 @@ public abstract class EntiteDeplacable extends EntiteLocalisable {
 		super(l, code);
 		this.c = c;
 
+		setAct();
+	}
+
+	public EntiteDeplacable(Location l, Location but, int code) {
+		super(l, code);
+		this.c = Comportement.But;
+		this.but = but;
+
+		setAct();
+	}
+	
+	private void setAct(){
 		this.bouger = new Act(new TimeLimit() {
 
 			@Override
@@ -32,12 +44,6 @@ public abstract class EntiteDeplacable extends EntiteLocalisable {
 				return (long) (Variables.getInstance().getVitesse() * Variables.VITESSE_DEPLACEMENT_ADVERSAIRE);
 			}
 		});
-	}
-
-	public EntiteDeplacable(Location l, Location but, int code) {
-		super(l, code);
-		this.c = Comportement.But;
-		this.but = but;
 	}
 
 	public Location getBut() {
@@ -55,7 +61,7 @@ public abstract class EntiteDeplacable extends EntiteLocalisable {
 	public boolean canAct() {
 		return bouger.canAct();
 	}
-	
+
 	public boolean seDeplace() {
 		return (c == Comportement.But || c == Comportement.DeplaceAleatoire);
 	}

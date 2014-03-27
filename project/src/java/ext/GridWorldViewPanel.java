@@ -117,7 +117,7 @@ public class GridWorldViewPanel extends JPanel {
 		// drawString(g,x,y,defaultFont,String.valueOf(object));
 	}
 
-	private static int limit = (int) Math.pow(2, 5);
+	private static int limit = (int) Math.pow(2, 6);
 
 	private void draw(Graphics g, int x, int y) {
 		boolean drawSomething = false;
