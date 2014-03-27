@@ -103,8 +103,6 @@ goHome.
 					 !prevenirLeader(.length(ListeMenace));
 					 !tirer(ID).
 					 
-+!verifierMenace : .my_name(D) & mission(D, devant, L)  <-
-				.send(L, untell, attend).
 				
 +!verifierMenace.				
 
