@@ -31,7 +31,7 @@ goHome.
 /* Plans */
 
 	
-+!doMission : .my_name(D) & mission(D,M,L) &  leader(LD)<- 
++!doMission : .my_name(D) & mission(D,M,L) &  leader(L)<- 
 			!posSurveillance; 
 			!detecterAdversaire; 
 			!verifierMenace;
@@ -40,7 +40,10 @@ goHome.
 			!doMission.	
 +!doMission.
 
-
++!doMission : .my_name(D) & mission(D,M,L) &  not leader(L)
+	<- !informerAllouer;
+		!choisirMission;
+		!doMission.
 
 /* Mission */
 
