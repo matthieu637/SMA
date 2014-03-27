@@ -31,7 +31,7 @@ goHome.
 /* Plans */
 
 	
-+!doMission : .my_name(D) & mission(D,M,L) &  leader(LD)<- 
++!doMission : .my_name(D) & mission(D,M,L) & leader(L)<- 
 			!posSurveillance; 
 			!detecterAdversaire; 
 			!verifierMenace;
@@ -39,7 +39,7 @@ goHome.
 			!goHome; 
 			!changeMission;
 			!doMission.	
-+!doMission.
+
 
 +!decoller : .my_name(X) & location(X, POSX, POSY) <- 
 			+positionInitiale(POSX, POSY);
