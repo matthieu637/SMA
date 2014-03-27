@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Random;
 
 import modele.entite.Convoi;
+import modele.entite.Vehicule;
 import modele.percepts.AllPercepts;
 import utils.Couple;
+import utils.PathBuilder;
 
 /**
  * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
@@ -155,7 +157,7 @@ public class TerrainModel extends Grille {
 			c = new Couple<Location, Boolean>(null, false);
 
 		if (c.second && convoi.getVehicule(agent).butAtteint()) {
-			if (retirerAgent(c.first, false)) {
+			if (retirerAgent(c.first, false, null)) {
 				System.out.println("Congratz!");
 				interpreteur.killVehicule(agent);
 			}
@@ -164,13 +166,40 @@ public class TerrainModel extends Grille {
 		return c;
 	}
 
-	public boolean retirerAgent(Location t, boolean killed) {
+	public boolean retirerAgent(Location t, boolean killed, Location from) {
 		int pos = getAgAtPos(t);
+		if (killed)
+			animate(from, t, convoi.getVehicule(pos + 1));
 		if (convoi.remove(pos + 1, killed)) {
 			removeAgent(pos);
 			return true;
 		}
 		return false;
+	}
+
+	private void animate(final Location t, final Location goal, final Vehicule a) {
+		new Thread() {
+			public void run() {
+				try {
+					PathBuilder pb = new PathBuilder(t, goal);
+					for (Location l : pb.getPath()) {
+						view.update(l.x, l.y, true);
+						Thread.sleep(150);
+						view.update(l.x, l.y, false);
+						Thread.sleep(150);
+					}
+					for (int i = 0; i < 4; i++) {
+						remove(Grille.AGENT, a.getLocation());
+						Thread.sleep(150);
+						add(Grille.AGENT, a.getLocation());
+						Thread.sleep(150);
+					}
+					remove(Grille.AGENT, a.getLocation());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			};
+		}.start();
 	}
 
 	public boolean scinder(int agent) {

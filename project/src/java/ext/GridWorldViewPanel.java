@@ -188,7 +188,7 @@ public class GridWorldViewPanel extends JPanel {
 
 		if (b) {
 			g.setColor(Color.BLACK);
-			g.fillOval(x * cellSizeW + 3, y * cellSizeH + 3, cellSizeW - 5, cellSizeH - 5);
+			g.fillRect(x * cellSizeW + 3, y * cellSizeH + 3, cellSizeW - 6, cellSizeH - 6);
 		}
 	}
 }

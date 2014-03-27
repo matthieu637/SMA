@@ -69,7 +69,7 @@ public class Ennemi extends Militaire {
 		if (but != null && l.distanceEuclidean(but) < portee()) { // on tire
 			Location trou = tirer(but, generateur.nextGaussian(), generateur.nextGaussian());
 			if (trou.isInArea(new Location(0, 0), new Location(carteModel.getTerrain().getWidth(), carteModel.getTerrain().getHeight())))
-				carteModel.destruction(trou);
+				carteModel.destruction(l, trou);
 		}
 	}
 

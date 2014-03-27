@@ -248,10 +248,10 @@ public class CarteModel {
 	/**
 	 * Détruit ce qu'il y a à la position t
 	 */
-	public void destruction(Location t) {
+	public void destruction(Location from, Location t) {
 		if (terrain.getAgAtPos(t) != -1) {
 			int ag = terrain.getAgAtPos(t);
-			if (terrain.retirerAgent(t, true))
+			if (terrain.retirerAgent(t, true, from))
 				interpreteur.killVehicule(ag + 1);
 
 			ciel.majPercepts();
