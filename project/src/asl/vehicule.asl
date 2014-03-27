@@ -9,6 +9,7 @@
 /* Plans */
 
 +!start : .my_name(Y) & leader(Y) <- 
+			.abolish(follow(_));
 			!to_goal.
 	
 +!start : .my_name(X) & not leader(X) <- 
@@ -28,7 +29,7 @@
 
 	
 -!to_goal : true <-
-			.wait(10);
+			.wait(100);
 			!to_goal.
 
 +!follow : .my_name(L) & location(L, X, Y) & follow(S) & location(S, GX, GY)  & 
@@ -40,7 +41,7 @@
 			!follow.
 
 -!follow : true <-
-			.wait(10);
+			.wait(100);
 			!follow.
 	
 +!follow : leader(L) & .my_name(L) <-

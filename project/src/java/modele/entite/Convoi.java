@@ -73,7 +73,7 @@ public class Convoi {
 		Vehicule mort = getVehicule(agent);
 		Vehicule devant = getDevant(mort);
 
-		if (mort.getFollower() != null && devant != null){
+		if (mort.getFollower() != null && devant != null) {
 			devant.setFollower(mort.getFollower());
 			devant.majPercept(interpreteur, hauteur);
 		}
@@ -84,7 +84,7 @@ public class Convoi {
 			nouveau_leader.setBut(but);
 			nouveau_leader.majPercept(interpreteur, hauteur);
 		}
-		
+
 		if (killed)
 			for (Vehicule leader : getLeaders())
 				interpreteur.ajouterMort(leader.getNumero(), mort.getNumero());
@@ -95,17 +95,19 @@ public class Convoi {
 	}
 
 	public boolean scinder(int agent) {
-		Vehicule nouveau_leader = getVehicule(agent);
-		// retire en tant que follower
-		Vehicule devant = getDevant(nouveau_leader);
-		if (devant != null)
-			devant.setFollower(null);
-		nouveau_leader.setLeader();
+		synchronized (lock) {
+			Vehicule nouveau_leader = getVehicule(agent);
+			// retire en tant que follower
+			Vehicule devant = getDevant(nouveau_leader);
+			if (devant != null)
+				devant.setFollower(null);
+			nouveau_leader.setLeader();
 
-		if(devant != null)
-			devant.majPercept(interpreteur, hauteur);
-		nouveau_leader.majPercept(interpreteur, hauteur);
-		return true;
+			if (devant != null)
+				devant.majPercept(interpreteur, hauteur);
+			nouveau_leader.majPercept(interpreteur, hauteur);
+			return true;
+		}
 	}
 
 	public Vehicule getDevant(Vehicule v) {
