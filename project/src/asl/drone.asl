@@ -40,7 +40,13 @@ goHome.
 			!changeMission;
 			!doMission.	
 
+//si plus aucun leader, je rentre
++!doMission : .my_name(D) & mission(D,M,L) &  not leader(_) <-
+			+goHome;
+			!goHome.
 
+//si plus aucun leader et je suis à home : fin
++!doMission : .my_name(D) & not leader(_) & positionInitiale(IX, IY) & location(D, IX, IY).
 
 +!doMission : .my_name(D) & mission(D,M,L) &  not leader(L)
 	<- !informerAllouer;
@@ -53,7 +59,7 @@ goHome.
 			.print("I am flying");
 			-goHome;
 			!choisirMission; 
-			!doMission.		
+			!doMission.	
 
 
 /* Mission */
@@ -184,7 +190,8 @@ goHome.
 /* GO Home */
 +!goHome : goHome & positionInitiale(IX, IY) <- 
 			.print("I go home."); 
-			!informerAllouer;!goto(IX, IY);
+			!informerAllouer;
+			!goto(IX, IY);
 			atterir; 
 			.print("I have landed").
 			

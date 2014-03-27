@@ -70,7 +70,7 @@ public class FenetrePpale extends JFrame {
 		j.setBounds(20, Variables.TAILLE_GRILLE + 20 + 20, 270, 20);
 		c.add(j);
 
-		JSlider v = new JSlider(1, 500);
+		JSlider v = new JSlider(3, 500);
 		v.setBounds(20, Variables.TAILLE_GRILLE + 20 + 20 + 30, 250, 20);
 		v.addChangeListener(new ChangeListener() {
 
