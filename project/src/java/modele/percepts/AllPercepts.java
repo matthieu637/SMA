@@ -171,7 +171,16 @@ public class AllPercepts extends InterpreteurSpl {
 
 	public void ajouterLeaderDrone(int id, int numero) {
 		ajouterDrone(id, leader, "v" + numero);
+	}	
+
+	public void ajouterLeaderTour(int numero) {
+		ajouterTour(leader, "v" + numero);
 	}
+	
+	public void retirerLeaderTour(int numero) {
+		retirerTour(leader, "v" + numero);
+	}
+
 
 	public void ajouterVehicule(int i, int j) {
 		ajouterVehicule(i, convoi, "v" + j);

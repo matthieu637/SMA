@@ -16,9 +16,10 @@ enoughFuel(N) :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionIniti
 			<= F - 10. 
 
 
-priorite(leader, 1).
-priorite(devant, 2).
-priorite(derriere, 3).
+priorite(leader, 0).
+priorite(devant, 1).
+priorite(derriere, 2).
+
 porte(3).
 menace(10).
 ingerable_milieu(2).
@@ -29,10 +30,9 @@ goHome.
 /* Initial goals */
 /* Plans */
 
-/* Mission */
 	
-+!doMission : .my_name(D) & mission(D,M) <- 
-			!posSurveillance(M); 
++!doMission : .my_name(D) & mission(D,M,L) <- 
+			!posSurveillance; 
 			!detecterAdversaire; 
 			!verifierMenace;
 			!randMove(1); 
@@ -40,6 +40,63 @@ goHome.
 			!doMission.	
 +!doMission.
 
+
+
+/* Mission */
+
++!informerAllouer : .my_name(D)<-
+			.findall(X,drone(X) & X \== D, L); 
+			.send(L, achieve, alloc);.print("I have informed Allouer");
+			.abolish(mission(D,M,L));
+			.print(L).
+	
++!choisirMission : .my_name(D) & mission(D,M,V) <- 
+			.print("Jai deja une mission").
+			
+			
++!choisirMission : .my_name(D) & .random(R) & R <= 0.1 & 
+			.findall(tripl(P,M,V), priorite(M,P) & mission(DD,M,V), MissionsDejaAllouees) &
+			.findall(tripl(P,M,V), priorite(M,P) & leader(V), ListeMissions) &  
+			.difference(ListeMissions, MissionsDejaAllouees, L) & .min(L, tripl(P,M,V)) 
+			<-
+			.print("I choose mission : ", mission(D,M,V));.print(L);
+			+mission(D,M,V);
+			!informerMission.
+
+
+
++!choisirMission : true <- 
+			!choisirMission. 
+
++!informerMission : .my_name(D) & mission(D, M, V) <- 
+			.findall(X,drone(X) & X \== D, L); 
+			.send(L, tell, mission(D,M,V));
+			.print("I have informed My Mission").
+		
++!informerMission : true <- !informerMission. 
+	
++!decoller : .my_name(X) & location(X, POSX, POSY) <- 
+			+positionInitiale(POSX, POSY);
+			decoller;
+			.print("I am flying");
+			-goHome;
+			!choisirMission; 
+			!doMission.					
+					
++!alloc[source(DD)] : .my_name(D) & mission(D,M,V) & priorite(M,P) & .count(mission(_, _, _), NDM) & P > NDM-1 & not goHome <- 
+			.abolish(mission(DD,_,_));
+			.abolish(mission(D,_,_));
+			.print("I have DeAllocated1 ", DD);
+			!choisirMission.
+						 
++!alloc[source(DD)] : true <- 
+			.abolish(mission(DD,_,_));
+			.print("I have DeAllocated2 ", DD).
+
+
+
+/* Menaces */
+	
 +!verifierMenace : positionSurveillance(BX, BY) & menace(L) &
 					.findall(pos(D, ID), ennemi(ID) & not dead(ID) & dernierePositionM(ID, POSX, POSY) &  distance(BX, BY, POSX, POSY, D) & D <= L, ListeMenace)& 
 					.length(ListeMenace) > 0 & .min(ListeMenace, pos(D, ID)) <-
@@ -83,47 +140,6 @@ goHome.
 +!detecterAdversaire.
 
 
-+!informerAllouer : .my_name(D)<-
-			.findall(X,drone(X) & X \== D, L); 
-			.send(L, achieve, alloc);.print("I have informed Allouer");
-			.abolish(mission(D,M));
-			.print(L).
-	
-+!choisirMission : .my_name(D) & mission(D,M) <- 
-			.print("Jai deja une mission").
-+!choisirMission : .my_name(D) & .random(R) & R <= 0.1 & .findall(X, mission(DD,X), S) & .difference([leader,devant,derriere], S, L) & .max(L, M) <-
-			.print("I choose mission : ", M);.print(L);
-			+mission(D,M);
-			!informerMission.
-
-+!choisirMission : true <- 
-			!choisirMission. 
-
-+!informerMission : .my_name(D) & mission(D, M) <- 
-			.findall(X,drone(X) & X \== D, L); 
-			.send(L, tell, mission(D,M));
-			.print("I have informed My Mission").
-		
-+!informerMission : true <- !informerMission. 
-	
-+!decoller : .my_name(X) & location(X, POSX, POSY) <- 
-			+positionInitiale(POSX, POSY);
-			decoller;
-			.print("I am flying");
-			-goHome;
-			!choisirMission; 
-			!doMission.					
-					
-+!alloc[source(DD)] : .my_name(D) & mission(D,M) & priorite(M,P) & .count(mission(_, _), NDM) & P > NDM-1 & not goHome <- 
-			.abolish(mission(DD,_));
-			.abolish(mission(D,_));
-			.print("I have DeAllocated1 ", DD);
-			!choisirMission.
-						 
-+!alloc[source(DD)] : .count(mission(_, _), NDM) <- 
-			.abolish(mission(DD,_));
-			.print("I have DeAllocated2 ", DD).
-
 				
 /* Random move */	
 +!randMove(0).
@@ -145,6 +161,7 @@ goHome.
 			
 +!goHome.
 -!goHome.
+
 
 /* GOTO */
 +!goto(GX, GY) : .my_name(X) & location(X, GX, GY) <- true.
@@ -170,20 +187,20 @@ goHome.
 
 /* GOTO monitor position */
 
-+!posSurveillance(M): .my_name(D) & leader(L) & mission(D, M) & fieldOfView(F) & not goHome <- 
++!posSurveillance : .my_name(D) & mission(D, M, L) & fieldOfView(F) & not goHome <- 
 			.send(L, askOne, location(L,_,_), location(L,POSX,POSY));
 			.send(L, askOne, goal(_,_), goal(BX,BY) );
 			ia.positionSurveillance(SX,SY,BX,BY,POSX,POSY,M,F);
 			-+positionSurveillance(SX, SY);
 			!goto(SX,SY).
 
-//+!posSurveillance(X) : not leader(_)
-//			<- !posSurveillance(X).
+//+!posSurveillance : not leader(_)
+//			<- !posSurveillance.
 	
-+!posSurveillance(X) : goHome 
++!posSurveillance : goHome 
 			<- true.
 	 
--!posSurveillance(X) : true <- true.
+-!posSurveillance : true <- true.
 
 
 
@@ -205,6 +222,9 @@ goHome.
 +ennemi(ID)[source(t)] : .my_name(N) <- 
 			.findall(X,drone(X) & X \== N, L); 
 			.send(L, tell, ennemi(ID)). 
+			 
+			 
+/* Tirer */			 
 			 
 +!tirer(ID) :  not dead(ID) & dernierePositionM(ID, POSX, POSY) & porte(P) & .my_name(N) & 
 					location(N, MYX, MYY) & distanceInf(MYX, MYY, POSX, POSY, P) & altitude(0)
@@ -244,6 +264,11 @@ goHome.
 		<- !tirer(ID).
 
 -!tirer(ID) : dead(ID).
+
+
+
+
+/* Fin : on rentre */
 
 -leader(_) : true
 	<- !rentrer.

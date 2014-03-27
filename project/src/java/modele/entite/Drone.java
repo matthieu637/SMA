@@ -161,8 +161,10 @@ public class Drone {
 
 		// leader
 		interpreteur.retirerLeaderDrone(id);
-		for (Vehicule v : c.getLeaders())
+		for (Vehicule v : c.getLeaders()) {
 			interpreteur.ajouterLeaderDrone(id, v.getNumero());
+			interpreteur.ajouterLeaderTour(v.getNumero());
+		}
 
 		// vision
 		// interpreteur.retirerVisionDrone(id); //ne pas retirer la mémoire
