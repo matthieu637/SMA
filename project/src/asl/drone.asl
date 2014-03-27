@@ -279,46 +279,39 @@ goHome.
 			 
 /* Tirer */			 
 			 
++!tirer(ID) : not dead(ID) & altitude(1)
+					 <-
+		changerAltitude;
+		!tirer(ID).
+		
 +!tirer(ID) :  not dead(ID) & dernierePositionM(ID, POSX, POSY) & porte(P) & .my_name(N) & 
 			.findall(X,drone(X) & X \== N, L) &
-			location(N, MYX, MYY) & distanceInf(MYX, MYY, POSX, POSY, P) & altitude(0)
+			location(N, MYX, MYY) & distanceInf(MYX, MYY, POSX, POSY, P)
 					 <-
 			tirer(POSX, POSY);
 			+dead(ID);
 			.send(L, tell, dead(ID));
 			.print("tirer1").
 			
-+!tirer(ID) : not dead(ID) & dernierePositionM(ID, POSX, POSY) & .my_name(N) & 
-			.findall(X,drone(X) & X \== N, L) &
-					location(N, MYX, MYY) & distanceInf(MYX, MYY, POSX, POSY, P) & altitude(1)
-					 <-
-			changerAltitude;
-			tirer(POSX, POSY);
-			+dead(ID);
-			.send(L, tell, dead(ID));
-			.print("tirer2").
 			
 +!tirer(ID) : not dead(ID) & dernierePositionM(ID, POSX, POSY) & porte(P) & .my_name(N) & 
-					location(N, MYX, MYY) & not distanceInf(MYX, MYY, POSX, POSY, P) & altitude(0)
+					location(N, MYX, MYY) & not distanceInf(MYX, MYY, POSX, POSY, P)
 					 <-
 		ia.choose_direction(Dir, MYX, MYY, POSX, POSY);
 		.print("ici1 ", MYX," ", MYY," ", POSX," ", POSY," ",Dir);
-		deplacer(Dir);
+		//deplacer(Dir);
+		!goto(POSX,POSY);
 		!tirer(ID).
 
-+!tirer(ID) : not dead(ID) & dernierePositionM(ID, POSX, POSY) & porte(P) & .my_name(N) & 
-					location(N, MYX, MYY) & not distanceInf(MYX, MYY, POSX, POSY, P) & altitude(1)
-					 <-
-		changerAltitude;
-		.print("ici2");
-		ia.choose_direction(Dir, MYX, MYY, POSX, POSY);
-		deplacer(Dir);
-		!tirer(ID).
++!tirer(ID) : dead(ID).
 		
--!tirer(ID) : not dead(ID)
-		<- !tirer(ID).
+-!tirer(ID) : not dead(ID) & .findall( pos(T, POSX, POSY), vehicule(ID, POSX, POSY, T) & militaire(ID), ListePosition) & 
+					.max(ListePosition, pos(T, X, Y)) & time(TNOW) & T >= TNOW - 3000 
+		<- .print("je retire", TNOW-T);
+			!tirer(ID).
+		
+-!tirer(ID) : not dead(ID).
 
--!tirer(ID) : dead(ID).
 
 
 

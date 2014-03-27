@@ -12,6 +12,7 @@ import jason.environment.Environment;
 public class AllPercepts extends InterpreteurSpl {
 
 	private final static String position = "location(%s, %s, %s)";
+	private final static String time = "time(%s)";
 	private final static String leader = "leader(%s)";
 	private final static String goal = "goal(%s, %s)";
 	private final static String heightmap = "heightmap(%s, %s, %s, %s)";
@@ -115,6 +116,16 @@ public class AllPercepts extends InterpreteurSpl {
 		ajouterDrone(d, fuel, f);
 	}
 
+
+	public void ajouterDroneTime(int d, long currentTimeMillis) {
+		ajouterDrone(d, time, currentTimeMillis);		
+	}
+	
+
+	public void retirerDroneTime(int d) {
+		retirerDroneUnif(d, time, "_");
+	}
+	
 	public void ajouterAltitude(int d, int f) {
 		ajouterDrone(d, altitude, f);
 	}
@@ -185,5 +196,6 @@ public class AllPercepts extends InterpreteurSpl {
 	public void ajouterVehicule(int i, int j) {
 		ajouterVehicule(i, convoi, "v" + j);
 	}
+
 
 }

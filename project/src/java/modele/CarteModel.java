@@ -161,6 +161,26 @@ public class CarteModel {
 		return true;
 	}
 
+
+	public boolean tirer(String agName, int x, int y) {
+		Couple<Integer, Grille> c = dispatch(agName);
+		Drone d = ciel.getDrone(c.first);
+		d.majPercepts(interpreteur, agentsSupplementaires, terrain.getConvoi());
+		
+		EntiteComportement killed = null;
+		for (EntiteComportement a : agentsSupplementaires)
+			if (a.getLocation().x == x && a.getLocation().y == y) {
+				killed = a;
+				break;
+			}
+		if (killed != null) {
+			System.out.println("target killed");
+			detruireAgentSupplementaire(killed);
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Permet de récuperer la grille sur laquelle est l'agent à partir de son
 	 * nom et son index dans cette grille
@@ -298,20 +318,6 @@ public class CarteModel {
 			g.remove(e.getCode(), e.getLocation());
 	}
 
-	public boolean tirer(int x, int y) {
-		EntiteComportement killed = null;
-		for (EntiteComportement a : agentsSupplementaires)
-			if (a.getLocation().x == x && a.getLocation().y == y) {
-				killed = a;
-				break;
-			}
-		if (killed != null) {
-			System.out.println("target killed");
-			detruireAgentSupplementaire(killed);
-			return true;
-		}
-		return false;
-	}
 
 	public boolean termine() {
 		return terrain.convoiArrive() && ciel.droneTermine();
