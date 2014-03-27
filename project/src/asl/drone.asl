@@ -18,7 +18,7 @@ enoughFuel(N) :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionIniti
 
 priorite(leader, 0).
 priorite(devant, 1).
-priorite(derriere, 2).
+priorite(derriere, 1).
 
 porte(3).
 menace(10).
@@ -37,17 +37,24 @@ goHome.
 			!verifierMenace;
 			!randMove(1); 
 			!goHome; 
+			!changeMission;
 			!doMission.	
 +!doMission.
 
-
++!decoller : .my_name(X) & location(X, POSX, POSY) <- 
+			+positionInitiale(POSX, POSY);
+			decoller;
+			.print("I am flying");
+			-goHome;
+			!choisirMission; 
+			!doMission.		
 
 /* Mission */
 
-+!informerAllouer : .my_name(D)<-
++!informerAllouer : .my_name(D) & mission(D,M,V) <-
 			.findall(X,drone(X) & X \== D, L); 
 			.send(L, achieve, alloc);.print("I have informed Allouer");
-			.abolish(mission(D,M,L));
+			.abolish(mission(D,M,V));
 			.print(L).
 	
 +!choisirMission : .my_name(D) & mission(D,M,V) <- 
@@ -57,16 +64,34 @@ goHome.
 +!choisirMission : .my_name(D) & .random(R) & R <= 0.1 & 
 			.findall(tripl(P,M,V), priorite(M,P) & mission(DD,M,V), MissionsDejaAllouees) &
 			.findall(tripl(P,M,V), priorite(M,P) & leader(V), ListeMissions) &  
-			.difference(ListeMissions, MissionsDejaAllouees, L) & .min(L, tripl(P,M,V)) 
+			.difference(ListeMissions, MissionsDejaAllouees, L) & .min(L, tripl(0,M,V))
 			<-
-			.print("I choose mission : ", mission(D,M,V));.print(L);
+			.print("I choose mission L : ", mission(D,M,V));.print(L);
+			+mission(D,M,V);
+			!informerMission.
+
++!choisirMission : .my_name(D) & .random(R) & R <= 0.1 & 
+			.findall(tripl(P,M,V), priorite(M,P) & mission(DD,M,V), MissionsDejaAllouees) &
+			.findall(tripl(P,M,V), priorite(M,P) & leader(V), ListeMissions) &  
+			.difference(ListeMissions, MissionsDejaAllouees, L) & 
+			.shuffle(L, LS) & .nth(0, LS, tripl(P,M,V))
+			<-
+			.print("I choose mission R : ", mission(D,M,V));.print(L);
 			+mission(D,M,V);
 			!informerMission.
 
 
-
 +!choisirMission : true <- 
 			!choisirMission. 
+			
+			
++!changeMission : .my_name(D) & mission(D,M,V) & priorite(M,1) & .random(R) & R <= 0.1 
+				<- 
+				.print("I change mission ...");
+				!informerAllouer;
+				!choisirMission.
+
++!changeMission : true.
 
 +!informerMission : .my_name(D) & mission(D, M, V) <- 
 			.findall(X,drone(X) & X \== D, L); 
@@ -75,13 +100,7 @@ goHome.
 		
 +!informerMission : true <- !informerMission. 
 	
-+!decoller : .my_name(X) & location(X, POSX, POSY) <- 
-			+positionInitiale(POSX, POSY);
-			decoller;
-			.print("I am flying");
-			-goHome;
-			!choisirMission; 
-			!doMission.					
+			
 					
 +!alloc[source(DD)] : .my_name(D) & mission(D,M,V) & priorite(M,P) & .count(mission(_, _, _), NDM) & P > NDM-1 & not goHome <- 
 			.abolish(mission(DD,_,_));
