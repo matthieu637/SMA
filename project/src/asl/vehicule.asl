@@ -23,6 +23,8 @@
 			.wait(250);
 			!to_goal.
 	
+
+	
 -!to_goal : true <-
 			!to_goal.
 
@@ -40,6 +42,9 @@
 +!follow : leader(L) & .my_name(L) <-
 			!start.
 
++!sciender : probleme
+	<- !scinder.
+	
 +!scinder : .findall(X, convoi(X) & not dead(X) , ConvoiRestant) & .length(ConvoiRestant) > 1 & 
 				Milieu = math.ceil( .length(ConvoiRestant) /2 ) & .nth(Milieu, ConvoiRestant, Candidat)  & not dejaScinde <-
 		.print("Scindons nous sur ",Candidat," !");
