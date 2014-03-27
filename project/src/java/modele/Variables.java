@@ -1,5 +1,8 @@
 package modele;
 
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+
 /**
  * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
  * 
@@ -68,14 +71,17 @@ public class Variables {
 	/**
 	 * Champ de vision des drones à haute altitude, en nombre de cases
 	 */
-	public static int CHAMP_VISION_DRONE_HAUTE_ALTITUDE = 6;
+	public static final int CHAMP_VISION_DRONE_HAUTE_ALTITUDE = 6;
 
-	public static float DIRECTION_IMPORTANCE_HAUTEUR = 0.05f;
+	public static final float DIRECTION_IMPORTANCE_HAUTEUR = 0.05f;
 	
 	/**
 	 * Valeur de hauteur en dehors de la carte (utile smooth)
 	 */
-	public static int HAUTEUR_HORS_CARTE = 150;
+	public static final int HAUTEUR_HORS_CARTE = 150;
+	
+	
+	public static int TAILLE_GRILLE = 600;
 
 	public static final float PROBA_DEPLACEMENT_ALEATOIRE = 0.01f;
 	
@@ -90,6 +96,12 @@ public class Variables {
 	private final Object lock = new Object();
 
 	private Variables() {
+		GraphicsEnvironment graphicsEnvironment=GraphicsEnvironment.getLocalGraphicsEnvironment();
+		Rectangle maximumWindowBounds=graphicsEnvironment.getMaximumWindowBounds();
+		
+		if(maximumWindowBounds.getHeight() < 800)
+			TAILLE_GRILLE = 450;
+		
 		synchronized (lock) {
 			vitesse = 500;
 		}
