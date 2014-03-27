@@ -154,19 +154,23 @@ public class TerrainModel extends Grille {
 		} else
 			c = new Couple<Location, Boolean>(null, false);
 
-		if (c.second && but.equals(c.first)) {
-			System.out.println("Congratz!");
-			retirerAgent(c.first, false);
-			interpreteur.killVehicule(agent);
+		if (c.second && convoi.getVehicule(agent).butAtteint()) {
+			if (retirerAgent(c.first, false)) {
+				System.out.println("Congratz!");
+				interpreteur.killVehicule(agent);
+			}
 		}
 
 		return c;
 	}
 
-	public void retirerAgent(Location t, boolean killed) {
+	public boolean retirerAgent(Location t, boolean killed) {
 		int pos = getAgAtPos(t);
-		removeAgent(pos);
-		convoi.remove(pos + 1, killed);
+		if (convoi.remove(pos + 1, killed)) {
+			removeAgent(pos);
+			return true;
+		}
+		return false;
 	}
 
 	public boolean scinder(int agent) {

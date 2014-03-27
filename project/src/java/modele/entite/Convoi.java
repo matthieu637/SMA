@@ -22,7 +22,7 @@ public class Convoi {
 	 */
 	private int[][] hauteur;
 	private AllPercepts interpreteur;
-	private Location but;
+	private Location but, but2;
 	private Object lock = new Object();
 	private Random generateur = new Random();
 
@@ -78,9 +78,16 @@ public class Convoi {
 		return leads;
 	}
 
-	public void remove(int agent, boolean killed) {
+	public boolean remove(int agent, boolean killed) {
 		Vehicule mort = getVehicule(agent);
 		Vehicule devant = getDevant(mort);
+
+		// but intermediaire atteint
+		if (!killed && mort.estLeader() && !mort.getBut().equals(but)) {
+			mort.setBut(but);
+			mort.majPercept(interpreteur, hauteur, morts);
+			return false;
+		}
 
 		if (mort.getFollower() != null && devant != null) {
 			devant.setFollower(mort.getFollower());
@@ -90,7 +97,7 @@ public class Convoi {
 		if (mort.estLeader() && mort.getFollower() != null) {
 			Vehicule nouveau_leader = mort.getFollower();
 			nouveau_leader.setLeader();
-			nouveau_leader.setBut(but);
+			nouveau_leader.setBut(mort.getBut());
 			nouveau_leader.majPercept(interpreteur, hauteur, morts);
 		}
 
@@ -103,6 +110,8 @@ public class Convoi {
 		synchronized (lock) {
 			file.remove(mort);
 		}
+
+		return true;
 	}
 
 	public boolean scinder(int agent) {
@@ -113,13 +122,30 @@ public class Convoi {
 			if (devant != null)
 				devant.setFollower(null);
 			nouveau_leader.setLeader();
-			nouveau_leader.setBut(but);
+			definirButIntermediaire(nouveau_leader.getLocation(), but, getLeaders().get(0).getLocation());
+			nouveau_leader.setBut(but2);
 
 			if (devant != null)
 				devant.majPercept(interpreteur, hauteur, morts);
 			nouveau_leader.majPercept(interpreteur, hauteur, morts);
 			return true;
 		}
+	}
+
+	private void definirButIntermediaire(Location l1, Location l2, Location leader) {
+		double dist = l1.distanceEuclidean(l2);
+		int perturbation = (int) (dist / 10.);
+		
+		float da = l1.y - l2.y; 
+		float db = l2.x - l1.x;
+		
+		float dc = da * l1.x + db * l1.y;
+		float dctest = da * leader.x + db * leader.y;
+		
+		if(dc < dctest)
+			but2 = new Location(l1.y - perturbation, l2.x + perturbation);
+		else
+			but2 = new Location(l1.x + perturbation, l2.y - perturbation);
 	}
 
 	public Vehicule getDevant(Vehicule v) {
