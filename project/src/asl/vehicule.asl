@@ -28,6 +28,7 @@
 
 	
 -!to_goal : true <-
+			.wait(10);
 			!to_goal.
 
 +!follow : .my_name(L) & location(L, X, Y) & follow(S) & location(S, GX, GY)  & 
@@ -39,6 +40,7 @@
 			!follow.
 
 -!follow : true <-
+			.wait(10);
 			!follow.
 	
 +!follow : leader(L) & .my_name(L) <-

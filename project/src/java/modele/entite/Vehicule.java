@@ -6,6 +6,7 @@ import modele.Grille;
 import modele.TimeLimit;
 import modele.Variables;
 import modele.percepts.AllPercepts;
+import modele.percepts.Interpreteur;
 
 /**
  * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
@@ -69,16 +70,14 @@ public class Vehicule extends EntiteLocalisable implements Comparable<Integer> {
 		return false;
 	}
 
-	public void initPercept(AllPercepts interpreteur, int[][] hauteur) {
-		if (follower != null)
-			interpreteur.ajouterFollow(follower.getNumero(), numero);
-	}
-
 	public void majPercept(AllPercepts interpreteur, int[][] hauteur) {
 		interpreteur.retirerPositionVehicule(numero, numero);
 		interpreteur.ajouterPositionVehicule(numero, numero, l.x, l.y);
 
 		if (follower != null) {
+			interpreteur.retirerFollow(follower.getNumero());
+			interpreteur.ajouterFollow(follower.getNumero(), numero);
+			
 			interpreteur.retirerPositionVehicule(follower.getNumero(), numero);
 			interpreteur.ajouterPositionVehicule(follower.getNumero(), numero, l.x, l.y);
 		}
@@ -119,4 +118,5 @@ public class Vehicule extends EntiteLocalisable implements Comparable<Integer> {
 	public void setLeader() {
 		estLeader = true; 
 	}
+
 }

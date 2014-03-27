@@ -157,7 +157,7 @@ public class TerrainModel extends Grille {
 		if (c.second && but.equals(c.first)) {
 			System.out.println("Congratz!");
 			retirerAgent(c.first, false);
-			interpreteur.killVehicule(getAgAtPos(c.first));
+			interpreteur.killVehicule(agent);
 		}
 
 		return c;

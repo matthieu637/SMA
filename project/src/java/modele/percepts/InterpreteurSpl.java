@@ -56,7 +56,7 @@ public abstract class InterpreteurSpl extends Interpreteur {
 	 * 
 	 */
 	public void killVehicule(int vehicule) {
-		kill("v" + (vehicule + 1));
+		kill("v" +vehicule);
 	}
 	
 	/**
@@ -64,6 +64,6 @@ public abstract class InterpreteurSpl extends Interpreteur {
 	 * 
 	 */
 	public void killDrone(int drone) {
-		kill("d" + (drone + 1));
+		kill("d" + drone);
 	}
 }

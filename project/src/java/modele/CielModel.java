@@ -76,7 +76,7 @@ public class CielModel extends Grille {
 			d.majPercepts(interpreteur, agentsSupplementaires, convoi);
 
 			if (outOfFuel) {
-				interpreteur.killDrone(this.getAgAtPos(c.first));
+				interpreteur.killDrone(agent);
 				this.remove(GridWorldModelP.AGENT, c.first);
 			}
 

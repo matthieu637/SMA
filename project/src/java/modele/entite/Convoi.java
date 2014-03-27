@@ -26,14 +26,12 @@ public class Convoi {
 		int a = 1;
 		for (; a < nbAgent; a++) {
 			Vehicule v = new Vehicule(a, new Location(a - 1, 0), false, a == 1 ? null : file.get(a - 2));
-			v.initPercept(interpreteur, hauteur);
 			v.majPercept(interpreteur, hauteur);
 			file.add(v);
 		}
 
 		Vehicule leader = new Vehicule(nbAgent, location, true, file.get(file.size() - 1));
 		leader.setBut(but);
-		leader.initPercept(interpreteur, hauteur);
 		leader.majPercept(interpreteur, hauteur);
 		file.add(leader);
 
@@ -74,10 +72,10 @@ public class Convoi {
 		Vehicule mort = getVehicule(agent);
 		Vehicule devant = getDevant(mort);
 
-		if (mort.getFollower() != null && devant != null)
+		if (mort.getFollower() != null && devant != null){
 			devant.setFollower(mort.getFollower());
-		if (devant != null)
 			devant.majPercept(interpreteur, hauteur);
+		}
 
 		if (mort.estLeader() && mort.getFollower() != null) {
 			Vehicule nouveau_leader = mort.getFollower();

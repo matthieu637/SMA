@@ -230,9 +230,10 @@ public class CarteModel {
 	 */
 	public void destruction(Location t) {
 		if (terrain.getAgAtPos(t) != -1) {
+			int ag = terrain.getAgAtPos(t);
 			terrain.retirerAgent(t, true);
 			ciel.majPercepts();
-			interpreteur.killVehicule(terrain.getAgAtPos(t));
+			interpreteur.killVehicule(ag + 1);
 		}
 	}
 

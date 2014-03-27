@@ -74,7 +74,7 @@ public class AllPercepts extends InterpreteurSpl {
 	}
 
 	public void retirerFollow(int follower) {
-		retirerVehiculeUnif(follower, follow, "_", "_");
+		retirerVehiculeUnif(follower, follow, "_");
 	}
 
 	public void ajouterPositionDrone(int d, int cible, int x, int y) {
