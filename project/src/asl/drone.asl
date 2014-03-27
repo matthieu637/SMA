@@ -31,7 +31,7 @@ goHome.
 /* Plans */
 
 	
-+!doMission : .my_name(D) & mission(D,M,L) <- 
++!doMission : .my_name(D) & mission(D,M,L) &  leader(LD)<- 
 			!posSurveillance; 
 			!detecterAdversaire; 
 			!verifierMenace;
@@ -121,8 +121,7 @@ goHome.
 					.length(ListeMenace) > 0 & .min(ListeMenace, pos(D, ID)) <-
 					 !prevenirLeader(.length(ListeMenace));
 					 !tirer(ID).
-					 
-				
+					 				
 +!verifierMenace.				
 
 +!prevenirLeader(T) :  ingerable_milieu(I) & T < I & .my_name(D) & mission(D, leader, L).
@@ -132,8 +131,9 @@ goHome.
 			.print("ATTEND");
 			.send(LD, tell, attend).
 			
-+!prevenirLeader(T) : ingerable_milieu(I) & T >= I & .my_name(D) & mission(D, leader, LD) <-
-			.send(LD, achieve, scinder). 
++!prevenirLeader(T) : ingerable_milieu(I) & leader(LD) & T >= I & .my_name(D) & mission(D, leader, L) <-
+			.send(LD, tell, probleme). 
+
 			
 //si le leader est mort entre temps, préviens le nouveau
 -!prevenirLeader(T) : true <-
@@ -193,13 +193,14 @@ goHome.
 		
 +!goto(GX, GY) : not enoughFuel(GX,GY) <- 
 			+goHome.
+
++!goto(GX, GY) : not mission(GX,GY,_) <- 
+			+goHome.
+
 	
 -!goto(GX,GY) : true <- 
 			!randMove(2); 
 			!goto(GX,GY).
-
-
-
 
 
 /* GOTO monitor position */
@@ -220,9 +221,6 @@ goHome.
 -!posSurveillance : true <- true.
 
 
-
-
-
 /* */
 
 +!suspect([]).
@@ -232,6 +230,10 @@ goHome.
 
 +allie(_) : altitude(0) <-
 			 changerAltitude.
+			 
++civil(_) : altitude(0) <-
+			 changerAltitude.
+			 
 +dead(_) :  altitude(0) <-
 			 changerAltitude.
 
