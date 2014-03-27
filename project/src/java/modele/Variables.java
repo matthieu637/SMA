@@ -64,7 +64,7 @@ public class Variables {
 	 */
 	public static int CHAMP_VISION_DRONE_BASSE_ALTITUDE = 3;
 	
-	public static final int VISION_ENNEMI = 5;
+	public static final int VISION_ENNEMI = 0;
 	
 	public static final int PORTE_ENNEMI = 4;
 
