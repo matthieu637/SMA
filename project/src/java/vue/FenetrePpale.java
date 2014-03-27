@@ -34,6 +34,7 @@ public class FenetrePpale extends JFrame {
 	private Location entite;
 
 	public FenetrePpale(CarteModel modele) {
+		Variables.getInstance();
 		setSize(1250, Variables.TAILLE_GRILLE + 180);
 
 		Container c = getContentPane();
