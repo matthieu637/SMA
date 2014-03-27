@@ -75,7 +75,9 @@ public class Variables {
 	 */
 	public static final int CHAMP_VISION_DRONE_HAUTE_ALTITUDE = 6;
 
-	public static final float DIRECTION_IMPORTANCE_HAUTEUR = 0.05f;
+	public static final float DIRECTION_IMPORTANCE_HAUTEUR = 0.045f;
+	
+	public static final float DIRECTION_IMPORTANCE_VARIATION = 0.015f;
 	
 	/**
 	 * Valeur de hauteur en dehors de la carte (utile smooth)

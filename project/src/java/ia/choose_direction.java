@@ -35,7 +35,7 @@ public class choose_direction extends DefaultInternalAction {
 		synchronized (lock) {
 
 
-		if (args.length == 5 || args.length == 9 || args.length == 6 || args.length == 10) {
+		if (args.length == 5 || args.length == 6 || args.length == 10) {
 			boolean random = false;
 			if(args.length == 6 || args.length == 10)
 				random = generateur.nextFloat() < Variables.PROBA_DEPLACEMENT_ALEATOIRE;
@@ -65,13 +65,14 @@ public class choose_direction extends DefaultInternalAction {
 			Location goal = new Location(gx, gy);
 			List<DLocation> mins = null;
 
-			if (args.length == 9) {
+			if (args.length == 10) {
 				int hg = Integer.parseInt(args[i++].toString());
 				int hh = Integer.parseInt(args[i++].toString());
 				int hd = Integer.parseInt(args[i++].toString());
 				int hb = Integer.parseInt(args[i++].toString());
+				float comp = Float.parseFloat(args[i++].toString()); 
 
-				mins = UtilList.minList(loc, new DistanceHeightmap(goal, hg, hh, hd, hb));
+				mins = UtilList.minList(loc, new DistanceHeightmap(goal, hg, hh, hd, hb, comp));
 			} else
 				mins = UtilList.minList(loc, new Distance(goal));
 
@@ -104,18 +105,20 @@ class DistanceHeightmap implements Comparator<DLocation> {
 	private Location goal;
 	private int hg, hh, hd, hb;
 	private static double distMax = new Location(0, 0).distanceEuclidean(new Location(Variables.TAILLE_CARTE_X, Variables.TAILLE_CARTE_Y));
-
-	DistanceHeightmap(Location goal, int hg, int hh, int hd, int hb) {
+	private float comp;
+	
+	DistanceHeightmap(Location goal, int hg, int hh, int hd, int hb, float comp) {
 		this.goal = goal;
 		this.hg = hg;
 		this.hh = hh;
 		this.hd = hd;
 		this.hb = hb;
+		this.comp = comp;
 	}
 
 	@Override
 	public int compare(DLocation o1, DLocation o2) {
-		double epsilon = Variables.DIRECTION_IMPORTANCE_HAUTEUR;
+		double epsilon = comp;
 
 		double h1 = getHeightmap(o1) / 255f;
 		double h2 = getHeightmap(o2) / 255f;

@@ -5,7 +5,9 @@ import jason.environment.grid.Location;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
+import modele.Variables;
 import modele.percepts.AllPercepts;
 
 public class Convoi {
@@ -20,6 +22,7 @@ public class Convoi {
 	private AllPercepts interpreteur;
 	private Location but;
 	private Object lock = new Object();
+	private Random generateur = new Random();
 
 	public Convoi(int nbAgent, Location location, AllPercepts interpreteur, Location but, int[][] hauteur) {
 
@@ -35,6 +38,10 @@ public class Convoi {
 		leader.setBut(but);
 		leader.majPercept(interpreteur, hauteur);
 		file.add(leader);
+
+		for (Vehicule v : file)
+			interpreteur.ajouterComportement(v.getNumero(), Variables.DIRECTION_IMPORTANCE_HAUTEUR + generateur.nextDouble()
+					* Variables.DIRECTION_IMPORTANCE_VARIATION * 2. - Variables.DIRECTION_IMPORTANCE_VARIATION);
 
 		this.interpreteur = interpreteur;
 		this.hauteur = hauteur;

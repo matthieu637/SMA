@@ -18,6 +18,7 @@ public class AllPercepts extends InterpreteurSpl {
 	private final static String heightmap = "heightmap(%s, %s, %s, %s)";
 	private final static String follow = "follow(%s)";
 	private final static String convoi = "convoi(%s)";
+	private final static String comportement = "comportement(%s)";
 
 	// id x y time
 	private final static String vehicule = "vehicule(%s, %s, %s, %s)";
@@ -195,6 +196,10 @@ public class AllPercepts extends InterpreteurSpl {
 
 	public void ajouterVehicule(int i, int j) {
 		ajouterVehicule(i, convoi, "v" + j);
+	}
+
+	public void ajouterComportement(int id, double d) {
+		ajouterVehicule(id, comportement, d);
 	}
 
 

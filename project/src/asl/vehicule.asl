@@ -15,8 +15,8 @@
 +!start : .my_name(X) & not leader(X) <- 
 			!follow.
 
-+!to_goal : .my_name(L) & goal(GX, GY) & location(L, X, Y) & heightmap(A, B, C, D) & 
-			ia.choose_direction(Dir, X, Y, GX, GY, A, B, C, D, true) & not attend(_) <-
++!to_goal : .my_name(L) & goal(GX, GY) & location(L, X, Y) & heightmap(A, B, C, D) & comportement(V) &
+			ia.choose_direction(Dir, X, Y, GX, GY, A, B, C, D, V) & not attend(_) <-
 			deplacer(Dir);
 			!to_goal.
 			
@@ -29,7 +29,7 @@
 
 	
 -!to_goal : true <-
-			.wait(100);
+			.wait(10);
 			!to_goal.
 
 +!follow : .my_name(L) & location(L, X, Y) & follow(S) & location(S, GX, GY)  & 
@@ -41,7 +41,7 @@
 			!follow.
 
 -!follow : true <-
-			.wait(100);
+			.wait(10);
 			!follow.
 	
 +!follow : leader(L) & .my_name(L) <-
