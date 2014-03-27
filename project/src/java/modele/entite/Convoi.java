@@ -22,7 +22,7 @@ public class Convoi {
 	 */
 	private int[][] hauteur;
 	private AllPercepts interpreteur;
-	private Location but, but2;
+	private Location but, but2, but3;
 	private Object lock = new Object();
 	private Random generateur = new Random();
 
@@ -121,9 +121,11 @@ public class Convoi {
 			Vehicule devant = getDevant(nouveau_leader);
 			if (devant != null)
 				devant.setFollower(null);
+			Vehicule ancien_leader = getLeaders().get(0);
 			nouveau_leader.setLeader();
-			definirButIntermediaire(nouveau_leader.getLocation(), but, getLeaders().get(0).getLocation());
+			definirButIntermediaire(nouveau_leader.getLocation(), but, ancien_leader.getLocation());
 			nouveau_leader.setBut(but2);
+			ancien_leader.setBut(but3);
 
 			if (devant != null)
 				devant.majPercept(interpreteur, hauteur, morts);
@@ -132,20 +134,29 @@ public class Convoi {
 		}
 	}
 
-	private void definirButIntermediaire(Location l1, Location l2, Location leader) {
-		double dist = l1.distanceEuclidean(l2);
-		int perturbation = (int) (dist / 10.);
+	private void definirButIntermediaire(Location l1, Location but, Location leader) {
+		double dist = l1.distanceEuclidean(but);
+		double dist2 = leader.distanceEuclidean(but);
+		int perturbation = (int) (dist / Variables.FACTEUR_COURBURE_TRAJECTOIRE);
+		int perturbation2 = (int) (dist2 / Variables.FACTEUR_COURBURE_TRAJECTOIRE);
 		
-		float da = l1.y - l2.y; 
-		float db = l2.x - l1.x;
+		float da = l1.y - but.y; 
+		float db = but.x - l1.x;
 		
 		float dc = da * l1.x + db * l1.y;
 		float dctest = da * leader.x + db * leader.y;
 		
-		if(dc < dctest)
-			but2 = new Location(l1.y - perturbation, l2.x + perturbation);
-		else
-			but2 = new Location(l1.x + perturbation, l2.y - perturbation);
+		if(dc < dctest){
+			but2 = new Location(but.x - perturbation, l1.y + perturbation);
+			but3 = new Location(leader.x + perturbation2, but.y - perturbation2);
+		}
+		else {
+			
+			but2 = new Location(l1.x + perturbation, but.y - perturbation);
+			but3 = new Location(but.x - perturbation2, leader.y + perturbation2);
+		}
+		
+		
 	}
 
 	public Vehicule getDevant(Vehicule v) {
