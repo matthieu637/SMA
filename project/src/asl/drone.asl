@@ -18,7 +18,7 @@ enoughFuel(N) :- fuel(F) & .my_name(X) & location(X, POSX, POSY) & positionIniti
 
 priorite(leader, 0).
 priorite(devant, 1).
-priorite(derriere, 2).
+priorite(derriere, 1).
 
 porte(3).
 menace(10).
@@ -29,25 +29,39 @@ goHome.
 
 /* Initial goals */
 /* Plans */
-
 	
-+!doMission : .my_name(D) & mission(D,M,L) <- 
+
++!doMission : .my_name(D) & mission(D,M,L) &  leader(L)<- 
 			!posSurveillance; 
 			!detecterAdversaire; 
 			!verifierMenace;
 			!randMove(1); 
 			!goHome; 
+			!changeMission;
 			!doMission.	
-+!doMission.
 
+
+
++!doMission : .my_name(D) & mission(D,M,L) &  not leader(L)
+	<- !informerAllouer;
+		!choisirMission;
+		!doMission.
+
++!decoller : .my_name(X) & location(X, POSX, POSY) <- 
+			+positionInitiale(POSX, POSY);
+			decoller;
+			.print("I am flying");
+			-goHome;
+			!choisirMission; 
+			!doMission.		
 
 
 /* Mission */
 
-+!informerAllouer : .my_name(D)<-
++!informerAllouer : .my_name(D) & mission(D,M,V) <-
 			.findall(X,drone(X) & X \== D, L); 
 			.send(L, achieve, alloc);.print("I have informed Allouer");
-			.abolish(mission(D,M,L));
+			.abolish(mission(D,M,V));
 			.print(L).
 	
 +!choisirMission : .my_name(D) & mission(D,M,V) <- 
@@ -57,16 +71,34 @@ goHome.
 +!choisirMission : .my_name(D) & .random(R) & R <= 0.1 & 
 			.findall(tripl(P,M,V), priorite(M,P) & mission(DD,M,V), MissionsDejaAllouees) &
 			.findall(tripl(P,M,V), priorite(M,P) & leader(V), ListeMissions) &  
-			.difference(ListeMissions, MissionsDejaAllouees, L) & .min(L, tripl(P,M,V)) 
+			.difference(ListeMissions, MissionsDejaAllouees, L) & .min(L, tripl(0,M,V))
 			<-
-			.print("I choose mission : ", mission(D,M,V));.print(L);
+			.print("I choose mission L : ", mission(D,M,V));.print(L);
+			+mission(D,M,V);
+			!informerMission.
+
++!choisirMission : .my_name(D) & .random(R) & R <= 0.1 & 
+			.findall(tripl(P,M,V), priorite(M,P) & mission(DD,M,V), MissionsDejaAllouees) &
+			.findall(tripl(P,M,V), priorite(M,P) & leader(V), ListeMissions) &  
+			.difference(ListeMissions, MissionsDejaAllouees, L) & 
+			.shuffle(L, LS) & .nth(0, LS, tripl(P,M,V))
+			<-
+			.print("I choose mission R : ", mission(D,M,V));.print(L);
 			+mission(D,M,V);
 			!informerMission.
 
 
-
 +!choisirMission : true <- 
 			!choisirMission. 
+			
+			
++!changeMission : .my_name(D) & mission(D,M,V) & priorite(M,1) & .random(R) & R <= 0.1 
+				<- 
+				.print("I change mission ...");
+				!informerAllouer;
+				!choisirMission.
+
++!changeMission : true.
 
 +!informerMission : .my_name(D) & mission(D, M, V) <- 
 			.findall(X,drone(X) & X \== D, L); 
@@ -75,13 +107,7 @@ goHome.
 		
 +!informerMission : true <- !informerMission. 
 	
-+!decoller : .my_name(X) & location(X, POSX, POSY) <- 
-			+positionInitiale(POSX, POSY);
-			decoller;
-			.print("I am flying");
-			-goHome;
-			!choisirMission; 
-			!doMission.					
+			
 					
 +!alloc[source(DD)] : .my_name(D) & mission(D,M,V) & priorite(M,P) & .count(mission(_, _, _), NDM) & P > NDM-1 & not goHome <- 
 			.abolish(mission(DD,_,_));
@@ -102,21 +128,19 @@ goHome.
 					.length(ListeMenace) > 0 & .min(ListeMenace, pos(D, ID)) <-
 					 !prevenirLeader(.length(ListeMenace));
 					 !tirer(ID).
-					 
-+!verifierMenace : leader(L) & .my_name(D) & mission(D, devant)  <-
-				.send(L, untell, attend).
-				
+					 				
 +!verifierMenace.				
 
-+!prevenirLeader(T) :  ingerable_milieu(I) & T < I & .my_name(D) & mission(D, leader).
-+!prevenirLeader(T) :  ingerable_devant(I) & T < I & .my_name(D) & mission(D, devant).
++!prevenirLeader(T) :  ingerable_milieu(I) & T < I & .my_name(D) & mission(D, leader, L).
++!prevenirLeader(T) :  ingerable_devant(I) & T < I & .my_name(D) & mission(D, devant, L).
 
-+!prevenirLeader(T) : ingerable_devant(I) & leader(LD) & T >= I & .my_name(D) & mission(D, devant) <-
++!prevenirLeader(T) : ingerable_devant(I) & T >= I & .my_name(D) & mission(D, devant, LD) <-
 			.print("ATTEND");
 			.send(LD, tell, attend).
 			
-+!prevenirLeader(T) : ingerable_milieu(I) & leader(LD) & T >= I & .my_name(D) & mission(D, leader) <-
-			.send(LD, achieve, scinder). 
++!prevenirLeader(T) : ingerable_milieu(I) & leader(LD) & T >= I & .my_name(D) & mission(D, leader, L) <-
+			.send(LD, tell, probleme). 
+
 			
 //si le leader est mort entre temps, préviens le nouveau
 -!prevenirLeader(T) : true <-
@@ -176,13 +200,14 @@ goHome.
 		
 +!goto(GX, GY) : not enoughFuel(GX,GY) <- 
 			+goHome.
+
++!goto(GX, GY) : not mission(GX,GY,_) <- 
+			+goHome.
+
 	
 -!goto(GX,GY) : true <- 
 			!randMove(2); 
 			!goto(GX,GY).
-
-
-
 
 
 /* GOTO monitor position */
@@ -203,9 +228,6 @@ goHome.
 -!posSurveillance : true <- true.
 
 
-
-
-
 /* */
 
 +!suspect([]).
@@ -215,6 +237,10 @@ goHome.
 
 +allie(_) : altitude(0) <-
 			 changerAltitude.
+			 
++civil(_) : altitude(0) <-
+			 changerAltitude.
+			 
 +dead(_) :  altitude(0) <-
 			 changerAltitude.
 
@@ -239,7 +265,8 @@ goHome.
 /* Tirer */			 
 			 
 +!tirer(ID) :  not dead(ID) & dernierePositionM(ID, POSX, POSY) & porte(P) & .my_name(N) & 
-					location(N, MYX, MYY) & distanceInf(MYX, MYY, POSX, POSY, P) & altitude(0)
+			.findall(X,drone(X) & X \== N, L) &
+			location(N, MYX, MYY) & distanceInf(MYX, MYY, POSX, POSY, P) & altitude(0)
 					 <-
 			tirer(POSX, POSY);
 			+dead(ID);
@@ -247,6 +274,7 @@ goHome.
 			.print("tirer1").
 			
 +!tirer(ID) : not dead(ID) & dernierePositionM(ID, POSX, POSY) & .my_name(N) & 
+			.findall(X,drone(X) & X \== N, L) &
 					location(N, MYX, MYY) & distanceInf(MYX, MYY, POSX, POSY, P) & altitude(1)
 					 <-
 			changerAltitude;
