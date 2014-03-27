@@ -31,7 +31,7 @@ goHome.
 /* Plans */
 
 	
-+!doMission : .my_name(D) & mission(D,M,L) <- 
++!doMission : .my_name(D) & mission(D,M,L) &  leader(LD)<- 
 			!posSurveillance; 
 			!detecterAdversaire; 
 			!verifierMenace;
@@ -102,10 +102,7 @@ goHome.
 					.length(ListeMenace) > 0 & .min(ListeMenace, pos(D, ID)) <-
 					 !prevenirLeader(.length(ListeMenace));
 					 !tirer(ID).
-					 
-//+!verifierMenace : .my_name(D) & mission(D, devant, L)  <-
-//				.send(L, untell, attend).
-				
+					 				
 +!verifierMenace.				
 
 +!prevenirLeader(T) :  ingerable_milieu(I) & T < I & .my_name(D) & mission(D, leader, L).
@@ -178,7 +175,7 @@ goHome.
 +!goto(GX, GY) : not enoughFuel(GX,GY) <- 
 			+goHome.
 
-+!goto(GX, GY) : not mission(GX,GY) <- 
++!goto(GX, GY) : not mission(GX,GY,_) <- 
 			+goHome.
 
 	
