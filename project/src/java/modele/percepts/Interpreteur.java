@@ -60,8 +60,18 @@ public abstract class Interpreteur {
 	 * Tue un agent du système
 	 * @param name
 	 */
-	protected void kill(String name) {
-		env.getEnvironmentInfraTier().getRuntimeServices().killAgent(name, null);
+	protected void kill(final String name) {
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(1500);
+					env.getEnvironmentInfraTier().getRuntimeServices().killAgent(name, null);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}.start();
 	}
 
 }

@@ -225,9 +225,10 @@ goHome.
 
 /* GOTO monitor position */
 
-+!posSurveillance : .my_name(D) & mission(D, M, L) & fieldOfView(F) & not goHome <- 
-			.send(L, askOne, location(L,_,_), location(L,POSX,POSY));
-			.send(L, askOne, goal(_,_), goal(BX,BY) );
+//check si leader n'est pas mort entre temps
++!posSurveillance : .my_name(D) & mission(D, M, L) & fieldOfView(F) & not goHome & leader(L) <- 
+			.send(L, askOne, location(L,_,_), location(L,POSX,POSY), 1000);
+			.send(L, askOne, goal(_,_), goal(BX,BY), 1000);
 			ia.positionSurveillance(SX,SY,BX,BY,POSX,POSY,M,F);
 			-+positionSurveillance(SX, SY);
 			!goto(SX,SY).
@@ -238,7 +239,8 @@ goHome.
 +!posSurveillance : goHome 
 			<- true.
 	 
--!posSurveillance : true <- true.
+-!posSurveillance : true <- 
+			!posSurveillance.
 
 
 /* */

@@ -19,6 +19,7 @@ public class Convoi {
 	private int[][] hauteur;
 	private AllPercepts interpreteur;
 	private Location but;
+	private Object lock = new Object();
 
 	public Convoi(int nbAgent, Location location, AllPercepts interpreteur, Location but, int[][] hauteur) {
 
@@ -88,7 +89,7 @@ public class Convoi {
 			for (Vehicule leader : getLeaders())
 				interpreteur.ajouterMort(leader.getNumero(), mort.getNumero());
 
-		synchronized (file) {
+		synchronized (lock) {
 			file.remove(mort);
 		}
 	}

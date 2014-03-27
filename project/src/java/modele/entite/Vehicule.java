@@ -6,7 +6,6 @@ import modele.Grille;
 import modele.TimeLimit;
 import modele.Variables;
 import modele.percepts.AllPercepts;
-import modele.percepts.Interpreteur;
 
 /**
  * @author Matthieu Zimmer <contact@matthieu-zimmer.net>
